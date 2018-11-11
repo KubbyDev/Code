@@ -1,0 +1,121 @@
+
+# Detection de click
+testforblock 123 45 -13 stone_button 11
+/setblock ~ ~ ~-2 quartz_block
+execute @a ~ ~ ~ /playsound random.pop @p ~ ~ ~ 100000 0.5
+/execute @e[x=1002,y=19,z=950,dx=52,dy=2,dz=2,type=armor_stand] ~1 ~ ~ detect ~ ~ ~ quartz_block 0 tp @e[type=armor_stand,r=2] ~ ~ ~
+/setblock 123 45 -13 air 0 destroy
+
+# Global Systems
+/execute @e[x=989,y=99,z=1048,dx=61,dy=4,dz=2,type=armor_stand] ~ ~ ~ detect ~ ~ ~ quartz_block 0 setblock ~ ~ ~ redstone_block
+/effect @a resistance 100000 100 true
+/effect @a speed 100000 0 true
+/effect @a saturation 1 10 true
+execute @e[type=xp_bottle] ~ ~ ~ setblock 1041 100 951 redstone_block
+execute @e[type=snowball] ~ ~ ~ setblock 1043 100 951 redstone_block
+/clear @a painting
+xp -10L @a
+
+# Lobby
+/title @a[x=949,y=198,z=949,dx=102,dy=5,dz=102] times 10 100 50
+/title @a[x=949,y=198,z=949,dx=102,dy=5,dz=102] subtitle §6§lFind the Button III
+/title @a[x=949,y=198,z=949,dx=102,dy=5,dz=102] title §a§lWelcome to
+playsound random.levelup @a[x=949,y=198,z=949,dx=102,dy=5,dz=102] 49 45 8 10000000
+/gamemode 2 @a[x=949,y=198,z=949,dx=102,dy=5,dz=102]
+/tp @a[x=949,y=198,z=949,dx=102,dy=5,dz=102] 49 45 8 0 0
+
+# Unstuck
+execute @e[type=snowball] ~ ~ ~ /execute @e[x=952,y=19,z=1006,dx=0,dy=5,dz=2,type=armor_stand] ~ ~ ~ tp @a 143 42 -28
+(setblock quartz)
+
+# Get Help
+execute @e[type=xp_bottle] ~ ~ ~ execute @e[x=952,y=19,z=1006,dx=0,dy=5,dz=2,type=armor_stand] ~ ~ ~ summon xp_orb 123 45 -13
+(setblock quartz)
+
+# Next level
+/tp @e[x=989,y=99,z=1048,dx=61,dy=4,dz=2,type=armor_stand] 989 100 1048
+/execute @e[x=986,y=99,z=950,dx=36,dy=4,dz=2,type=armor_stand] ~ ~ ~ tp @s ~1 50 1007
+title @a subtitle §6You have just completed the level!
+title @a title §a§lCongratulations
+/execute @a ~ ~ ~ playsound random.orb @p ~ ~ ~ 100000 2
+/fill 985 20 951 951 20 1032 quartz_block 0 replace redstone_block
+setblock ~ ~ ~3 redstone_block
+
+/execute @e[x=986,y=99,z=950,dx=36,dy=4,dz=2,type=armor_stand] ~ ~ ~ detect ~ ~-1 ~ quartz_block 0 setblock ~ 20 1007 redstone_block
+setblock ~ ~ ~-2 quartz_block (cond)
+setblock ~ ~ 951 quartz_block (cond)
+
+# Win Map
+/tp @a -3 25 224 180 0 
+kill @e[x=986,y=99,z=950,dx=36,dy=4,dz=2,type=armor_stand]
+kill @e[x=989,y=99,z=1048,dx=61,dy=4,dz=2,type=armor_stand]
+summon armor_stand 993 500 949
+/title @a subtitle §eYou have completed the map!
+/title @a title §a§lCongratulations
+execute @a ~ ~ ~ /playsound mob.wither.death @s ~ ~ ~
+execute @a ~ ~ ~ summon fireworks_rocket ~ ~2 ~
+§a§lCongratulations! §r§6You completed Find The Button III!
+clone (dispenser coordinates x2) (dispenser on you win)
+/setblock 66 1 47 stone
+
+# Reset
+setblock ~ ~ ~-1 quartz_block
+/fill 985 20 951 951 20 1032 quartz_block 0 replace redstone_block
+fill 987 20 951 1050 20 951 quartz_block 0 replace redstone_block
+summon armor_stand 987 101.1 951
+summon armor_stand 1050 100.1 1049
+tp @a 15 33 8 90 0
+setblock 993 20 951 quartz_block
+/setblock 66 1 47 redstone_block
+
+# Title buttons left
+/setblock ~ ~ ~-1 quartz_block
+/title @a actionbar §6§lButtons§7[§c0§7/§68§7]
+/setblock 993 20 951 redstone_block
+
+# Start Level
+setblock ~ ~ ~-1 quartz_block
+/title @a subtitle §eYou have to find 2 buttons!
+/title @a title §a§lLevel 21
+/title @a times 5 30 8
+execute @a ~ ~ ~ playsound random.levelup @a ~ ~ ~ 100000000 1.5
+/tp @e[x=1002,y=19,z=950,dx=52,dy=2,dz=2,type=armor_stand] 1048 20 951
+/tp @a 124 74 918
+fill ~ ~ 1000 ~ ~ 951 redstone_block 0 replace quartz_block
+/tickingarea add 93 0 1061 160 0 1159 lvl22
+tickingarea remove lvl20
+setblock 114 95 897 stone_button 3
+setblock 144 77 949 stone_button 2
+kill @e[type=xp_orb]
+say §r§l§2Level 21§r: §aRice to the Shrine§r. §6You have to find 2 buttons OR say §r§l§4Level 25 (BOSS)§r: §cPitchy Pitchblende§r. §6You have to find 7 buttons
+
+
+
+12 14 220
+1 14 209
+-7 14 209
+-18 14 220
+-18 14 228
+-7 14 239
+1 14 239
+12 14 228
+/setblock -2 10 225 redstone_block
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
