@@ -7,6 +7,7 @@ import neuralnetwork.SimpleNetwork;
 
 public class AI extends Player {
 
+	public static boolean sendInfos = false;
 	public Network reseau;
 	
 	public AI(SimpleNetwork sn) {
@@ -35,6 +36,10 @@ public class AI extends Player {
 		float[] inputs = readPlateau(plateau, player);		
 		float[] outputs = reseau.simulate(inputs);
 		
+		if(player == 1 && sendInfos) {
+			TrainingV3.situations.add(inputs);
+			TrainingV3.answers.add(outputs);	
+		}
 		//Training.disp(inputs);
 		//Training.disp(outputs);
 		

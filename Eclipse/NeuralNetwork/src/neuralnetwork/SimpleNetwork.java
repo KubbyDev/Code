@@ -227,7 +227,7 @@ public class SimpleNetwork extends Network {
 			weights[i] = (float) ((Math.random() + -0.5) * weightMult);
 
 		// return new Neuron(weights, (Math.random() + biaisAdd) * biaisMult);
-		return new Neuron(weights, -0.5f);
+		return new Neuron(weights, -0.0f);
 	}
 
 	public SimpleNetwork invert() {
@@ -285,5 +285,8 @@ public class SimpleNetwork extends Network {
 		return Save.exists(slot, Network.SIMPLE);
 	}
 
+	public Neuron getNeuron(int i) {
+		return network.get(i);
+	}
 	
 }

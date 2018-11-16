@@ -12,20 +12,9 @@ public class Test {
 	public static void main(String[] args) {
 
 		
-		int[] y = {5,500,500,7};
-		
-		BiologicalNetwork bn = new BiologicalNetwork(2100);
-		
-		for(int i = 0; i < 7; i++)
-			bn.getNeuron(2, i).display();
-		
-		
-		
-		BiologicalNetwork s = new BiologicalNetwork(2103);
-			
-		float[] inputs = generateMorpionInputs(true);
-		
-		disp(s.simulate(inputs));
+		SimpleNetwork s = new SimpleNetwork(2002);
+		for(int i = 0; i < 9; i++)
+			s.getNeuron(i).display();
 		
 	}
 	

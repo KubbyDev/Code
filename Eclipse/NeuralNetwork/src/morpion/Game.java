@@ -1,7 +1,6 @@
 package morpion;
 
-import neuralnetwork.BiologicalNetwork;
-import neuralnetwork.DeepNetwork;
+import neuralnetwork.SimpleNetwork;
 
 public class Game {
 	
@@ -16,8 +15,8 @@ public class Game {
 	
 	public static void main(String[] args) {
 		
-		Game g = new Game(new Human(), new AI(new BiologicalNetwork(2201)));
-		g.start(true, true, false);
+		Game g = new Game(new AI(new SimpleNetwork(2002)), new Human());
+		g.start(true, false, false);
 		
 	}
 	
