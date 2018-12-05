@@ -9,6 +9,18 @@ public class Test {
 	
 	public static void main(String[] args) {
 
+		CustomGate c1 = new CustomGate("c1", "or(i0,and(i2,or(not(i0),i1)))");
+		c1.generateTruthTable();
+		System.out.println(c1.isCircuitEquivalent("or(i0,i1)"));
+		
+		CustomGate c2 = new CustomGate("c2", "or(or(and(i0,and(i1,i2)),and(i0,and(not(i1),not(i2)))),or(and(not(i0),and(i1,not(i2))),and(not(i0),and(i1,i2))))");
+		//System.out.println(CustomGate.simplify(c2.getCircuit(), 20, true));
+		
+		System.out.println(CustomGate.simplify("xnor(i0,i1)", 20, true));
+	}
+	
+	public static void oldTests() {
+		
 		String i1 = new String("0000011000001111");
 		String i2 = new String("0000110010010110");
 
