@@ -25,7 +25,7 @@ public class Game {
 	
 	public static void main(String[] args) {
 		
-		Game g = new Game(new Human(), new MinimaxAI(2));
+		Game g = new Game(new Human(), new MinimaxAI(7));
 		g.start(true, false, false);
 		
 	}

@@ -105,8 +105,10 @@ public class MinimaxAI extends Player {
 		else
 			value = getMin(rates);
 		
-		if(Math.abs(value) == 100000)
-			return -value;
+		//Si toutes les colonnes sont pleines, on donne un rate choisi uniquement
+		//en dernier recours, mais preferé a une colonne deja pleine au tour precedent
+		if(Math.abs(value) >= 1000000000)
+			return -value +1;
 		
 		return value;
 		
