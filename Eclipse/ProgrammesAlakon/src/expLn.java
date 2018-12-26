@@ -1,12 +1,45 @@
 
 public class expLn {
 
+	public static int nbTours = 0;
+	public static int var1 = 0;
+	public static int var3 = 0;
+	public static int var2 = 0;
+	public static int res = 0;
+	
 	public static void main(String[] args) {
 
-		System.out.println(Math.exp(0.1) + "    " + approxExp(0.1));
-		//System.out.println(Math.log(5) + "    " + approxLn(4));
+		double x = -0.23;
+		System.out.println("Exp(" + x + ")\n" + "Valeur de Java: " + Math.exp(x) + "\nApproximation avec des doubles: " + approxExp2(x));
+		
+		var1 = (int) (x*100);
+		nbTours = 0;
+		exp();
+		System.out.println("Approximation avec des ints: " + res + " En " + nbTours + " tours");
 	}
 
+	public static void exp() {
+		
+		res = 1000;
+		var3 = var1;
+		var3 *= 10;
+		var2 = 1;
+		expLoop();
+	}
+	
+	private static void expLoop() {
+		
+		res += var3;
+		var2 += 1;
+		var3 /= var2;
+		var3 *= var1;
+		var3 /= 100;
+		
+		nbTours++;
+		if(var3 != 0)
+			expLoop();
+	}
+	
 	public static double approxExp(double x) {
 		
 		double ex = 0;
@@ -18,6 +51,20 @@ public class expLn {
 		}
 		
 		return ex;
+	}
+	
+	public static double approxExp2(double x) {
+		
+		double sum = 1.0;
+		double term = x;
+		
+		for(int i = 2; i-1 <= 20; i++) 
+		{
+			sum += term;
+			term  = term * (x / i);
+		}
+		
+		return sum;
 	}
 	
     public static long factorial(int number) {
