@@ -1,16 +1,7 @@
 
 public class expLn {
 	
-	public static int var1 = 0,
-					  var2 = 0,
-					  var3 = 0,
-					  var4 = 0,
-					  var5 = 0,
-					  var6 = 0,
-					  var7 = 0,
-					  var8 = 0,
-					  res = 0;
-
+	public static int var1 = 0, var2 = 0, var3 = 0, var4 = 0, var5 = 0, var6 = 0, var7 = 0, var8 = 0, var9 = 0, res = 0;
 	public static int nbTours = 0;
 	
 	public static void main(String[] args) {
@@ -26,7 +17,7 @@ public class expLn {
 		*/
 		
 		/*
-		double[] tests = {0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100, 500, 1000, 5000, 10000, 50000, 100000};
+		double[] tests = {0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000};
 		for(double d : tests) {
 			System.out.print("x= " + d + " ");
 			approxLn2(d);
@@ -35,18 +26,22 @@ public class expLn {
 			System.out.println();
 		}
 		*/
-				
-		double x = 0.002;
+			
+		/*
+		double x = 0.005;
 		System.out.println("ln(" + x + ")\nApproximation:     " + approxLn2(x) + "\nValeur de Java:    " + Math.log(x));
 		
 		var1 = (int) (x*1000);
 		ln();
 		System.out.println("Methode Minecraft: " + res);
+		*/
 		
+		/*
 		int i = 1;
 		
-		int maxTest = 1;
+		int maxTest = 6;
 		int step = -3;
+		boolean fastTest = true;
 		System.out.println("\n\n\nTest des valeurs 10^-3 a 10^" + maxTest + " avec un pas de 10^" + step);
 		
 		int pas = (int) Math.pow(10, step +3);
@@ -56,12 +51,15 @@ public class expLn {
 		double erreurMaxPos = 0;
 		int erreurGrosses = 0;
 		int erreurTresGrosses = 0;
+		double base = 3.5;
 		
 		while(i <= Math.pow(10, maxTest +3)) {
-			
+		
 			var1 = i;
 			ln();
-			int valeurJava = (int) (10000 * Math.log((double) i / 1000));
+			res *= 10000;
+			res /= Math.log(base) * 10000;
+			int valeurJava = (int) (10000 * (Math.log((double) i / 1000))/Math.log(base));
 			
 			double erreur = res - valeurJava; 
 			
@@ -75,7 +73,10 @@ public class expLn {
 			if(Math.abs(erreur) >= 10) erreurGrosses++;
 			if(Math.abs(erreur) >= 20) erreurTresGrosses++;
 			
-			i += pas;
+			if(fastTest && i > 1000000)
+				i += 10000;
+			else
+				i += pas;
 		}
 		
 		System.out.println("Nombre de valeurs testées: " + valeursTestees);
@@ -85,7 +86,29 @@ public class expLn {
 		System.out.println("Proportion d'erreurs >= 0.001: " + (double) Math.round(100000*((double)erreurGrosses/(double)valeursTestees))/1000 + "%");
 		System.out.println("Erreurs >= 0.002: " + erreurTresGrosses);
 		System.out.println("Proportion d'erreurs >= 0.002: " + (double) Math.round(100000*((double)erreurTresGrosses/(double)valeursTestees))/1000 + "%");
+		*/
+		
+		double a = 5.786;
+		double x = 1.786;
+		System.out.println("log(" + x + ")\nApproximation:     " + approxLn2(x)/approxLn2(a) + "\nValeur de Java:    " + Math.log(x)/Math.log(a));
+		
+		var1 = (int) (x*1000);
+		var2 = (int) (a*1000);
+		
+		var9 = var1;
+		var1 = var2;
+		ln();
 
+		var1 = var9;
+		var9 = res;
+
+		ln();
+		res *= 10000;
+
+		res /= var9;
+		
+		System.out.println("Methode Minecraft: " + res);
+		
 	}
 
 	public static void exp() {
@@ -173,16 +196,16 @@ public class expLn {
     	double y = (a-1)/(a+1);
     	
     	//System.out.print(" (n+2)= " + (n+2));
-    	System.out.println("(n+2)= " + (n+2));
-    	System.out.println("a= " + a);
-    	System.out.println("y= " + y);
+    	//System.out.println("(n+2)= " + (n+2));
+    	//System.out.println("a= " + a);
+    	//System.out.println("y= " + y);
     	
     	for(int i = 0; i < 13; i++) {
-    		System.out.println("Add to sp: " + Math.pow(y,  2*i +1) / (2*i +1));
+    		//System.out.println("Add to sp: " + Math.pow(y,  2*i +1) / (2*i +1));
     		sp += Math.pow(y,  2*i +1) / (2*i +1);
     	}
     	
-    	System.out.println("Sp= " + sp);
+    	//System.out.println("Sp= " + sp);
     	
     	return 2*sp + (n-1)*2.302585;
     }
@@ -192,107 +215,107 @@ public class expLn {
     	//Var4 = x (* 1000)
     	var4 = var1; 
     	
-    	//Var2 = n-1
+    	//Var2 = n+2
     	if(var4 <= 1000) var1 -= 1;   	
     	var2 = 0;
     	if(var4 != 1)
-    		ln_ndigits();
+    		ln_digits();
     	if(var4 > 1000) var2 -= 1;
     	
     	//Var7 = n-1
     	var7 = var2;
     	var7 -= 3;
     	
-    	//System.out.print(" var2= " + var2 + "  ");
-    	
     	//Res = 10^(n-1) (* 1000)
     	var1 = 10;
-    	res = (int) Math.pow(var1, var2);   //Attention, var3 est modifie a ce moment la (dans la fonction de la lib)
+    	res = (int) Math.pow(var1, var2); var3 = 0;
     	
-		//y = (a-1)/(a+1), a = x/10^(n-1) => y = (x-10^(n-1))/x+10^(n-1)
-    	//Var1 = y (* 10 000)
-    	var1 = var4;
-    	var1 -= res;
+    	//Calculation of y
+    	
+		//y = (a-1)/(a+1), a = x/10^(n-1) => y = (x-10^(n-1))/(x+10^(n-1))
+    	//Var5 = y (* 10 000)
+    	var5 = var4;
+    	var5 -= res;
     	var4 += res;
+    	//We change the orders of magnitude to have the best possible accuracy
+    	//Calculation of the multipliers
+    	//Var8 = 10^(5-Var7)
+    	//Var6 = 10^(Var7-1)
+    	var6 = res;
+    	var6 /= 10000;
+    	var2 = 5;
+    	var2 -= var7;
+    	res = (int) Math.pow(var1, var2); var3 = 0; 	
+    	var8 = 1;
+    	if (var7 == 6) var5 /= 10;
+    	else var8 = res;
+    	//Modification of the orders of magnitude
+    	var5 *= var8;
+    	if(var5 > 0) var5 += 50000;
+    	if(var5 < 0) var5 -= 50000;
+    	var8 /= 10000;
+    	if(var7 < 1) var4 *= var8;
+    	if(var7 > 1) var4 /= var6;
+    	//Division of x-10^(n-1) by x+10^(n-1)
+    	var5 /= var4;
+    	var1 = var5;
     	
-    	//On adapte les ordres de grandeur pour avoir la meilleure précision possible
-    	//Var2 = 10^(min (5, n-2))
-    	/*
-    	var2 = var7;
-    	var2 -= 1;
-    	if(var2 > 5) var2 = 5;
-    	res = (int) Math.pow(var1, var2);
-    	var8 = 10000;
-    	if(res == 0) res = 1;
-    	var8 /= res;
-    	*/
+    	//Calculation of Sp
     	
-    	var8 = (int) Math.pow(10, Math.max(-1, -var7+5));
-    	if(var8 == 0) var8 += 1;
-    	
-    	double mult = Math.pow(10, Math.min(5, var7-1));
-    	System.out.print(mult);
-    	
-    	var1 *= var8;   //10000/Math.pow(10, Math.min(5, var7-1))
-    	if(var1 > 0)
-    		var1 += 50000;
-    	if(var1 < 0)
-    		var1 -= 50000;
-    	var4 /= Math.pow(10, Math.min(5, var7-1));
-    	
-    	var1 /= var4;
-	
     	//Var6 = Sp (* 10 000)
     	var2 = 1;
     	var6 = 0;
-    	
     	var3 = var1;
     	ln_loop();
     	
+    	//Last calculation
+    	//log(x) ~ Sp + (n-1)*log(10)
     	res = var6;
     	res *= 2;
     	var7 *= 2302585;
     	var7 /= 100;
     	res += var7;
     	
-    	res += 10;
+    	//Small adjustment to increase average accuracy
+    	res += 7;
     }
     
-    public static void ln_ndigits() {
+    public static void ln_digits() {
+		
+		//Counts the number of digits of var1
+		var1 /= 10;
+		var2 += 1;
+		
+		if(var1 != 0)
+			ln_digits();
     	
-    	//Counts the number of digits before the point
-    	var1 /= 10;
-    	var2 += 1;
-    	
-    	if(var1 != 0)
-    		ln_ndigits();
-    	
-    }    
+    }
     
     public static void ln_loop() {
-    	
-    	res = var3;
-    	res /= var2;
-    	var6 += res;
-    	var2 += 2;
-    	
-    	//Calcul de y^(var2)
-    	var3 *= var1;
-    	if(var3 > 0)
-    		var3 += 5000;
-    	if(var3 < 0)
-    		var3 -= 5000;
-    	var3 /= 10000;    	
-    	var3 *= var1;
-    	if(var3 > 0)
-    		var3 += 5000;
-    	if(var3 < 0)
-    		var3 -= 5000;
-    	var3 /= 10000;
-    	
-    	if(res > 1 || res < -1)
-    		ln_loop();
-    
+		
+		//S_p = 2 * sum(k from 0 to p)( y^(2k+1) / (2k+1) )
+		//In minecraft we don't have infinite accuracy so p is not definied,
+		//but we stop suming when the term is < 1
+		
+		res = var3;
+		res /= var2;
+		var6 += res;
+		var2 += 2;
+		
+		//Calculation of y^(var2)
+		var3 *= var1;
+		if(var3 > 0) var3 += 5000;
+		if(var3 < 0) var3 -= 5000;
+		var3 /= 10000;    	
+		var3 *= var1;
+		if(var3 > 0) var3 += 5000;
+		if(var3 < 0) var3 -= 5000;
+		var3 /= 10000;
+		
+		//If it is useful to continue
+		if(res > 1 || res < -1)
+			ln_loop();
+
     }
     
 }

@@ -467,6 +467,85 @@ public class CustomGate {
 		return a.get(bestIndex);	
 	}
 	
+	private static String cleanBoolExpr(String s) {
+		
+		//Au cas ou l'expression commence par des espaces
+		int j = 0;
+		while(s.charAt(j) == ' ')
+			j++;
+		
+		//On clean l'entree (suppression des espaces, ajout de * la ou il en faut)
+		String ret = new String() + s.charAt(j);
+		char prev = s.charAt(j);
+		
+		for(int i = j+1; i < s.length(); i++) {
+			
+			char c = s.charAt(i);
+			
+			if(c != ' ' && c != '*' && c != '+' && c != ')' && prev != '*' && prev != '+' && prev != '(' && prev != '/')
+				ret += '*';
+			
+			if(c != ' ') {
+				ret += c;	
+				prev = c;
+			}
+		}
+		
+		return ret;
+	}
+	
+	private static String removeParenthesis(String s) {
+		return (s.charAt(0) == '(') ? s.substring(1, s.length()-1) : s;
+	}
+	
+	public static String toCircuit(String boolExpr, ArrayList<String> inputNames) {
+		
+		String s = cleanBoolExpr(boolExpr);
+		
+		int i = 0;
+		int imbrication = 0;
+		while(i < s.length()) {
+			
+			char c = s.charAt(i);
+			
+			if(c == '(')
+				imbrication++;
+			
+			if(c == ')')
+				imbrication--;
+			
+			if(imbrication == 0) {
+				
+				if(c == '+')
+					return "or(" + toCircuit(removeParenthesis(s.substring(0, i)), inputNames) + "," + toCircuit(removeParenthesis(s.substring(i+1, s.length())), inputNames) + ")";
+				
+				if(c == '*')
+					return "and(" + toCircuit(removeParenthesis(s.substring(0, i)), inputNames) + "," + toCircuit(removeParenthesis(s.substring(i+1, s.length())), inputNames) + ")";
+				
+			}
+			
+			i++;
+		}
+		
+		if(s.charAt(0) == '/')
+			return "not(" + toCircuit(removeParenthesis(s.substring(1, s.length())), inputNames) + ")";
+		
+		return "i" + inputNames.indexOf(s);
+	}
+	
+	public static String toCircuit(String boolExpr) {
+		return toCircuit(boolExpr, generateInputNames());
+	}
+	
+	private static ArrayList<String> generateInputNames() {
+	
+		ArrayList<String> a = new ArrayList<String>();
+		for(int i = 0; i < 26; i++)
+			a.add((char) (i + 'a') + "");
+		
+		return a;		
+	}
+	
 	private class GateInput {
 		
 		public int inputNumber;
@@ -617,6 +696,48 @@ public class CustomGate {
 	
 	public String getCircuit() {
 		return this.circuit;
+	}
+	
+	public static String toMathExpression(String s) {
+		return toMathExpression(s, generateInputNames());
+	}
+	
+	public static String toMathExpression(String s, ArrayList<String> inputNames) {
+		
+		String[] gateAndInputs = readGate(s);
+			
+		switch (gateAndInputs[0]) {
+	
+		case "not"  : return "/" + getMathInput(gateAndInputs[1], inputNames, true);
+		case "and"  : return getMathInput(gateAndInputs[1], inputNames, false) + getMathInput(gateAndInputs[2], inputNames, false);
+		case "or"   : return getMathInput(gateAndInputs[1], inputNames, false) + " + " + getMathInput(gateAndInputs[2], inputNames, false);
+	
+		default: 
+			new Exception("The math expression can only contain +, *, / operators").printStackTrace();
+			return "";
+		}
+		
+	}
+	
+	private static String getMathInput(String input, ArrayList<String> inputNames, boolean needParenthesis) {
+	
+		if(input.charAt(0) != 'i')   //Si on a une porte a traduire
+			if(input.contains("or(") || needParenthesis)
+				return "(" + toMathExpression(input, inputNames) + ")";	
+			else
+				return toMathExpression(input, inputNames);	
+		
+		//Si on a un input a traduire
+		return inputNames.get(Integer.valueOf(input.substring(1, input.length())));
+		
+	}
+	
+	public String getMathExpression() {
+		return toMathExpression(circuit);
+	}
+	
+	public String getMathExpression(ArrayList<String> inputNames) {
+		return toMathExpression(circuit, inputNames);
 	}
 	
 }
