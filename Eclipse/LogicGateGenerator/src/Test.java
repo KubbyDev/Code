@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class Test {
 
-	public static CustomGate addO1 = new CustomGate("addO1", "xor(xor(i0,i1),i2)");
-	public static CustomGate addO2 = new CustomGate("addO2", "or(and(i1,i2),and(i0,or(i1,i2)))");
+	//public static CustomGate addO1 = new CustomGate("addO1", "xor(xor(i0,i1),i2)");
+	//public static CustomGate addO2 = new CustomGate("addO2", "or(and(i1,i2),and(i0,or(i1,i2)))");
 	
 	//xor(xor(i0,i1),i2)
 	
@@ -19,10 +19,10 @@ public class Test {
 		//System.out.println(CustomGate.simplify(c2.getCircuit(), 20, true));
 		
 		System.out.println(CustomGate.simplify("xnor(i0,i1)", 20, true));
-		*/
 		
 		CustomGate c = new CustomGate("tamere", CustomGate.toCircuit("(a+b)a/b + /(a+b)"));
 		System.out.println(c.getMathExpression());
+		*/
 		
 	}
 	

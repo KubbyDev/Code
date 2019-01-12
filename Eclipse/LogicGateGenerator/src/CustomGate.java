@@ -16,6 +16,20 @@ public class CustomGate {
 	
 	//Constructeurs
 	
+	public CustomGate(String pName, String pCircuit) {
+
+		if(pName == "")
+			throw new IllegalArgumentException("The name of the gate must contain at least one character");
+		
+		if(pName.charAt(0) == 'i')
+			throw new IllegalArgumentException("The name of the gate can't start with an \'i\'");
+		
+		//On donne le circuit, le programme peut génerer la table de vérités
+		circuit = pCircuit;
+		name = pName;
+		
+	}
+	
 	public CustomGate(String pName, boolean[][] pTruthTable, long maxTimeSec, boolean pOnlyBasic) {
 		
 		//On donne la table de vérité, le programme génere le circuit en moins de (maxTimeSec) secondes 
@@ -39,14 +53,6 @@ public class CustomGate {
 		boolean[][] orderedTable = orderTruthTable(pTruthTable);
 		if(orderedTable != null)
 			circuit = selectBest(generateCircuit(orderedTable, maxTimeSec), pTruthTable[0].length-1);
-		
-	}
-	
-	public CustomGate(String pName, String pCircuit) {
-		//On donne le circuit, le programme peut génerer la table de vérités
-		
-		circuit = pCircuit;
-		name = pName;
 		
 	}
 
@@ -356,6 +362,10 @@ public class CustomGate {
 		
 	}
 
+	public void simplify(long maxTimeSec, boolean pOnlyBasic) {
+		circuit = new CustomGate("ret", getTruthTable(), maxTimeSec, pOnlyBasic).getCircuit();
+	}
+	
 	private String generateTestGate(int nbreInputs) {
 		
 		TestGate gate = new TestGate(onlyBasic);
@@ -691,6 +701,10 @@ public class CustomGate {
 	}
 
 	public boolean[][] getTruthTable() {
+		
+		if(truthTable == null)
+			generateTruthTable();
+		
 		return this.truthTable;
 	}
 	

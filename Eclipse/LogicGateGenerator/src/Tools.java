@@ -20,15 +20,15 @@ public class Tools {
 	}
 	
 	public static boolean xnor(boolean i1, boolean i2) {
-		return not(xor(i1, i2));
+		return (!i1 && !i2) || (i2 && i1);
 	}	
 	
 	public static boolean nand(boolean i1, boolean i2) {
-		return not(and(i1, i2));
+		return !i1 || !i2;
 	}	
 	
 	public static boolean nor(boolean i1, boolean i2) {
-		return not(or(i1, i2));
+		return !i1 && !i2;
 	}	
 	
 	//Autres
