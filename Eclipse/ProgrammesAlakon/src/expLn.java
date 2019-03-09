@@ -6,6 +6,17 @@ public class expLn {
 	
 	public static void main(String[] args) {
 		
+		double max = 0;
+		
+		for(int i = -100; i < 1200; i++) {
+			var1 = i;
+			exp();
+			
+			max = Math.max(max, Math.abs( Math.exp((double) i/100)*1000 - res ) / (Math.exp((double)i/100)*1000));
+		}
+			
+		System.out.print(max);
+		
 		/*
 		double x = -0.23;
 		System.out.println("Exp(" + x + ")\n" + "Valeur de Java: " + Math.exp(x) + "\nApproximation avec des doubles: " + approxExp2(x));
@@ -88,6 +99,7 @@ public class expLn {
 		System.out.println("Proportion d'erreurs >= 0.002: " + (double) Math.round(100000*((double)erreurTresGrosses/(double)valeursTestees))/1000 + "%");
 		*/
 		
+		/*
 		double a = 5.786;
 		double x = 1.786;
 		System.out.println("log(" + x + ")\nApproximation:     " + approxLn2(x)/approxLn2(a) + "\nValeur de Java:    " + Math.log(x)/Math.log(a));
@@ -108,6 +120,7 @@ public class expLn {
 		res /= var9;
 		
 		System.out.println("Methode Minecraft: " + res);
+		*/
 		
 	}
 
