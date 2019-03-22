@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Gamedev Canvas Workshop</title>
+    <title>Casse Briques</title>
     <style>
         * { padding: 0; margin: 0; }
         canvas { background: #7b7b7b; display: block; margin: 0 auto; }
@@ -21,12 +21,16 @@
 
         static color = "#3cd3ff";
         static radius = 5;
-        static speedVal = 1;
+        static speedVal = 2;
+        static startPos = [240,300];
+        static count = 10;
 
-        constructor(startAngle) {
+        constructor(speedX, speedY) {
 
-            this.speed = [Math.cos(startAngle*Math.PI/180),Math.sin(startAngle*Math.PI/180)],
-                this.position = [10,10]
+            this.speed = [speedX,speedY],
+                this.position = [0,0],
+                this.position[0] = Ball.startPos[0],
+                this.position[1] = Ball.startPos[1]
         }
 
         move() {
@@ -34,9 +38,8 @@
             let delta = [0,0];
             delta[0] = this.speed[0] / Ball.speedVal;
             delta[1] = this.speed[1] / Ball.speedVal;
-            let nbReps = Ball.speedVal;
 
-            for(let i = 0; i < nbReps; i++) {
+            for(let i = 0; i < Ball.speedVal; i++) {
 
                 //Collisions avec les briques
                 for(let brick of bricks) {
@@ -80,7 +83,7 @@
     class Brick {
 
         static color = "#b90003";
-        static startHealth = 2;
+        static startHealth = 25;
         static width = 30;  //La largeur en partant du milieu
         static height = 30; //La hauteur en partant du milieu
 
@@ -98,14 +101,49 @@
     }
 
     function createBricks() {
-        return [new Brick(40,50) ,new Brick(80,50),new Brick(120,50),new Brick(160,50), new Brick(200,50), new Brick(240,50), new Brick(280,50), new Brick(320,50)];
+        return [new Brick(40,50),
+            new Brick(80,50),
+            new Brick(120,50),
+            new Brick(160,50),
+            new Brick(200,50),
+            new Brick(240,50),
+            new Brick(280,50),
+            new Brick(320,50)];
     }
 
     function update() {
 
-        //Calcul des mouvements de chaque balle
-        for(let ball of balls) {
-            ball.move();
+        //Si il reste des balles a lancer
+        if(ballsToShoot > 0 && timeToShoot <= 0) {
+            balls.push(new Ball(chosenX, chosenY));
+            timeToShoot = 20;
+            ballsToShoot--;
+        }
+        if(timeToShoot > 0)
+            timeToShoot--;
+
+        if(shooting) {
+            //Si on est en train de choisir la direction de lancer
+
+            if(mouseX !== 0 && mouseY !== 0) {
+
+                chosenX = Math.abs(Ball.startPos[0] - mouseX)+1;
+                chosenY = Math.abs(Ball.startPos[1] - mouseY)+1;
+                let mult = Ball.speedVal / Math.sqrt(chosenX*chosenX + chosenY*chosenY);
+                chosenX *= mult;
+                chosenY *= mult;
+
+                ballsToShoot = Ball.count;
+                shooting = false;
+            }
+        }
+        else {
+            //Si on a deja lance les balles
+
+            //Calcul des mouvements de chaque balle
+            for(let ball of balls) {
+                ball.move();
+            }
         }
 
         //Affichage de la frame
@@ -116,21 +154,21 @@
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        for(let ball of balls) {
+        for (let ball of balls) {
 
             //Affichage du disque
             ctx.beginPath();
-            ctx.arc(Math.round(ball.position[0]), Math.round(ball.position[1]), Ball.radius, 0, Math.PI*2, false);
+            ctx.arc(Math.round(ball.position[0]), Math.round(ball.position[1]), Ball.radius, 0, Math.PI * 2, false);
             ctx.fillStyle = Ball.color;
             ctx.fill();
             ctx.closePath();
         }
 
-        for(let brick of bricks) {
+        for (let brick of bricks) {
 
             //Affichage du carre
             ctx.beginPath();
-            ctx.rect(brick.position[0] - Brick.width/2, brick.position[1] - Brick.height/2, Brick.width, Brick.height);
+            ctx.rect(brick.position[0] - Brick.width / 2, brick.position[1] - Brick.height / 2, Brick.width, Brick.height);
             ctx.fillStyle = Brick.color;
             ctx.fill();
             ctx.closePath();
@@ -138,13 +176,28 @@
             //Affichage de la vie
             ctx.fillStyle = "#FFFFFF";
             ctx.textAlign = "center";
-            ctx.textBaseline = "bottom";
-            ctx.fillText(brick.health.toString(), brick.position[0]-1, brick.position[1]+5);
+            ctx.textBaseline = "center";
+            ctx.fillText(brick.health.toString(), brick.position[0] - 1, brick.position[1]);
         }
     }
 
-    let balls = [new Ball(30)];
+    function getMousePos(event) {
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+    }
+    document.addEventListener("click", getMousePos);
+
+    let mouseX = 0;
+    let mouseY = 0;
+
+    let chosenX = 0;
+    let chosenY = 0;
+    let timeToShoot = 0;
+    let ballsToShoot = 0;
+
+    let balls = [];
     let bricks = createBricks();
+    let shooting = true;
 
     setInterval(update, 5);
 
