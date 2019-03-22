@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Gamedev Canvas Workshop</title>
+    <style>
+        * { padding: 0; margin: 0; }
+        canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="480" height="320"></canvas>
+
+<script>
+
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+
+    class Ball {
+
+        static color = "#3cd3ff";
+        static radius = 5;
+        static speedVal = 1;
+
+        constructor(startAngle) {
+
+            this.speed = [Math.cos(startAngle*Math.PI/180),Math.sin(startAngle*Math.PI/180)],
+                this.position = [10,10]
+        }
+
+        move() {
+
+            let delta = [0,0];
+            delta[0] = this.speed[0] / Ball.speedVal;
+            delta[1] = this.speed[1] / Ball.speedVal;
+            let nbReps = Ball.speedVal;
+
+            for(let i = 0; i < nbReps; i++) {
+
+                /*
+                //Collisions avec les briques
+                for(var brick of allBricks) {
+                    //Collisions horizontales
+                    if(brick.position[0] + width < this.position[0] + delta[0] - radius && brick.position[0] - width > this.position[0] + delta[0] + radius)
+                        delta[0] *= -1;
+                    //Collisions verticales
+                    if(brick.position[1] + width < this.position[1] + delta[1] - radius && brick.position[1] - width > this.position[1] + delta[1] + radius)
+                        delta[1] *= -1;
+                }
+                */
+
+                //Collisions avec les murs gauche ou droite
+                if(this.position[0] + delta[0] - Ball.radius < 0 || this.position[0] + delta[0] + Ball.radius > canvas.width) {
+                    delta[0] *= -1;
+                    this.speed[0] *= -1;
+                }
+                //Collisions avec les murs haut et bas
+                if(this.position[1] + delta[1] - Ball.radius < 0 || this.position[1] + delta[1] + Ball.radius > canvas.height) {
+                    delta[1] *= -1;
+                    this.speed[1] *= -1;
+                }
+
+                this.position[0] += delta[0];
+                this.position[1] += delta[1];
+            }
+        }
+    }
+
+    class Brick {
+
+        static color = "#FF0000";
+        static startHealth = 50;
+        static width = 4;  //La largeur en partant du milieu
+        static height = 2; //La hauteur en partant du milieu
+
+        constructor() {
+            this.health = Brick.startHealth,
+                this.position = [0,0]
+        }
+
+        hit() {
+            this.health -= 1;
+        }
+
+    }
+
+    function createBricks() {
+        return [];
+    }
+
+    function update() {
+
+        for(let ball of balls) {
+            ball.move();
+        }
+
+        draw();
+    }
+
+    function draw() {
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for(let ball of balls) {
+
+            ctx.beginPath();
+            ctx.arc(Math.round(ball.position[0]), Math.round(ball.position[1]), Ball.radius, 0, Math.PI*2, false);
+            ctx.fillStyle = Ball.color;
+            ctx.fill();
+            ctx.closePath();
+        }
+    }
+
+    setInterval(update, 5);
+
+    let balls = [new Ball(30)];
+    let bricks = createBricks();
+
+</script>
+
+</body>
+</html>
