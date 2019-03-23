@@ -24,6 +24,7 @@
         static speedVal = 2;
         static startPos = [240,300];
         static count = 8;
+        static timeToShoot = 1000;
 
         static toKill = [];
 
@@ -54,7 +55,7 @@
                         this.speed[0] *= -1;
                         brick.hit();
                     }
-                    //Collisions vertical
+                    //Collisions verticales
                     if(this.position[0] > brick.position[0] - Brick.width/2 - Ball.radius
                         && this.position[0] < brick.position[0] + Brick.width/2 + Ball.radius
                         && this.position[1] + delta[1] > brick.position[1] - Brick.height/2 - Ball.radius
@@ -76,7 +77,7 @@
                     this.speed[1] *= -1;
                 }
                 //Sortie par le mur du bas
-                if(this.position[1] + delta[1] > canvas.height) {
+                if(this.position[1] + delta[1] - Ball.radius > canvas.height) {
                     this.onLeave();
                 }
 
@@ -94,9 +95,10 @@
     class Brick {
 
         static color = "#b90003";
-        static startHealth = 25;
+        static startHealth = 10;
         static width = 30;  //La largeur en partant du milieu
         static height = 30; //La hauteur en partant du milieu
+        static timeToMove = 30;
 
         constructor(posX, posY) {
             this.health = Brick.startHealth,
@@ -105,9 +107,27 @@
 
         //Appellee quand une balle touche cette brique
         hit() {
+
             this.health -= 1;
             if(this.health <= 0)
                 bricks.splice(bricks.indexOf(this), 1);
+        }
+
+        move() {
+
+            //Collisions avec les balles
+            for(let ball of balls) {
+                //Collisions verticales
+                if(ball.position[0] > this.position[0] - Brick.width/2 - Ball.radius
+                    && ball.position[0] < this.position[0] + Brick.width/2 + Ball.radius
+                    && ball.position[1] > this.position[1] +1 - Brick.height/2 - Ball.radius
+                    && ball.position[1] < this.position[1] +1 + Brick.height/2 + Ball.radius) {
+                    ball.position[1]++;
+                    this.hit();
+                }
+            }
+
+            this.position[1]++;
         }
 
     }
@@ -141,17 +161,27 @@
     function update() {
 
         //Si il reste des balles a lancer
-        if(ballsToShoot > 0 && timeToShoot <= 0) {
+        if(ballsToShoot > 0 && autoShootTime <= 0) {
 
             balls.push(new Ball(chosenX, chosenY));
-            timeToShoot = 20;
+            autoShootTime = 20;
             ballsToShoot--;
         }
-        if(timeToShoot > 0)
-            timeToShoot--;
+        if(autoShootTime > 0)
+            autoShootTime--;
 
+        //Mouvements des cubes
+        if(timeToMoveBricks <= 0) {
+
+            for(let brick of bricks)
+                brick.move();
+            timeToMoveBricks = Brick.timeToMove;
+        }
+        else
+            timeToMoveBricks--;
+
+        //Si on est en train de choisir la direction de lancer
         if(shooting) {
-            //Si on est en train de choisir la direction de lancer
 
             if(mouseX !== 0 && mouseY !== 0) {
 
@@ -162,26 +192,26 @@
                 shooting = false;
             }
         }
-        else {
-            //Si on a deja lance les balles
 
-            //Calcul des mouvements de chaque balle
-            for(let ball of balls)
-                ball.move();
+        //Calcul des mouvements de chaque balle
+        for(let ball of balls)
+            ball.move();
 
-            //Kill toutes les balles qui doivent l'etre
-            for(let ball of Ball.toKill)
-                balls.splice(balls.indexOf(ball), 1);
-            Ball.toKill = [];
+        //Kill toutes les balles qui doivent l'etre
+        for(let ball of Ball.toKill)
+            balls.splice(balls.indexOf(ball), 1);
+        Ball.toKill = [];
 
-            //Si il n'y a plus de balles
-            //on relance le choix de la direction du lancer
-            if(balls.length === 0) {
-                mouseX = 0;
-                mouseY = 0;
-                shooting = true;
-            }
+        //Si il n'y a plus de balles
+        //on relance le choix de la direction du lancer
+        if(timeToShoot <= 0) {
+            mouseX = 0;
+            mouseY = 0;
+            shooting = true;
+            timeToShoot = Ball.timeToShoot;
         }
+        else
+            timeToShoot--;
 
         //Affichage de la frame
         draw();
@@ -231,7 +261,9 @@
     let chosenX = 0;
     let chosenY = 0;
     let timeToShoot = 0;
+    let autoShootTime = 0;
     let ballsToShoot = 0;
+    let timeToMoveBricks = 0;
 
     let balls = [];
     let bricks = createBricks();
