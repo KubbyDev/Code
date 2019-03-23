@@ -23,7 +23,9 @@
         static radius = 5;
         static speedVal = 2;
         static startPos = [240,300];
-        static count = 10;
+        static count = 8;
+
+        static toKill = [];
 
         constructor(speedX, speedY) {
 
@@ -68,15 +70,24 @@
                     delta[0] *= -1;
                     this.speed[0] *= -1;
                 }
-                //Collisions avec les murs haut et bas
-                if(this.position[1] + delta[1] - Ball.radius < 0 || this.position[1] + delta[1] + Ball.radius > canvas.height) {
+                //Collisions avec le mur du haut
+                if(this.position[1] + delta[1] - Ball.radius < 0) {
                     delta[1] *= -1;
                     this.speed[1] *= -1;
+                }
+                //Sortie par le mur du bas
+                if(this.position[1] + delta[1] > canvas.height) {
+                    this.onLeave();
                 }
 
                 this.position[0] += delta[0];
                 this.position[1] += delta[1];
             }
+        }
+
+        onLeave() {
+            if(!Ball.toKill.includes(this))
+                Ball.toKill.push(this);
         }
     }
 
@@ -92,6 +103,7 @@
                 this.position = [posX, posY]
         }
 
+        //Appellee quand une balle touche cette brique
         hit() {
             this.health -= 1;
             if(this.health <= 0)
@@ -111,10 +123,26 @@
             new Brick(320,50)];
     }
 
+    function calcVector() {
+
+        chosenX = mouseX - canvas.offsetLeft - Ball.startPos[0];
+        chosenY = mouseY - canvas.offsetTop - Ball.startPos[1];
+
+        if(chosenY > 0) {
+            chosenX *= -1;
+            chosenY *= -1;
+        }
+
+        let mult = Ball.speedVal / Math.sqrt(chosenX*chosenX + chosenY*chosenY);
+        chosenX *= mult;
+        chosenY *= mult;
+    }
+
     function update() {
 
         //Si il reste des balles a lancer
         if(ballsToShoot > 0 && timeToShoot <= 0) {
+
             balls.push(new Ball(chosenX, chosenY));
             timeToShoot = 20;
             ballsToShoot--;
@@ -127,11 +155,8 @@
 
             if(mouseX !== 0 && mouseY !== 0) {
 
-                chosenX = Math.abs(Ball.startPos[0] - mouseX)+1;
-                chosenY = Math.abs(Ball.startPos[1] - mouseY)+1;
-                let mult = Ball.speedVal / Math.sqrt(chosenX*chosenX + chosenY*chosenY);
-                chosenX *= mult;
-                chosenY *= mult;
+                //Modifie chosenX et chosenY
+                calcVector();
 
                 ballsToShoot = Ball.count;
                 shooting = false;
@@ -141,8 +166,20 @@
             //Si on a deja lance les balles
 
             //Calcul des mouvements de chaque balle
-            for(let ball of balls) {
+            for(let ball of balls)
                 ball.move();
+
+            //Kill toutes les balles qui doivent l'etre
+            for(let ball of Ball.toKill)
+                balls.splice(balls.indexOf(ball), 1);
+            Ball.toKill = [];
+
+            //Si il n'y a plus de balles
+            //on relance le choix de la direction du lancer
+            if(balls.length === 0) {
+                mouseX = 0;
+                mouseY = 0;
+                shooting = true;
             }
         }
 
@@ -181,6 +218,7 @@
         }
     }
 
+    //Recupere la position du dernier click
     function getMousePos(event) {
         mouseX = event.clientX;
         mouseY = event.clientY;
