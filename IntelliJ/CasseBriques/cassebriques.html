@@ -95,10 +95,11 @@
     class Brick {
 
         static color = "#b90003";
-        static startHealth = 10;
+        static startHealth = 5;
         static width = 30;  //La largeur en partant du milieu
         static height = 30; //La hauteur en partant du milieu
-        static timeToMove = 30;
+        static timeToMove = 50;
+        static spawnRate = Brick.timeToMove * (Brick.width + 10);
 
         constructor(posX, posY) {
             this.health = Brick.startHealth,
@@ -133,14 +134,44 @@
     }
 
     function createBricks() {
-        return [new Brick(40,50),
-            new Brick(80,50),
-            new Brick(120,50),
-            new Brick(160,50),
-            new Brick(200,50),
-            new Brick(240,50),
-            new Brick(280,50),
-            new Brick(320,50)];
+
+        switch(Math.floor(Math.random() *4)) {
+            case 0:
+                return [new Brick(40,-Brick.height/2),
+                    new Brick(80,-Brick.height/2),
+                    new Brick(120,-Brick.height/2),
+                    new Brick(160,-Brick.height/2),
+                    new Brick(200,-Brick.height/2),
+                    new Brick(240,-Brick.height/2),
+                    new Brick(280,-Brick.height/2),
+                    new Brick(320,-Brick.height/2),
+                    new Brick(360,-Brick.height/2),
+                    new Brick(400,-Brick.height/2),
+                    new Brick(440,-Brick.height/2)];
+            case 1:
+                return [new Brick(200,-Brick.height/2),
+                    new Brick(240,-Brick.height/2),
+                    new Brick(280,-Brick.height/2)];
+            case 2:
+                return [new Brick(120,-Brick.height/2),
+                    new Brick(160,-Brick.height/2),
+                    new Brick(200,-Brick.height/2),
+                    new Brick(280,-Brick.height/2),
+                    new Brick(320,-Brick.height/2),
+                    new Brick(360,-Brick.height/2)];
+            case 3:
+                return [new Brick(120,-Brick.height/2),
+                    new Brick(200,-Brick.height/2),
+                    new Brick(240,-Brick.height/2),
+                    new Brick(280,-Brick.height/2),
+                    new Brick(360,-Brick.height/2)];
+        }
+    }
+
+    function addBricks(toAdd) {
+
+        for(let brick of toAdd)
+            bricks.push(brick);
     }
 
     function calcVector() {
@@ -162,7 +193,6 @@
 
         //Si il reste des balles a lancer
         if(ballsToShoot > 0 && autoShootTime <= 0) {
-
             balls.push(new Ball(chosenX, chosenY));
             autoShootTime = 20;
             ballsToShoot--;
@@ -172,7 +202,6 @@
 
         //Mouvements des cubes
         if(timeToMoveBricks <= 0) {
-
             for(let brick of bricks)
                 brick.move();
             timeToMoveBricks = Brick.timeToMove;
@@ -180,16 +209,24 @@
         else
             timeToMoveBricks--;
 
+        //Spawn des bricks
+        if(timeToSpawnBricks <= 0) {
+            timeToSpawnBricks = Brick.spawnRate;
+            addBricks(createBricks());
+        }
+        else
+            timeToSpawnBricks--;
+
         //Si on est en train de choisir la direction de lancer
-        if(shooting) {
+        if(canShoot) {
 
             if(mouseX !== 0 && mouseY !== 0) {
-
                 //Modifie chosenX et chosenY
                 calcVector();
 
                 ballsToShoot = Ball.count;
-                shooting = false;
+                canShoot = false;
+                timeToShoot = Ball.timeToShoot;
             }
         }
 
@@ -205,10 +242,11 @@
         //Si il n'y a plus de balles
         //on relance le choix de la direction du lancer
         if(timeToShoot <= 0) {
+
             mouseX = 0;
             mouseY = 0;
-            shooting = true;
-            timeToShoot = Ball.timeToShoot;
+            canShoot = true;
+            timeToShoot = 0;
         }
         else
             timeToShoot--;
@@ -221,9 +259,15 @@
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        //Affichage du temps pour le tir
+        ctx.fillStyle = "#FFFFFF";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "center";
+        ctx.fillText((Math.round((timeToShoot)/20)/10).toString().padEnd(3, ".0"), 460, 300);
+
         for (let ball of balls) {
 
-            //Affichage du disque
+            //Affichage de la balle
             ctx.beginPath();
             ctx.arc(Math.round(ball.position[0]), Math.round(ball.position[1]), Ball.radius, 0, Math.PI * 2, false);
             ctx.fillStyle = Ball.color;
@@ -263,11 +307,13 @@
     let timeToShoot = 0;
     let autoShootTime = 0;
     let ballsToShoot = 0;
+
+    let timeToSpawnBricks = 0;
     let timeToMoveBricks = 0;
 
     let balls = [];
-    let bricks = createBricks();
-    let shooting = true;
+    let bricks = [];
+    let canShoot = true;
 
     setInterval(update, 5);
 
