@@ -28,7 +28,7 @@ class Vector {
         this.z += other.z;
     }
 
-    substract(other) {
+    subtract(other) {
         this.x -= other.x;
         this.y -= other.y;
         this.z -= other.z;
