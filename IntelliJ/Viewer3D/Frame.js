@@ -5,16 +5,32 @@ let cameraOrientation = [0,0];
 let width = 720;
 let height = 405;
 let backgroundColor = "#878787";
+let objects = [];
 
-function draw(objects) {
+function setObjects(pObjects) {
+    objects = pObjects;
+}
+
+function addObject(object) {
+    objects.add(object)
+}
+
+function drawFrame() {
+
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+
+    ctx.beginPath();
+    ctx.fill();
 
     for(let y = 0; y < height; y++) {
         for(let x = 0; x < width; x++) {
-
-            calcPixel(x, y);
-
+            ctx.rect(x, y, 1, 1);
+            ctx.fillStyle = calcPixel(x, y);
         }
     }
+
+    ctx.closePath();
 }
 
 function calcPixel(x, y) {

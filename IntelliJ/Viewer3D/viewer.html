@@ -2,20 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="Vector.js"></script>
+    <title>3D Viewer</title>
+    <style>
+        * { padding: 0; margin: 0; }
+        canvas { background: #7b7b7b; display: block; margin: 0 auto; }
+    </style>
+
     <script src="Mesh.js"></script>
+    <script src="Frame.js"></script>
 </head>
 <body>
 
+<canvas id="myCanvas" width="480" height="320"></canvas>
+
 <script>
 
-
-    let vector = Vector.zero;
-    vector.add(new Vector(1,2,3))
-    vector.disp();
-
-
+    addObject(Mesh.cube);
+    setInterval(drawFrame, 5);
 
 </script>
 
