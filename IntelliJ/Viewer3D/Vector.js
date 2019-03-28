@@ -90,7 +90,7 @@ class Vector {
      * @returns The same vector with length 1
      */
     normalize() {
-
+        return this.divide(this.length());
     }
 
     rotate(h, v) {

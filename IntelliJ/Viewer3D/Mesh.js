@@ -9,6 +9,11 @@ class Mesh {
         this.color = "#00f8ff";
     }
 
+    setFacesParentMesh() {
+        for(let face of this.faces)
+            face.parentMesh = this;
+    }
+
     scale(value) {
 
         for(let p of this.points) {
@@ -46,7 +51,10 @@ class Mesh {
             new Face([points[0], points[7], points[6]])
         ];
 
-        return new Mesh(faces, points);
+        let mesh = new Mesh(faces, points);
+        mesh.setFacesParentMesh();
+
+        return mesh;
     }
 }
 
@@ -58,6 +66,8 @@ class Point {
 }
 
 class Face {
+
+    parentMesh = null;
 
     constructor(points) {
         this.points = points;

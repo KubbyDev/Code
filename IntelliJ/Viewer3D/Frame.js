@@ -6,6 +6,7 @@ let width = 720;
 let height = 405;
 let backgroundColor = "#878787";
 let objects = [];
+let lights = [new Light(new Vector(2,2,2), 5)];
 
 function setObjects(pObjects) {
     objects = pObjects;
@@ -43,9 +44,31 @@ function calcPixel(x, y) {
 
     //Tracage du ray
     let hit = new Ray(cameraPosition, dir).trace();
-    if(hit === null)
+    if(!hit.hasHit)
         return backgroundColor;
 
     //Calcul de la couleur du pixel en fonction de l'eclairage
+    let brightness = 0.1;
+    for(let light of lights) {
+        let lightHit = new Ray(hit.position, light.position.subtract(hit.position)).trace();
+        if(!lightHit.hasHit)
+            brightness += Math.max(0, light.intensity - Vector.sqrDistance(lightHit.position, hit.position));
+    }
 
+    return adjustBrightness(hit.other.color, brightness);
+}
+
+function adjustBrightness(color, multiplier) {
+
+    let colorVec = new Vector(
+        parseInt(color.substr(1,2),16),
+        parseInt(color.substr(3,2),16),
+        parseInt(color.substr(5,2),16)
+    );
+
+    colorVec.multiply(multiplier);
+
+    return "#" + Math.round(Math.min(colorVec.x, 255)).toString(16)
+               + Math.round(Math.min(colorVec.y, 255)).toString(16)
+               + Math.round(Math.min(colorVec.z, 255)).toString(16);
 }
