@@ -9,14 +9,43 @@ class Ray {
 
     collideWith(face) {
 
+        //Soient S le point de depart du ray et u son vecteur directeur
+        //Soient P le plan dans lequel est inscrit la face (le triangle constitue des points que l'on nommera A, B et C)
+        //Soit n le vecteur normal de P, et M le point d'intersection entre le ray et P
 
+        //Vecteurs AB, AC et BC
+        let ab = Vector.subtract(face.points[1].position, face.points[0].position);
+        let ac = Vector.subtract(face.points[2].position, face.points[0].position);
+        let bc = Vector.subtract(face.points[2].position, face.points[1].position);
 
+        //Vecteur normal de P
+        let n = Vector.crossProduct(ab, ac);
 
+        //Si le ray est parallele au plan
+        let d_ndir = Vector.dotProduct(n, this.direction);
+        if(d_ndir === 0)
+            return new RaycastHit(false, Vector.zero, null);
 
+        //Soit t le reel verifiant M = u*t + S
+        //t = (-n.S + s)/(n.u), s etant le 4e terme definissant le plan
+        //Pour tout point M, M appartient a P <=> n.M = s
+        let t = -(Vector.dotProduct(n, this.start) + Vector.dotProduct(n, face.points[0].position))/d_ndir;
 
+        //Si t est negatif la face est derriere la camera, donc on la touche pas
+        if(t < 0.1)
+            return new RaycastHit(false, Vector.zero, null);
 
+        //M est le point d'intersection du ray et de P
+        let m = Vector.add(Vector.multiply(this.direction, t), this.start);
 
-        return new RaycastHit(false, Vector.zero, null);
+        //On verifie si M est dans le triangle
+        if (!Vector.dotProduct(n, Vector.crossProduct(ab, Vector.subtract(m, face.points[0].position))) > 0
+         || !Vector.dotProduct(n, Vector.crossProduct(ac, Vector.subtract(m, face.points[1].position))) > 0
+         || !Vector.dotProduct(n, Vector.crossProduct(bc, Vector.subtract(m, face.points[2].position))) > 0)
+            return new RaycastHit(false, Vector.zero, null);
+
+        //Si tous ces tests sont passes c'est bon on a un hit
+        return new RaycastHit(true, m, face.parentMesh);
     }
 
     trace() {

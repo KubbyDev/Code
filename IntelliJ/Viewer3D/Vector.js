@@ -29,14 +29,26 @@ class Vector {
         this.z += other.z;
     }
 
+    static add(a, b) {
+        return new Vector(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
+
+    static subtract(a, b) {
+        return new Vector(a.x - b.x, a.y - b.y, a.z - b.z);
+    }
+
+    static multiply(u, k) {
+        return new Vector(u.x * k, u.y * k, u.z * k)
+    }
+
+    static divide(u, k) {
+        return new Vector(u.x / k, u.y / k, u.z / k)
+    }
+
     subtract(other) {
         this.x -= other.x;
         this.y -= other.y;
         this.z -= other.z;
-    }
-
-    dot(other) {
-        return this.x * other.x + this.y * other.y + this.z * other.z;
     }
 
     sqrLength() {
@@ -86,6 +98,17 @@ class Vector {
         return new Vector(cos_h*sin_v, cos_v, sin_h*sin_v);
     }
 
+    static crossProduct(a, b) {
+        return new Vector(
+            a.y*b.z-a.z*b.y,
+            a.z*b.x-a.x*b.z,
+            a.x*b.y-a.y*b.x);
+    }
+
+    static dotProduct(a, b) {
+        return a.x * b.x + a.y * b.y + a.z * b.z;
+    }
+
     /**
      * @returns The same vector with length 1
      */
@@ -94,7 +117,6 @@ class Vector {
     }
 
     rotate(h, v) {
-
 
 
     }

@@ -1,10 +1,10 @@
 
 let fov = [70,40];
-let cameraPosition = new Vector(0,0,0);
+let cameraPosition = new Vector(2,2,2);
 let cameraOrientation = [0,0];
 let width = 720;
 let height = 405;
-let backgroundColor = "#878787";
+let backgroundColor = "#0b0b0b";
 let objects = [];
 let lights = [new Light(new Vector(2,2,2), 5)];
 
@@ -13,7 +13,7 @@ function setObjects(pObjects) {
 }
 
 function addObject(object) {
-    objects.add(object)
+    objects.push(object)
 }
 
 function drawFrame() {
@@ -21,17 +21,14 @@ function drawFrame() {
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
 
-    ctx.beginPath();
-    ctx.fill();
+    ctx.clearRect(0,0, canvas.width, canvas.height);
 
-    for(let y = 0; y < height; y++) {
-        for(let x = 0; x < width; x++) {
-            ctx.rect(x, y, 1, 1);
+    for(let y = 0; y < canvas.height; y++) {
+        for (let x = 0; x < canvas.width; x++) {
             ctx.fillStyle = calcPixel(x, y);
+            ctx.fillRect(x, y, 1,1)
         }
     }
-
-    ctx.closePath();
 }
 
 function calcPixel(x, y) {
@@ -50,7 +47,7 @@ function calcPixel(x, y) {
     //Calcul de la couleur du pixel en fonction de l'eclairage
     let brightness = 0.1;
     for(let light of lights) {
-        let lightHit = new Ray(hit.position, light.position.subtract(hit.position)).trace();
+        let lightHit = new Ray(hit.position, Vector.subtract(light.position, hit.position)).trace();
         if(!lightHit.hasHit)
             brightness += Math.max(0, light.intensity - Vector.sqrDistance(lightHit.position, hit.position));
     }
