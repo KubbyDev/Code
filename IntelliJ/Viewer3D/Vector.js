@@ -77,16 +77,16 @@ class Vector {
         return Math.sqrt(Vector.sqrDistance(a, b));
     }
 
-    /**
-     * @param horizontal orientation
-     * @param vertical orientation
+    /** The forward vector of (0,0) is (1,0,0)
+     * @param h horizontal orientation
+     * @param v vertical orientation
      * @returns The forward vector of the given orientation
      */
     static fromOrientation(h, v) {
 
         //Passage en radian
-        h = h*Math.PI/180;
-        v = v*Math.PI/180;
+        h *= Math.PI/180;
+        v *= Math.PI/180;
 
         //Calcul des sin et des cos
         let cos_v = Math.cos(v);
@@ -95,7 +95,7 @@ class Vector {
         let sin_h = Math.sin(h);
 
         //Calcul du vecteur
-        return new Vector(cos_h*sin_v, cos_v, sin_h*sin_v);
+        return new Vector(cos_h*cos_v, sin_v, cos_v*sin_h);
     }
 
     static crossProduct(a, b) {

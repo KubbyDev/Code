@@ -39,9 +39,11 @@ class Ray {
         let m = Vector.add(Vector.multiply(this.direction, t), this.start);
 
         //On verifie si M est dans le triangle
-        if (!Vector.dotProduct(n, Vector.crossProduct(ab, Vector.subtract(m, face.points[0].position))) > 0
-         || !Vector.dotProduct(n, Vector.crossProduct(ac, Vector.subtract(m, face.points[1].position))) > 0
-         || !Vector.dotProduct(n, Vector.crossProduct(bc, Vector.subtract(m, face.points[2].position))) > 0)
+        let am = Vector.subtract(m, face.points[0].position);
+        let bm = Vector.subtract(m, face.points[1].position);
+        if (Vector.dotProduct(n, Vector.crossProduct(ab, am)) < 0
+         || Vector.dotProduct(n, Vector.crossProduct(ac, am)) < 0
+         || Vector.dotProduct(n, Vector.crossProduct(bc, bm)) < 0)
             return new RaycastHit(false, Vector.zero, null);
 
         //Si tous ces tests sont passes c'est bon on a un hit
