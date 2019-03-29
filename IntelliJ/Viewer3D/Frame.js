@@ -21,8 +21,6 @@ function drawFrame() {
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
 
-    ctx.clearRect(0,0, canvas.width, canvas.height);
-
     for(let y = 0; y < canvas.height; y++) {
         for (let x = 0; x < canvas.width; x++) {
             ctx.fillStyle = calcPixel(x, y);
@@ -45,13 +43,17 @@ function calcPixel(x, y) {
         return backgroundColor;
 
     //Calcul de la couleur du pixel en fonction de l'eclairage
+    let brightness = 1;
+    /*
     let brightness = 0.1;
     for(let light of lights) {
         let lightHit = new Ray(hit.position, Vector.subtract(light.position, hit.position)).trace();
         if(!lightHit.hasHit || true)
             brightness += Math.max(0, light.intensity - Vector.sqrDistance(lightHit.position, hit.position))/10;
     }
+     */
 
+    console.log(adjustBrightness(hit.other.color, brightness));
     return adjustBrightness(hit.other.color, brightness);
 }
 
@@ -65,7 +67,7 @@ function adjustBrightness(color, multiplier) {
 
     colorVec.multiply(multiplier);
 
-    return "#" + Math.round(Math.min(colorVec.x, 255)).toString(16)
-               + Math.round(Math.min(colorVec.y, 255)).toString(16)
-               + Math.round(Math.min(colorVec.z, 255)).toString(16);
+    return "#" + Math.round(Math.min(colorVec.x, 255)).toString(16).padStart(2, "00")
+               + Math.round(Math.min(colorVec.y, 255)).toString(16).padStart(2, "00")
+               + Math.round(Math.min(colorVec.z, 255)).toString(16).padStart(2, "00");
 }
