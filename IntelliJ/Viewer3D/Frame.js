@@ -1,6 +1,6 @@
 
 let fov = [70,40];
-let cameraPosition = new Vector(2,0,0);
+let cameraPosition = new Vector(5,0,0);
 let cameraOrientation = [-180,0];
 let backgroundColor = "#0b0b0b";
 let objects = [];
@@ -16,7 +16,7 @@ function addObject(object) {
 
 function drawFrame() {
 
-    for(let y = canvas.height-1; y >= 0; y--) {
+    for(let y = 0; y < canvas.height; y++) {
         for (let x = 0; x < canvas.width; x++) {
             ctx.fillStyle = calcPixel(x, y);
             ctx.fillRect(x, y, 1,1)
@@ -29,7 +29,7 @@ function calcPixel(x, y) {
     //Calcul du vecteur directeur du ray
     let dir = Vector.fromOrientation(
         ((x/canvas.width)-0.5)*2 *fov[0] + cameraOrientation[0],
-        ((y/canvas.height)-0.5)*2 *fov[1] + cameraOrientation[1]
+        -((y/canvas.height)-0.5)*2 *fov[1] + cameraOrientation[1]
     );
 
     //Tracage du ray

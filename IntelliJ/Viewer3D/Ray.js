@@ -42,7 +42,7 @@ class Ray {
         let am = Vector.subtract(m, face.points[0].position);
         let bm = Vector.subtract(m, face.points[1].position);
         if (Vector.dotProduct(n, Vector.crossProduct(ab, am)) < 0
-         || Vector.dotProduct(n, Vector.crossProduct(ac, am)) < 0
+         || Vector.dotProduct(n, Vector.crossProduct(am, ac)) < 0
          || Vector.dotProduct(n, Vector.crossProduct(bc, bm)) < 0)
             return new RaycastHit(false, Vector.zero, null);
 
