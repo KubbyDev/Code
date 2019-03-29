@@ -15,18 +15,21 @@ class Vector {
         this.x *= mult;
         this.y *= mult;
         this.z *= mult;
+        return this;
     }
 
     divide(div) {
         this.x /= div;
         this.y /= div;
         this.z /= div;
+        return this;
     }
 
     add(other) {
         this.x += other.x;
         this.y += other.y;
         this.z += other.z;
+        return this;
     }
 
     static add(a, b) {
@@ -49,6 +52,7 @@ class Vector {
         this.x -= other.x;
         this.y -= other.y;
         this.z -= other.z;
+        return this;
     }
 
     sqrLength() {
@@ -116,9 +120,20 @@ class Vector {
         return this.divide(this.length());
     }
 
-    rotate(h, v) {
+    rotate(h) {
+        let cos = Math.cos(h *Math.PI/180);
+        let sin = Math.sin(h *Math.PI/180);
 
+        let tmp = this.x;
 
+        this.x = this.x*cos + this.z*sin;
+        this.z = this.z*cos - tmp*sin;
+    }
+
+    //PAS SUR QUE CA MARCHE
+    toOrientation() {
+        let v = new Vector(this.x, this.y, this.z).normalize();
+        return [Math.atan2(v.z, v.x)*180/Math.PI, Math.asin(v.y)*180/Math.PI];
     }
 
     toString() {

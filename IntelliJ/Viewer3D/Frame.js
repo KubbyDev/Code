@@ -1,7 +1,7 @@
 
 let fov = [70,40];
 let cameraPosition = new Vector(5,0,0);
-let cameraOrientation = [-180,0];
+let cameraOrientation = [-180,-10];
 let backgroundColor = "#0b0b0b";
 let objects = [];
 let lights = [new Light(new Vector(2,2,2), 100)];
@@ -15,6 +15,11 @@ function addObject(object) {
 }
 
 function drawFrame() {
+
+    let angle = 5;
+
+    cameraOrientation[0] = (cameraOrientation[0]+180 + angle)%360-180;
+    cameraPosition.rotate(-angle);
 
     for(let y = 0; y < canvas.height; y++) {
         for (let x = 0; x < canvas.width; x++) {

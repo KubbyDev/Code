@@ -41,14 +41,14 @@ class Mesh {
             new Face([points[0], points[3], points[2]]),
             new Face([points[0], points[7], points[4]]),
             new Face([points[0], points[3], points[4]]),
-            new Face([points[7], points[6], points[5]]),
-            new Face([points[7], points[4], points[5]]),
-            new Face([points[1], points[2], points[5]]),
-            new Face([points[1], points[6], points[5]]),
-            new Face([points[2], points[5], points[4]]),
-            new Face([points[2], points[3], points[4]]),
-            new Face([points[0], points[1], points[6]]),
-            new Face([points[0], points[7], points[6]])
+            new Face([points[5], points[6], points[7]]),
+            new Face([points[5], points[4], points[7]]),
+            //new Face([points[1], points[2], points[5]]),
+            //new Face([points[1], points[6], points[5]]),
+            //new Face([points[2], points[5], points[4]]),
+            //new Face([points[2], points[3], points[4]]),
+            //new Face([points[0], points[1], points[6]]),
+            //new Face([points[0], points[7], points[6]])
         ];
 
         let mesh = new Mesh(faces, points);
