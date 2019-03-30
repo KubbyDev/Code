@@ -1,10 +1,10 @@
 
 let fov = [70,70];
-let cameraPosition = new Vector(3,0,0);
+let cameraPosition = new Vector(2,0,0);
 let cameraOrientation = [-180,0];
-let backgroundColor = "#0b0b0b";
+let backgroundColor = "#2e2e2e";
 let objects = [];
-let lights = [new Light(new Vector(2,2,2), 100)];
+let lights = [new Light(new Vector(2,2,2), 20)];
 
 function setObjects(pObjects) {
     objects = pObjects;
@@ -43,15 +43,12 @@ function calcPixel(x, y) {
         return backgroundColor;
 
     //Calcul de la couleur du pixel en fonction de l'eclairage
-    let brightness = 1;
-    /*
     let brightness = 0.1;
     for(let light of lights) {
         let lightHit = new Ray(hit.position, Vector.subtract(light.position, hit.position)).trace();
-        if(!lightHit.hasHit || true)
-            brightness += Math.max(0, light.intensity - Vector.sqrDistance(lightHit.position, hit.position))/10;
+        if(!lightHit.hasHit)
+            brightness += light.intensity/Math.pow(Vector.sqrDistance(light.position, hit.position), 2);
     }
-    */
 
     return adjustBrightness(hit.other.color, brightness);
 }

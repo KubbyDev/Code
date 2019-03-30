@@ -28,11 +28,11 @@ class Ray {
 
         //Soit t le reel verifiant M = u*t + S
         //t = (-n.S + s)/(n.u), s etant le 4e terme definissant le plan
-        //Pour tout point M, M appartient a P <=> n.M = s
-        let t = -(Vector.dotProduct(n, this.start) + Vector.dotProduct(n, face.points[0].position))/d_ndir;
+        //Pour tout point M, M appartient a P <=> n.M = -s
+        let t = -(Vector.dotProduct(n, this.start) - Vector.dotProduct(n, face.points[0].position))/d_ndir;
 
         //Si t est negatif la face est derriere la camera, donc on la touche pas
-        if(t < 0.1)
+        if(t < 0.01)
             return new RaycastHit(false, Vector.zero, null);
 
         //M est le point d'intersection du ray et de P
@@ -72,7 +72,7 @@ class Ray {
         let closest = Infinity;
 
         for(let hit of hits) {
-            let sqrDistance = Vector.sqrDistance(hit.position, cameraPosition) < closest;
+            let sqrDistance = Vector.sqrDistance(hit.position, cameraPosition);
             if (sqrDistance < closest) {
                 closest = sqrDistance;
                 finalHit = hit;

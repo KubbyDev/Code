@@ -23,16 +23,16 @@
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
 
-/*
     let points = [
-        new Point(new Vector(0,1,0)),
-        new Point(new Vector(0,0,1)),
-        new Point(new Vector(0,0,-1)),
+        new Point(new Vector(1,1.1,1)),
+        new Point(new Vector(1,0.7,1.5)),
+        new Point(new Vector(1,0.7,0.5)),
     ];
 
     let mesh = new Mesh([new Face(points)], points);
+    mesh.color = "#1ae130";
 
- */
+    addObject(mesh);
 
     addObject(Mesh.cube);
     setInterval(drawFrame, 100);
