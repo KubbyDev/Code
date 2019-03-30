@@ -1,7 +1,7 @@
 
-let fov = [70,40];
-let cameraPosition = new Vector(5,0,0);
-let cameraOrientation = [-180,-10];
+let fov = [70,70];
+let cameraPosition = new Vector(3,0,0);
+let cameraOrientation = [-180,0];
 let backgroundColor = "#0b0b0b";
 let objects = [];
 let lights = [new Light(new Vector(2,2,2), 100)];

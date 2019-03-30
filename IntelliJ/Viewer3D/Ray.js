@@ -59,8 +59,10 @@ class Ray {
         for(let object of objects) {
             for (let face of object.faces) {
                 let hit = this.collideWith(face);
-                if (hit.hasHit)
+                if (hit.hasHit) {
+                    hit.other = object;
                     hits.push(hit);
+                }
             }
         }
 
