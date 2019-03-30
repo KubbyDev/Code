@@ -48,6 +48,35 @@ class Mesh {
 
         return new Mesh(faces, points);
     }
+
+    /**
+     * Lis un .obj (Ne prend en compte que la position des points et leurs liaisons)
+     * @param file: Le contenu du fichier en format obj
+     */
+    static parse(file) {
+
+        let points = [];
+        let faces = [];
+
+        for(let line of file.split('\n')) {
+
+            let words = line.split(' ');
+
+            //Points
+            if(words[0] === 'v')
+                points.push(new Point(new Vector(parseFloat(words[1]), parseFloat(words[2]), parseFloat(words[3]))));
+
+            //Faces
+            if(words[0] === 'f')
+                faces.push(new Face([
+                    points[parseInt(words[1].split('/')[0]) -1],
+                    points[parseInt(words[2].split('/')[0]) -1],
+                    points[parseInt(words[3].split('/')[0]) -1]
+                ]));
+        }
+
+        return new Mesh(faces, points);
+    }
 }
 
 class Point {
