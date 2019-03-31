@@ -12,9 +12,7 @@ class Mesh {
     scale(value) {
 
         for(let p of this.points) {
-            p.position.subtract(this.position);
-            p.position.multiply(value);
-            p.position.add(this.position);
+            p.position.subtract(this.position).multiply(value).add(this.position);
         }
     }
 

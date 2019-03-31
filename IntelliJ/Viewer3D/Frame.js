@@ -4,7 +4,7 @@ let cameraPosition = new Vector(2,0,0);
 let cameraOrientation = [-180,0];
 let backgroundColor = "#2e2e2e";
 let objects = [];
-let lights = [new Light(new Vector(2,2,2), 20)];
+let lights = [new Light(new Vector(1.8,2,2), 20)];
 
 function setObjects(pObjects) {
     objects = pObjects;
@@ -45,9 +45,8 @@ function calcPixel(x, y) {
     //Calcul de la couleur du pixel en fonction de l'eclairage
     let brightness = 0.1;
     for(let light of lights) {
-        let toLight = Vector.subtract(light.position, hit.position).normalize();
-        let lightHit = new Ray(hit.position, toLight).trace();
-        if(!lightHit.hasHit) {
+        let toLight = Vector.subtract(light.position, hit.position).normalized();
+        if(!new Ray(hit.position, toLight).hitsFace()) {
             //On ajoute de la luminosite en fonction de la distance avec la lampe,
             //de son intensite et de l'angle d'arrivee des rayons lumineux
             brightness += light.intensity * Math.abs(Vector.dotProduct(toLight, hit.normal)) / Math.pow(Vector.sqrDistance(light.position, hit.position), 2);

@@ -32,6 +32,13 @@ class Vector {
         return this;
     }
 
+    subtract(other) {
+        this.x -= other.x;
+        this.y -= other.y;
+        this.z -= other.z;
+        return this;
+    }
+
     static add(a, b) {
         return new Vector(a.x + b.x, a.y + b.y, a.z + b.z);
     }
@@ -46,13 +53,6 @@ class Vector {
 
     static divide(u, k) {
         return new Vector(u.x / k, u.y / k, u.z / k)
-    }
-
-    subtract(other) {
-        this.x -= other.x;
-        this.y -= other.y;
-        this.z -= other.z;
-        return this;
     }
 
     sqrLength() {
@@ -116,7 +116,7 @@ class Vector {
     /**
      * @returns The same vector with length 1
      */
-    normalize() {
+    normalized() {
         return this.divide(this.length());
     }
 
@@ -132,7 +132,7 @@ class Vector {
 
     //PAS SUR QUE CA MARCHE
     toOrientation() {
-        let v = new Vector(this.x, this.y, this.z).normalize();
+        let v = new Vector(this.x, this.y, this.z).normalized();
         return [Math.atan2(v.z, v.x)*180/Math.PI, Math.asin(v.y)*180/Math.PI];
     }
 

@@ -47,9 +47,13 @@ class Ray {
             return new RaycastHit(false, Vector.zero, null, Vector.zero);
 
         //Si tous ces tests sont passes c'est bon on a un hit
-        return new RaycastHit(true, m, null, n.normalize());
+        return new RaycastHit(true, m, null, n.normalized());
     }
 
+    /**
+     * Traces the ray
+     * @returns RaycastHit containing all the hit info
+     */
     trace() {
 
         let hits = [];
@@ -80,6 +84,23 @@ class Ray {
         }
 
         return finalHit;
+    }
+
+    /**
+     * Calculates if the ray hits something
+     * @returns boolean: True => The ray has hit a face
+     */
+    hitsFace() {
+
+        for(let object of objects) {
+            for (let face of object.faces) {
+                let hit = this.collideWith(face);
+                if (hit.hasHit)
+                    return true;
+            }
+        }
+
+        return false;
     }
 }
 
