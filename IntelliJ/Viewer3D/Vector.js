@@ -120,6 +120,18 @@ class Vector {
         return this.divide(this.length());
     }
 
+    scaleX(newX) {
+        return this.multiply(newX/this.x);
+    }
+
+    scaleX(newY) {
+        return this.multiply(newY/this.y);
+    }
+
+    scaleX(newZ) {
+        return this.multiply(newZ/this.z);
+    }
+
     rotate(h) {
         let cos = Math.cos(h *Math.PI/180);
         let sin = Math.sin(h *Math.PI/180);
