@@ -24,7 +24,7 @@ class Ray {
         //Si le ray est parallele au plan
         let d_ndir = Vector.dotProduct(n, this.direction);
         if(d_ndir === 0)
-            return new RaycastHit(false, Vector.zero, null);
+            return new RaycastHit(false, Vector.zero, null, Vector.zero);
 
         //Soit t le reel verifiant M = u*t + S
         //t = (-n.S + s)/(n.u), s etant le 4e terme definissant le plan
@@ -33,7 +33,7 @@ class Ray {
 
         //Si t est negatif la face est derriere la camera, donc on la touche pas
         if(t < 0.01)
-            return new RaycastHit(false, Vector.zero, null);
+            return new RaycastHit(false, Vector.zero, null, Vector.zero);
 
         //M est le point d'intersection du ray et de P
         let m = Vector.add(Vector.multiply(this.direction, t), this.start);
@@ -44,10 +44,10 @@ class Ray {
         if (Vector.dotProduct(n, Vector.crossProduct(ab, am)) < 0
          || Vector.dotProduct(n, Vector.crossProduct(am, ac)) < 0
          || Vector.dotProduct(n, Vector.crossProduct(bc, bm)) < 0)
-            return new RaycastHit(false, Vector.zero, null);
+            return new RaycastHit(false, Vector.zero, null, Vector.zero);
 
         //Si tous ces tests sont passes c'est bon on a un hit
-        return new RaycastHit(true, m, face.parentMesh);
+        return new RaycastHit(true, m, null, n.normalize());
     }
 
     trace() {
@@ -85,9 +85,10 @@ class Ray {
 
 class RaycastHit {
 
-    constructor(hasHit, position, other) {
+    constructor(hasHit, position, other, normal) {
         this.hasHit = hasHit;
         this.position = position;
         this.other = other;
+        this.normal = normal;
     }
 }

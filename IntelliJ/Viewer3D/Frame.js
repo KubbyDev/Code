@@ -45,9 +45,13 @@ function calcPixel(x, y) {
     //Calcul de la couleur du pixel en fonction de l'eclairage
     let brightness = 0.1;
     for(let light of lights) {
-        let lightHit = new Ray(hit.position, Vector.subtract(light.position, hit.position)).trace();
-        if(!lightHit.hasHit)
-            brightness += light.intensity/Math.pow(Vector.sqrDistance(light.position, hit.position), 2);
+        let toLight = Vector.subtract(light.position, hit.position).normalize();
+        let lightHit = new Ray(hit.position, toLight).trace();
+        if(!lightHit.hasHit) {
+            //On ajoute de la luminosite en fonction de la distance avec la lampe,
+            //de son intensite et de l'angle d'arrivee des rayons lumineux
+            brightness += light.intensity * Math.abs(Vector.dotProduct(toLight, hit.normal)) / Math.pow(Vector.sqrDistance(light.position, hit.position), 2);
+        }
     }
 
     return adjustBrightness(hit.other.color, brightness);
