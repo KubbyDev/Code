@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Learning Cars</title>
+    <style>
+        * { padding: 0; margin: 0; }
+        canvas { background: #7b7b7b; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="480" height="320"></canvas>
+
+
+<script src="Car.js"></script>
+<script src="Game.js"></script>
+<script>
+
+cars = [new Car().setColor("#FF0000").setPosition(20,20)];
+
+function rotate() {
+    cars[0].rotation += 1;
+
+    draw();
+}
+
+setInterval(rotate, 10);
+
+</script>
+
+</body>
+</html>

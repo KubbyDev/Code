@@ -1,5 +1,5 @@
 
-let fov = [70,70];
+let fov = [140,70];
 let cameraPosition = new Vector(2,0,0);
 let cameraOrientation = [-180,0];
 let backgroundColor = "#2e2e2e";
