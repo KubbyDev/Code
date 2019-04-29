@@ -1,5 +1,6 @@
 class Car {
 
+    controller = new HumanController();
     position = [0,0];
     rotation = 0;
     width = 5;
@@ -12,6 +13,11 @@ class Car {
     corners = [[0,0],[0,0],[0,0],[0,0]];
     hitbox = [new Line(), new Line(), new Line(), new Line()];
     areCornersCorrect = false;
+
+    //Recupere les ordres venant du controller et les applique
+    update() {
+
+    }
 
     constructor() {
     }
