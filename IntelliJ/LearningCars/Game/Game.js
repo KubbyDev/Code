@@ -2,14 +2,16 @@ const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
 let cars = [];
+let circuit = circuit1;
 
 function draw() {
 
     ctx.clearRect(0,0, canvas.width, canvas.height);
 
-    for(let car of cars) {
-        drawRect(car.getCorners(), car.color);
-    }
+    for(let car of cars)
+        car.draw();
+
+    circuit.draw();
 
 }
 

@@ -3,7 +3,7 @@ class Line {
     start = [];
     end = [];
     visible = false;
-    color = "#555555";
+    color = "#ffffff";
 
     constructor() {
     }
@@ -11,6 +11,17 @@ class Line {
     setStartEnd(start, end) {
         this.start = start;
         this.end = end;
+        return this;
+    }
+
+    setVisible(visible) {
+        this.visible = visible;
+        return this;
+    }
+
+    setColor(color) {
+        this.color = color;
+        return this;
     }
 
     isColliding(lines) {
@@ -59,5 +70,17 @@ class Line {
             return point;
 
         return null;
+    }
+
+    draw() {
+
+        if(this.visible) {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.moveTo(this.start[0], this.start[1]);
+            ctx.lineTo(this.end[0], this.end[1]);
+            ctx.stroke();
+            ctx.closePath();
+        }
     }
 }

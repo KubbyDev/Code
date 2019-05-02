@@ -94,4 +94,8 @@ class Car {
 
         return false;
     }
+
+    draw() {
+        drawRect(this.getCorners(), this.color)
+    }
 }
