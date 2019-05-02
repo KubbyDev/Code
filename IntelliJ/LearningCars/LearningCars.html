@@ -22,14 +22,13 @@
 
 cars = [new Car().setColor("#FF0000").setPosition(20,20)];
 
-function update() {
+function tick() {
 
-    cars[0].update();
-
+    update(); //Ces fonctions sont dans game
     draw();
 }
 
-setInterval(update, 10);
+setInterval(tick, 10);
 
 </script>
 

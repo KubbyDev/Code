@@ -15,13 +15,15 @@ class Car {
     areCornersCorrect = false;
 
     //Recupere les ordres venant du controller et les applique
-    update() {
+    update(circuit) {
 
         let inputs = this.controller.getInputs();
 
         this.moveForward(inputs[0]);
         this.turn(inputs[1]);
 
+        if(this.isColliding(circuit))
+            this.alive = false;
     }
 
     setColor(color) {
@@ -45,6 +47,7 @@ class Car {
     }
 
     getCorners() {
+
         if(!this.areCornersCorrect)
             this.calcCorners();
 
@@ -52,6 +55,7 @@ class Car {
     }
 
     calcCorners() {
+
         let degR = this.rotation*Math.PI/180;
 
         this.corners[0] = [this.position[0] + this.length*Math.cos(degR) - this.width*Math.sin(degR),
@@ -70,6 +74,7 @@ class Car {
     }
 
     moveForward(enginePower) {
+
         this.position[0] += Math.cos(this.rotation*Math.PI/180)*enginePower*this.speed;
         this.position[1] += Math.sin(this.rotation*Math.PI/180)*enginePower*this.speed;
 
@@ -77,7 +82,8 @@ class Car {
     }
 
     turn(input) {
-        this.rotation += this.turnRate * input;
+
+        this.rotation += this.turnRate * -input;
 
         this.areCornersCorrect = false;
     }
@@ -98,6 +104,12 @@ class Car {
     }
 
     draw() {
-        drawRect(this.getCorners(), this.color)
+
+        drawRect(this.getCorners(), this.color);
+
+        /*
+        for(let line of this.hitbox)
+            line.draw();
+         */
     }
 }

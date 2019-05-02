@@ -65,8 +65,10 @@ class Line {
         }
 
         //Si le point est bien sur les deux segments
-        if (point[0] > Math.min(this.start[0], this.end[0]) && point[0] < Math.max(this.start[0], this.end[0])
-            && point[1] > Math.min(this.start[1], this.end[1]) && point[1] < Math.max(this.start[1], this.end[1]))
+        if (point[0] > Math.min(this.start[0], this.end[0]) && point[0] < Math.max(this.start[0], this.end[0]) &&
+            point[1] > Math.min(this.start[1], this.end[1]) && point[1] < Math.max(this.start[1], this.end[1]) &&
+            point[0] > Math.min(other.start[0], other.end[0]) && point[0] < Math.max(other.start[0], other.end[0]) &&
+            point[1] > Math.min(other.start[1], other.end[1]) && point[1] < Math.max(other.start[1], other.end[1]))
             return point;
 
         return null;
