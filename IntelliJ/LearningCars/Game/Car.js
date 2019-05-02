@@ -1,6 +1,6 @@
 class Car {
 
-    controller = new HumanController();
+    controller = humanController;
     position = [0,0];
     rotation = 0;
     width = 5;
@@ -17,9 +17,11 @@ class Car {
     //Recupere les ordres venant du controller et les applique
     update() {
 
-    }
+        let inputs = this.controller.getInputs();
 
-    constructor() {
+        this.moveForward(inputs[0]);
+        this.turn(inputs[1]);
+
     }
 
     setColor(color) {
@@ -68,8 +70,8 @@ class Car {
     }
 
     moveForward(enginePower) {
-        this.position[0] += Math.cos(this.rotation)*enginePower*this.speed;
-        this.position[1] += Math.sin(this.rotation)*enginePower*this.speed;
+        this.position[0] += Math.cos(this.rotation*Math.PI/180)*enginePower*this.speed;
+        this.position[1] += Math.sin(this.rotation*Math.PI/180)*enginePower*this.speed;
 
         this.areCornersCorrect = false;
     }

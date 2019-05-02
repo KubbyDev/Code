@@ -1,46 +1,43 @@
 class HumanController {
 
-    forward = false;
-    right = false;
-    left = false;
-
-    constructor() {
-
-        document.onkeydown = function(event) {
-
-            console.log(event.keyCode);
-
-            switch(event.keyCode) {
-                case 38:
-                    this.forward = true;
-                    break;
-                case 37:
-                    this.left = true;
-                    break;
-                case 39:
-                    this.right = true;
-                    break;
-            }
-        };
-        document.onkeyup = function(event){
-
-            switch(event.keyCode) {
-                case 38:
-                    this.forward = false;
-                    break;
-                case 37:
-                    this.left = false;
-                    break;
-                case 39:
-                    this.right = false;
-                    break;
-            }
-
-        };
-
+    getInputs() {
+        return [forwardAxis,rightAxis];
     }
-
-
 }
+
+const humanController = new HumanController();
+
+forwardAxis = 0;
+rightAxis = 0;
+
+document.onkeydown = function(event) {
+
+    switch(event.keyCode) {
+        case 38:
+            forwardAxis = 1;
+            break;
+        case 37:
+            rightAxis = 1;
+            break;
+        case 39:
+            rightAxis = -1;
+            break;
+    }
+};
+document.onkeyup = function(event){
+
+    switch(event.keyCode) {
+        case 38:
+            forwardAxis = 0;
+            break;
+        case 37:
+            rightAxis = 0;
+            break;
+        case 39:
+            rightAxis = 0;
+            break;
+    }
+};
+
 
 
