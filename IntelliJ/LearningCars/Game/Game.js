@@ -26,10 +26,10 @@ function draw() {
 function drawRect(points, color) {
     ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.moveTo(points[0][0], points[0][1]);
-    ctx.lineTo(points[1][0], points[1][1]);
-    ctx.lineTo(points[2][0], points[2][1]);
-    ctx.lineTo(points[3][0], points[3][1]);
+    ctx.moveTo(points[0].x, points[0].y);
+    ctx.lineTo(points[1].x, points[1].y);
+    ctx.lineTo(points[2].x, points[2].y);
+    ctx.lineTo(points[3].x, points[3].y);
     ctx.closePath();
     ctx.fill();
 }

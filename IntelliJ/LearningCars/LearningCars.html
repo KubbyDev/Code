@@ -13,14 +13,24 @@
 <canvas id="myCanvas" width="480" height="320"></canvas>
 
 
+<script src="Game/Vector.js"></script>
+
 <script src="Game/Line.js"></script>
 <script src="Game/Circuit.js"></script>
-<script src="Game/HumanController.js"></script>
 <script src="Game/Car.js"></script>
 <script src="Game/Game.js"></script>
+
+<script src="Game/HumanController.js"></script>
+
+<script src="Network/Input.js"></script>
+<script src="Network/Connection.js"></script>
+<script src="Network/Neuron.js"></script>
+<script src="Network/Network.js"></script>
+<script src="Network/NetworkController.js"></script>
+
 <script>
 
-cars = [new Car().setColor("#FF0000").setPosition(20,20)];
+cars = [new Car(true).setColor("#FF0000").setPosition(20,20)];
 
 function tick() {
 

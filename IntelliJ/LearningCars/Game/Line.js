@@ -1,7 +1,7 @@
 class Line {
 
-    start = [];
-    end = [];
+    start = new Vector(0,0);
+    end = new Vector(0,0);
     visible = false;
     color = "#ffffff";
 
@@ -42,21 +42,21 @@ class Line {
 
         let point; //Le point d'intersection
 
-        let slopeThis = (this.end[1] - this.start[1]) / (this.end[0] - this.start[0]);
-        let slopeOther = (other.end[1] - other.start[1]) / (other.end[0] - other.start[0]);
+        let slopeThis = (this.end.y - this.start.y) / (this.end.x - this.start.x);
+        let slopeOther = (other.end.y - other.start.y) / (other.end.x - other.start.x);
 
         //Si les lignes sont paralleles
         if (slopeThis === slopeOther)
             return null;
 
-        let interceptThis = this.start[1] - slopeThis * this.start[0];
-        let interceptOther = other.start[1] - slopeOther * other.start[0];
+        let interceptThis = this.start.y - slopeThis * this.start.x;
+        let interceptOther = other.start.y - slopeOther * other.start.x;
 
         //Si une des lignes est verticale
         if (slopeThis === Infinity)
-            point = [this.start[0], slopeOther * this.start[0] + interceptOther];
+            point = [this.start.x, slopeOther * this.start.x + interceptOther];
         else if (slopeOther === Infinity)
-            point = [other.start[0], slopeThis * other.start[0] + interceptThis];
+            point = [other.start.x, slopeThis * other.start.x + interceptThis];
         else {
 
             //Cas normal (lignes non verticales et non paralleles)
@@ -65,10 +65,10 @@ class Line {
         }
 
         //Si le point est bien sur les deux segments
-        if (point[0] > Math.min(this.start[0], this.end[0]) && point[0] < Math.max(this.start[0], this.end[0]) &&
-            point[1] > Math.min(this.start[1], this.end[1]) && point[1] < Math.max(this.start[1], this.end[1]) &&
-            point[0] > Math.min(other.start[0], other.end[0]) && point[0] < Math.max(other.start[0], other.end[0]) &&
-            point[1] > Math.min(other.start[1], other.end[1]) && point[1] < Math.max(other.start[1], other.end[1]))
+        if (point.x > Math.min(this.start.x, this.end.x) && point.x < Math.max(this.start.x, this.end.x) &&
+            point.y > Math.min(this.start.y, this.end.y) && point.y < Math.max(this.start.y, this.end.y) &&
+            point.x > Math.min(other.start.x, other.end.x) && point.x < Math.max(other.start.x, other.end.x) &&
+            point.y > Math.min(other.start.y, other.end.y) && point.y < Math.max(other.start.y, other.end.y))
             return point;
 
         return null;
@@ -79,8 +79,8 @@ class Line {
         if(this.visible) {
             ctx.fillStyle = this.color;
             ctx.beginPath();
-            ctx.moveTo(this.start[0], this.start[1]);
-            ctx.lineTo(this.end[0], this.end[1]);
+            ctx.moveTo(this.start.x, this.start.y);
+            ctx.lineTo(this.end.x, this.end.y);
             ctx.stroke();
             ctx.closePath();
         }

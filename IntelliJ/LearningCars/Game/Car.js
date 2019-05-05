@@ -1,7 +1,7 @@
 class Car {
 
-    controller = humanController;
-    position = [0,0];
+    controller;
+    position = new Vector(0,0);
     rotation = 0;
     width = 5;
     length = 12;
@@ -10,9 +10,17 @@ class Car {
     turnRate = 1;
     alive = true;
 
-    corners = [[0,0],[0,0],[0,0],[0,0]];
+    corners = [new Vector(0,0), new Vector(0,0), new Vector(0,0), new Vector(0,0)];
     hitbox = [new Line(), new Line(), new Line(), new Line()];
     areCornersCorrect = false;
+
+    constructor(isHuman = false) {
+
+        if(isHuman)
+            this.controller = humanController;
+        else
+            this.controller = new NetworkController(this);
+    }
 
     //Recupere les ordres venant du controller et les applique
     update(circuit) {
@@ -37,7 +45,7 @@ class Car {
     }
 
     setPosition(x, y) {
-        this.position = [x, y];
+        this.position = new Vector(x,y);
         return this;
     }
 
@@ -58,25 +66,33 @@ class Car {
 
         let degR = this.rotation*Math.PI/180;
 
-        this.corners[0] = [this.position[0] + this.length*Math.cos(degR) - this.width*Math.sin(degR),
-            this.position[1] + this.length*Math.sin(degR) + this.width*Math.cos(degR)];
+        this.corners[0] = new Vector(
+            this.position.x + this.length*Math.cos(degR) - this.width*Math.sin(degR),
+            this.position.y + this.length*Math.sin(degR) + this.width*Math.cos(degR)
+        );
 
-        this.corners[1] = [this.position[0] + this.length*Math.cos(degR) + this.width*Math.sin(degR),
-            this.position[1] + this.length*Math.sin(degR) - this.width*Math.cos(degR)];
+        this.corners[1] = new Vector(
+            this.position.x + this.length*Math.cos(degR) + this.width*Math.sin(degR),
+            this.position.y + this.length*Math.sin(degR) - this.width*Math.cos(degR)
+        );
 
-        this.corners[2] = [this.position[0] - this.length*Math.cos(degR) + this.width*Math.sin(degR),
-            this.position[1] - this.length*Math.sin(degR) - this.width*Math.cos(degR)];
+        this.corners[2] = new Vector(
+            this.position.x - this.length*Math.cos(degR) + this.width*Math.sin(degR),
+            this.position.y - this.length*Math.sin(degR) - this.width*Math.cos(degR)
+        );
 
-        this.corners[3] = [this.position[0] - this.length*Math.cos(degR) - this.width*Math.sin(degR),
-            this.position[1] - this.length*Math.sin(degR) + this.width*Math.cos(degR)];
+        this.corners[3] = new Vector(
+            this.position.x - this.length*Math.cos(degR) - this.width*Math.sin(degR),
+            this.position.y - this.length*Math.sin(degR) + this.width*Math.cos(degR)
+        );
 
         this.areCornersCorrect = true;
     }
 
     moveForward(enginePower) {
 
-        this.position[0] += Math.cos(this.rotation*Math.PI/180)*enginePower*this.speed;
-        this.position[1] += Math.sin(this.rotation*Math.PI/180)*enginePower*this.speed;
+        this.position.x += Math.cos(this.rotation*Math.PI/180)*enginePower*this.speed;
+        this.position.y += Math.sin(this.rotation*Math.PI/180)*enginePower*this.speed;
 
         this.areCornersCorrect = false;
     }

@@ -16,6 +16,9 @@ document.onkeydown = function(event) {
         case 38:
             forwardAxis = 1;
             break;
+        case 36:
+            forwardAxis = -1;
+            break;
         case 37:
             rightAxis = 1;
             break;
@@ -28,6 +31,9 @@ document.onkeyup = function(event){
 
     switch(event.keyCode) {
         case 38:
+            forwardAxis = 0;
+            break;
+        case 36:
             forwardAxis = 0;
             break;
         case 37:
