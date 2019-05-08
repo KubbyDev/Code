@@ -54,21 +54,21 @@ class Line {
 
         //Si une des lignes est verticale
         if (slopeThis === Infinity)
-            point = [this.start.x, slopeOther * this.start.x + interceptOther];
+            point = new Vector(this.start.x, slopeOther * this.start.x + interceptOther);
         else if (slopeOther === Infinity)
-            point = [other.start.x, slopeThis * other.start.x + interceptThis];
+            point = new Vector(other.start.x, slopeThis * other.start.x + interceptThis);
         else {
 
             //Cas normal (lignes non verticales et non paralleles)
             let x = (interceptOther - interceptThis) / (slopeThis - slopeOther);
-            point = [x, slopeThis * x + interceptThis];
+            point = new Vector(x, slopeThis * x + interceptThis);
         }
 
         //Si le point est bien sur les deux segments
-        if (point.x > Math.min(this.start.x, this.end.x) && point.x < Math.max(this.start.x, this.end.x) &&
-            point.y > Math.min(this.start.y, this.end.y) && point.y < Math.max(this.start.y, this.end.y) &&
-            point.x > Math.min(other.start.x, other.end.x) && point.x < Math.max(other.start.x, other.end.x) &&
-            point.y > Math.min(other.start.y, other.end.y) && point.y < Math.max(other.start.y, other.end.y))
+        if (point.x >= Math.min(this.start.x, this.end.x) && point.x <= Math.max(this.start.x, this.end.x) &&
+            point.y >= Math.min(this.start.y, this.end.y) && point.y <= Math.max(this.start.y, this.end.y) &&
+            point.x >= Math.min(other.start.x, other.end.x) && point.x <= Math.max(other.start.x, other.end.x) &&
+            point.y >= Math.min(other.start.y, other.end.y) && point.y <= Math.max(other.start.y, other.end.y))
             return point;
 
         return null;

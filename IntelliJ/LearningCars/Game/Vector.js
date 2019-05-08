@@ -55,4 +55,8 @@ class Vector {
     disp() {
         console.log(this.toString());
     }
+
+    toLine(startPoint) {
+        return new Line().setStartEnd(startPoint, startPoint.add(this))
+    }
 }

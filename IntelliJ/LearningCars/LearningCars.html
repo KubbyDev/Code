@@ -30,12 +30,13 @@
 
 <script>
 
-cars = [new Car(true).setColor("#FF0000").setPosition(20,20)];
+game = new Game();
+game.cars = [new Car(true).setColor("#FF0000").setPosition(20,20)];
 
 function tick() {
 
-    update(); //Ces fonctions sont dans game
-    draw();
+    game.update(); //Ces fonctions sont dans game
+    game.draw();
 }
 
 setInterval(tick, 10);

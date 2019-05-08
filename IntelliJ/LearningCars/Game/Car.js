@@ -1,6 +1,7 @@
 class Car {
 
     controller;
+    test;
     position = new Vector(0,0);
     rotation = 0;
     width = 5;
@@ -15,6 +16,8 @@ class Car {
     areCornersCorrect = false;
 
     constructor(isHuman = false) {
+
+        this.test = new NetworkController(this);
 
         if(isHuman)
             this.controller = humanController;
@@ -32,6 +35,9 @@ class Car {
 
         if(this.isColliding(circuit))
             this.alive = false;
+
+        //Temp
+        console.log(this.test.getDistances(circuit));
     }
 
     setColor(color) {

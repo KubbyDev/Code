@@ -1,25 +1,29 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
-let cars = [];
-let circuit = circuit1;
+class Game {
 
-function update() {
+    cars = [];
+    circuit = circuit1;
 
-    for(let car of cars)
-        if(car.alive)
-            car.update(circuit.lines);
+    update() {
 
-}
+        for(let car of this.cars)
+            if(car.alive)
+                car.update(this.circuit.lines);
 
-function draw() {
+    }
 
-    ctx.clearRect(0,0, canvas.width, canvas.height);
+    draw() {
 
-    for(let car of cars)
-        car.draw();
+        ctx.clearRect(0,0, canvas.width, canvas.height);
 
-    circuit.draw();
+        for(let car of this.cars)
+            car.draw();
+
+        this.circuit.draw();
+
+    }
 
 }
 
