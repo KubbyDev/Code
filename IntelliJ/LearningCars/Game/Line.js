@@ -5,7 +5,9 @@ class Line {
     visible = false;
     color = "#ffffff";
 
-    constructor() {
+    constructor(start, end) {
+        this.start = start;
+        this.end = end;
     }
 
     setStartEnd(start, end) {

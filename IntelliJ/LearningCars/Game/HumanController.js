@@ -16,7 +16,7 @@ document.onkeydown = function(event) {
         case 38:
             forwardAxis = 1;
             break;
-        case 36:
+        case 40:
             forwardAxis = -1;
             break;
         case 37:
@@ -33,7 +33,7 @@ document.onkeyup = function(event){
         case 38:
             forwardAxis = 0;
             break;
-        case 36:
+        case 40:
             forwardAxis = 0;
             break;
         case 37:

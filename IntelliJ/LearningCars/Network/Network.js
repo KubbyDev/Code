@@ -1,14 +1,14 @@
 class Network {
 
     layers = [];  //Contient des listes de neurones
-    inputs = [];  //Contient les inputs a chaque fois que le reseau est simule
+    inputs = [];  //Contient les objets inputs (neurones de la premiere couche (qui n'existe donc pas vraiment))
 
     //Renvoie les activations de la derniere couche
     simulate(inputs) {
 
-        this.inputs = new Array(inputs.length);
+        //Simulation de la premiere couche (couche virtuelle des inputs)
         for(let i = 0; i < inputs.length; i++)
-            this.inputs[i] = new Input(inputs[i]);
+            this.inputs[i].activation = inputs[i];
 
         let answer = [];
         let lastLayerId = this.layers.length-1;
@@ -23,5 +23,22 @@ class Network {
             answer[i] = this.layers[lastLayerId][i].simulate();
 
         return answer;
+    }
+
+    static random(inputNumber, outputNumber) {
+
+        let network = new Network();
+
+        //Premiere couche (couche virtuelle des inputs)
+        network.inputs = new Array(inputNumber);
+
+        //Derniere couche (couche des outputs)
+        network.layers = new Array(1);
+        network.layers[0] = new Array(outputNumber);
+        for(let i = 0; i < outputNumber; i++) {
+            network.layers[0][i] = Neuron.random();
+        }
+
+        return network;
     }
 }

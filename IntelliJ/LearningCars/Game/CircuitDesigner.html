@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CircuitDesigner</title>
+    <style>
+        * { padding: 0; margin: 0; }
+        canvas { background: #7b7b7b; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="1900" height="900"></canvas>
+
+<script src="Vector.js"></script>
+<script src="Line.js"></script>
+<script>
+
+    (()=>{
+
+        //Left click = create line
+        //Right click = set line end and line start
+        //Middle click = remove last line
+        //Enter = generate (see console)
+
+        let lines = [];
+        let lineStart = new Vector(0,0);
+        let lineEnd = new Vector(0,0);
+
+        function onClick(event) {
+
+            switch(event.which) {
+
+                //Click gauche
+                case 1:
+                    lineStart = new Vector(event.clientX, event.clientY);
+                    break;
+                //Click droit
+                case 3:
+                    lineEnd = new Vector(event.clientX, event.clientY);
+                    lines.push(new Line(lineStart, lineEnd).setVisible(true));
+                    lineStart = lineEnd;
+                    break;
+                //Click molette
+                case 2:
+                    lines.pop();
+                    lineStart = lines[lines.length-1].start;
+                    break;
+                default:
+            }
+
+            draw();
+        }
+        document.addEventListener("click", onClick);
+
+        document.onkeydown = function(event) {
+
+            if(event.keyCode === 13)
+                generateCircuit();
+        };
+
+        function draw() {
+
+            for(let line of lines)
+                line.draw();
+        }
+
+        function generateCircuit() {
+
+        }
+
+    })();
+
+</script>
+
+</body>
+</html>

@@ -45,6 +45,7 @@ class Vector {
     }
 
     static fromOrientation(angle) {
+        angle = angle*Math.PI/180;
         return new Vector(Math.cos(angle), Math.sin(angle));
     }
 

@@ -11,12 +11,12 @@ class Neuron {
         for(let connection of this.connections)
             answer += connection.simulate();
 
-        answer = this.activation(answer);
+        answer = Neuron.actFunction(answer);
         this.activation = answer;
         return answer;
     }
 
-    activation(x) {
+    static actFunction(x) {
         return Math.min(1, Math.max(0, x));
     }
 
@@ -31,5 +31,9 @@ class Neuron {
         neuron.biais = this.biais;
 
         return neuron;
+    }
+
+    static random() {
+
     }
 }

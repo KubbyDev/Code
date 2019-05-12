@@ -12,24 +12,24 @@ class NetworkController {
     }
 
     getInputs() {
-        let answer = this.network.simulate(this.getDistances());
+        let answer = this.network.simulate(this.getDistances().map(x => x/1000));
         return [clamp(answer[0]),clamp(answer[1])];
     }
 
     getDistances(circuit) {
         return [
-          this.getDistance(Vector.fromOrientation(this.parentCar.rotation).multiply(1000000).toLine(this.parentCar.position), circuit),
-          this.getDistance(Vector.fromOrientation(this.parentCar.rotation+45).multiply(1000000).toLine(this.parentCar.position), circuit),
-          this.getDistance(Vector.fromOrientation(this.parentCar.rotation-45).multiply(1000000).toLine(this.parentCar.position), circuit),
-          this.getDistance(Vector.fromOrientation(this.parentCar.rotation-90).multiply(1000000).toLine(this.parentCar.position), circuit),
-          this.getDistance(Vector.fromOrientation(this.parentCar.rotation+90).multiply(1000000).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation).multiply(1000).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation+45).multiply(1000).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation-45).multiply(1000).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation-90).multiply(1000).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation+90).multiply(1000).toLine(this.parentCar.position), circuit),
         ];
     }
 
     //Calcule la distance de la premiere collision avec le circuit le long de line
     getDistance(line, circuit) {
 
-        let minDistance = 1000000;
+        let minDistance = 1000;
         for(let circuitLine of circuit) {
 
             let collisionPoint = line.getCollisionPoint(circuitLine);
