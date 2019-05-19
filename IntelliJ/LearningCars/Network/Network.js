@@ -31,14 +31,19 @@ class Network {
 
         //Premiere couche (couche virtuelle des inputs)
         network.inputs = new Array(inputNumber);
+        for(let i = 0; i < inputNumber; i++)
+            network.inputs[i] = new Input();
 
         //Derniere couche (couche des outputs)
         network.layers = new Array(1);
         network.layers[0] = new Array(outputNumber);
-        for(let i = 0; i < outputNumber; i++) {
-            network.layers[0][i] = Neuron.random();
-        }
+        for(let i = 0; i < outputNumber; i++)
+            network.layers[0][i] = Neuron.random(network.inputs);
 
         return network;
+    }
+
+    mutate() {
+
     }
 }

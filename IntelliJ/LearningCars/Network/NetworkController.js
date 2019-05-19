@@ -1,5 +1,5 @@
 function clamp(val) {
-    return Math.min(1, Math.max(val, -1))
+    return Math.max(0, Math.min(val, 1))
 }
 
 class NetworkController {
@@ -9,11 +9,15 @@ class NetworkController {
 
     constructor(parentCar) {
         this.parentCar = parentCar;
+        this.network = Network.random(5, 2);
     }
 
-    getInputs() {
-        let answer = this.network.simulate(this.getDistances().map(x => x/1000));
-        return [clamp(answer[0]),clamp(answer[1])];
+    getInputs(circuit) {
+        let answer = this.network.simulate(this.getDistances(circuit).map(x => x/1000));
+        return [
+            (clamp(answer[0])-0.5)*2,
+            (clamp(answer[1])-0.5)*2
+        ];
     }
 
     getDistances(circuit) {

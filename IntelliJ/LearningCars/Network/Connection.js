@@ -5,6 +5,7 @@ class Connection {
     
     constructor(target) {
         this.target = target;
+        this.weight = Math.random()*2-1;
     }
     
     simulate() {
@@ -18,5 +19,9 @@ class Connection {
         connection.weight = this.weight;
         
         return connection;
+    }
+
+    mutate(strength, newNodeProba) {
+
     }
 }

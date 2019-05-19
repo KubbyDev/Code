@@ -10,6 +10,7 @@ class Car {
     speed = 1;
     turnRate = 1;
     alive = true;
+    nextCheckpoint = 0;  //Identifiant du prochain checkpoint a passer
 
     corners = [new Vector(0,0), new Vector(0,0), new Vector(0,0), new Vector(0,0)];
     hitbox = [new Line(), new Line(), new Line(), new Line()];
@@ -28,16 +29,16 @@ class Car {
     //Recupere les ordres venant du controller et les applique
     update(circuit) {
 
-        let inputs = this.controller.getInputs();
+        let inputs = this.controller.getInputs(circuit.lines);
 
         this.moveForward(inputs[0]);
         this.turn(inputs[1]);
 
-        if(this.isColliding(circuit))
+        if(this.isColliding(circuit.lines))
             this.alive = false;
 
-        //Temp
-        console.log(this.test.getDistances(circuit));
+        if(this.isColliding(circuit.checkpoints[this.nextCheckpoint]))
+            this.nextCheckpoint++;
     }
 
     setColor(color) {
@@ -110,7 +111,7 @@ class Car {
         this.areCornersCorrect = false;
     }
 
-    isColliding(circuit) {
+    isColliding(lines) {
 
         this.getCorners();
         this.hitbox[0].setStartEnd(this.corners[0], this.corners[1]);
@@ -119,7 +120,7 @@ class Car {
         this.hitbox[3].setStartEnd(this.corners[3], this.corners[0]);
 
         for(let line of this.hitbox)
-            if(line.isColliding(circuit))
+            if(line.isColliding(lines))
                 return true;
 
         return false;

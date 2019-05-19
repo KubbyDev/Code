@@ -17,7 +17,7 @@ class Neuron {
     }
 
     static actFunction(x) {
-        return Math.min(1, Math.max(0, x));
+        return Math.max(0, Math.min(1, x));
     }
 
     copy() {
@@ -33,7 +33,16 @@ class Neuron {
         return neuron;
     }
 
-    static random() {
+    static random(inputs) {
+
+        let neuron = new Neuron();
+        for(let input of inputs)
+            neuron.connections.push(new Connection(input)); //Le weight est set automatiquement par la Connection
+
+        return neuron;
+    }
+
+    mutate(probability) {
 
     }
 }

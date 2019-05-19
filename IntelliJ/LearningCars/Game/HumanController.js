@@ -1,6 +1,6 @@
 class HumanController {
 
-    getInputs() {
+    getInputs(circuit) {
         return [forwardAxis,rightAxis];
     }
 }

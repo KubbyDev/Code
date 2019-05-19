@@ -1,6 +1,3 @@
-const canvas = document.getElementById("myCanvas");
-const ctx = canvas.getContext("2d");
-
 class Game {
 
     cars = [];
@@ -22,7 +19,6 @@ class Game {
             car.draw();
 
         this.circuit.draw();
-
     }
 
 }

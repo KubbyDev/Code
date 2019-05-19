@@ -10,43 +10,49 @@
 </head>
 <body>
 
-<canvas id="myCanvas" width="1900" height="900"></canvas>
+<canvas id="myCanvas" width="1400" height="700"></canvas>
 
 <script src="Vector.js"></script>
 <script src="Line.js"></script>
+<script src="Checkpoint.js"></script>
 <script>
+
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
 
     (()=>{
 
-        //Left click = create line
-        //Right click = set line end and line start
-        //Middle click = remove last line
-        //Enter = generate (see console)
+        //Space: creation d'une ligne (click pour placer)
+        //Click gauche: placement d'un point
+        //Enter: generer le circuit
+        //Backspace: Supprimer la derniere ligne
+        //C: placer un checkpoint
+        //V: supprimer le dernier checkpoint
+        //Fleches: modifier le dernier checkpoint
 
         let lines = [];
+        let checkpoints = [];
         let lineStart = new Vector(0,0);
         let lineEnd = new Vector(0,0);
+        let currentObject = 0; //0: placement d'un debut de ligne, 1: fin, 2: checkpoint
 
         function onClick(event) {
 
-            switch(event.which) {
+            //Click gauche: creation d'une ligne
+            if (event.which === 1) {
 
-                //Click gauche
-                case 1:
-                    lineStart = new Vector(event.clientX, event.clientY);
-                    break;
-                //Click droit
-                case 3:
-                    lineEnd = new Vector(event.clientX, event.clientY);
+                if(currentObject === 0) { //Debut de ligne
+                    lineStart = cursorPosition(event);
+                    currentObject = 1;
+                }
+                if(currentObject === 1) { //Fin de ligne
+                    lineEnd = cursorPosition(event);
                     lines.push(new Line(lineStart, lineEnd).setVisible(true));
                     lineStart = lineEnd;
-                    break;
-                //Click molette
-                case 2:
-                    lines.pop();
-                    lineStart = lines[lines.length-1].start;
-                    break;
-                default:
+                }
+                if(currentObject === 2) { //Checkpoint
+                    checkpoints.push(new Checkpoint(cursorPosition(event), 0, 100));
+                }
             }
 
             draw();
@@ -55,18 +61,105 @@
 
         document.onkeydown = function(event) {
 
+            console.log(event.keyCode);
+
+            //Generation du circuit
             if(event.keyCode === 13)
                 generateCircuit();
+
+            //Nouvelle ligne
+            if(event.keyCode === 32)
+                currentObject = 0;
+
+            //Suppression de la derniere ligne
+            if(event.keyCode === 8 && lines.length > 0)
+                lineStart = lines.pop().start;
+
+            //Placement d'un checkpoint (C)
+            if(event.keyCode === 67)
+                currentObject = 2;
+
+            //Suppression du dernier checkpoint (V)
+            if(event.keyCode === 86 && checkpoints.length > 0)
+                checkpoints.pop();
+
+            //Rotation du dernier checkpoint
+            if(event.keyCode === 39 && checkpoints.length > 0) {
+                let check = checkpoints.pop();
+                check.rotate(2);
+                checkpoints.push(check);
+            }
+
+            //Rotation du dernier checkpoint
+            if(event.keyCode === 37 && checkpoints.length > 0) {
+                let check = checkpoints.pop();
+                check.rotate(-2);
+                checkpoints.push(check);
+            }
+
+            //Etirage du dernier checkpoint
+            if(event.keyCode === 38 && checkpoints.length > 0) {
+                let check = checkpoints.pop();
+                check.stretch(1);
+                checkpoints.push(check);
+            }
+
+            //Retractation du dernier checkpoint
+            if(event.keyCode === 40 && checkpoints.length > 0) {
+                let check = checkpoints.pop();
+                check.stretch(-1);
+                checkpoints.push(check);
+            }
+
+            draw();
         };
 
         function draw() {
 
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             for(let line of lines)
                 line.draw();
+
+            for(let check of checkpoints)
+                check.draw();
+        }
+
+        function cursorPosition(event) {
+            return new Vector(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
         }
 
         function generateCircuit() {
 
+            let ret = "new Circuit([\n";
+
+            for(let line of lines)
+                ret += "    new Line().setStartEnd(new Vector("
+                    + line.start.x
+                    + ", "
+                    + line.start.y
+                    + "),new Vector("
+                    + line.end.x
+                    + ", "
+                    + line.end.y
+                    + ")).setVisible(true),\n";
+
+            ret += "],[\n";
+
+            new Checkpoint(new Vector(check.center.x, check.center.y), check.rotation, check.halfLenght*2, )
+
+            for(let check of checkpoints)
+                ret += "    new Checkpoint().set(new Vector("
+                    + line.start.x
+                    + ", "
+                    + line.start.y
+                    + "),new Vector("
+                    + line.end.x
+                    + ", "
+                    + line.end.y
+                    + ")).setVisible(true),\n";
+
+            console.log(ret + "]);")
         }
 
     })();

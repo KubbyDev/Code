@@ -79,8 +79,8 @@ class Line {
     draw() {
 
         if(this.visible) {
-            ctx.fillStyle = this.color;
             ctx.beginPath();
+            ctx.fillStyle = this.color;
             ctx.moveTo(this.start.x, this.start.y);
             ctx.lineTo(this.end.x, this.end.y);
             ctx.stroke();

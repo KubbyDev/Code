@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<canvas id="myCanvas" width="1900" height="900"></canvas>
+<canvas id="myCanvas" width="1400" height="700"></canvas>
 
 
 <script src="Game/Vector.js"></script>
@@ -30,16 +30,24 @@
 
 <script>
 
-game = new Game();
-game.cars = [new Car(true).setColor("#FF0000").setPosition(20,20)];
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
 
-function tick() {
+    humanGame();
 
-    game.update(); //Ces fonctions sont dans game
-    game.draw();
-}
+    function humanGame() {
 
-setInterval(tick, 10);
+        let game = new Game();
+        game.cars.push(new Car(true).setColor("#FF0000").setPosition(80,40).setRotation(90));
+
+        function tick() {
+
+            game.update(); //Ces fonctions sont dans game
+            game.draw();
+        }
+
+        setInterval(tick, 10);
+    }
 
 </script>
 
