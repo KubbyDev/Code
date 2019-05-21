@@ -16,6 +16,7 @@
 <script src="Game/Vector.js"></script>
 
 <script src="Game/Line.js"></script>
+<script src="Game/Checkpoint.js"></script>
 <script src="Game/Circuit.js"></script>
 <script src="Game/Car.js"></script>
 <script src="Game/Game.js"></script>
@@ -44,6 +45,8 @@
 
             game.update(); //Ces fonctions sont dans game
             game.draw();
+
+            console.log(game.cars[0].nextCheckpoint);
         }
 
         setInterval(tick, 10);

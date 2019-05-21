@@ -146,18 +146,18 @@
 
             ret += "],[\n";
 
-            new Checkpoint(new Vector(check.center.x, check.center.y), check.rotation, check.halfLenght*2, )
-
-            for(let check of checkpoints)
-                ret += "    new Checkpoint().set(new Vector("
-                    + line.start.x
+            for(let i = 0; i < checkpoints.length; i++)
+                ret += "    new Checkpoint(new Vector("
+                    + checkpoints[i].center.x
                     + ", "
-                    + line.start.y
-                    + "),new Vector("
-                    + line.end.x
+                    + checkpoints[i].center.y
+                    + "), "
+                    + checkpoints[i].rotation
                     + ", "
-                    + line.end.y
-                    + ")).setVisible(true),\n";
+                    + checkpoints[i].halfLenght*2
+                    + ", "
+                    + i
+                    + "),\n";
 
             console.log(ret + "]);")
         }

@@ -1,13 +1,13 @@
 class Game {
 
     cars = [];
-    circuit = circuit1;
+    circuit = Circuit.SIMPLE;
 
     update() {
 
         for(let car of this.cars)
             if(car.alive)
-                car.update(this.circuit.lines);
+                car.update(this.circuit);
 
     }
 
