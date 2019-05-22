@@ -1,5 +1,8 @@
 class Connection {
-    
+
+    static MUTATION_STRENGTH = 0.1;
+    static NEW_NEURON_PROBABILITY = 0;
+
     weight = 0;
     target = null;
     
@@ -21,7 +24,15 @@ class Connection {
         return connection;
     }
 
-    mutate(strength, newNodeProba) {
+    mutate() {
+
+        this.weight += Math.random() * Connection.MUTATION_STRENGTH;
+
+        if(Math.random() < Neuron.NEW_NEURON_PROBABILITY)
+            this.insert_neuron();
+    }
+
+    insert_neuron() {
 
     }
 }

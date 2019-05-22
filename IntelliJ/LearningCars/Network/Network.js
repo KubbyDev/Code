@@ -43,7 +43,33 @@ class Network {
         return network;
     }
 
+    copy() {
+
+        let network = new Network();
+
+        //Premiere couche (couche virtuelle des inputs)
+        network.inputs = new Array(this.inputs.length);
+        for(let i = 0; i < this.inputs.length; i++)
+            network.inputs[i] = new Input();
+
+        //Pour chaque couche
+        network.layers = new Array(this.layers.length);
+        for(let i = 0; i < this.layers.length; i++) {
+
+            //Pour chaque neurone de la couche
+            let neuronsNumber = this.layers[i].length;
+            network.layers[i] = new Array(neuronsNumber);
+            for(let j = 0; j < neuronsNumber; j++)
+                network.layers[i][j] = this.layers[i][j].copy();
+        }
+
+        return network;
+    }
+
     mutate() {
 
+        for(let layer of this.layers)
+            for(let neuron of layer)
+                neuron.mutate();
     }
 }

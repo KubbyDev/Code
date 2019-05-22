@@ -6,9 +6,9 @@ class Car {
     rotation = 0;
     width = 5;
     length = 12;
-    color = "#FF0000";
-    speed = 1;
-    turnRate = 1;
+    color = '#' + (Math.random().toString(16) + "000000").substring(2,8);
+    speed = 3;
+    turnRate = 2;
 
     alive = true;
     nextCheckpoint = 0;  //Identifiant du prochain checkpoint a passer
@@ -27,7 +27,7 @@ class Car {
 
     /***
      * Recupere les ordres venant du controller et les applique
-     * Calcule les collisions et bouge la voiture
+     * Calcule les collisions (checkpoints compris) et bouge la voiture
      * @param circuit
      */
     update(circuit) {
@@ -37,20 +37,17 @@ class Car {
         this.moveForward(inputs[0]);
         this.turn(inputs[1]);
 
+        //Collisions avec les murs
         if(this.isColliding(circuit.lines))
             this.alive = false;
 
-        if(this.isColliding([circuit.checkpoints[this.nextCheckpoint].line]))
+        //Collisions avec le prochain checkpoint
+        if(this.nextCheckpoint < circuit.checkpoints.length && this.isColliding([circuit.checkpoints[this.nextCheckpoint].line]))
             this.nextCheckpoint++;
     }
 
     setColor(color) {
         this.color = color;
-        return this;
-    }
-
-    setPosition(position) {
-        this.position = position;
         return this;
     }
 

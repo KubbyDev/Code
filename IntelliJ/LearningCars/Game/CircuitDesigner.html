@@ -41,14 +41,14 @@
             //Click gauche: creation d'une ligne
             if (event.which === 1) {
 
-                if(currentObject === 0) { //Debut de ligne
-                    lineStart = cursorPosition(event);
-                    currentObject = 1;
-                }
                 if(currentObject === 1) { //Fin de ligne
                     lineEnd = cursorPosition(event);
                     lines.push(new Line(lineStart, lineEnd).setVisible(true));
                     lineStart = lineEnd;
+                }
+                if(currentObject === 0) { //Debut de ligne
+                    lineStart = cursorPosition(event);
+                    currentObject = 1;
                 }
                 if(currentObject === 2) { //Checkpoint
                     checkpoints.push(new Checkpoint(cursorPosition(event), 0, 100));

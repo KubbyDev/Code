@@ -3,6 +3,12 @@ class Game {
     cars = [];
     circuit = Circuit.SIMPLE;
 
+    initCars() {
+
+        this.cars.forEach(car => car.setPosition(this.circuit.startPos.x, this.circuit.startPos.y));
+        this.cars.forEach(car => car.setRotation(this.circuit.startRot));
+    }
+
     update() {
 
         for(let car of this.cars)

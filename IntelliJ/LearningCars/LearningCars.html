@@ -12,44 +12,51 @@
 
 <canvas id="myCanvas" width="1400" height="700"></canvas>
 
-
 <script src="Game/Vector.js"></script>
-
 <script src="Game/Line.js"></script>
 <script src="Game/Checkpoint.js"></script>
 <script src="Game/Circuit.js"></script>
 <script src="Game/Car.js"></script>
 <script src="Game/Game.js"></script>
-
 <script src="Game/HumanController.js"></script>
 
 <script src="Network/Input.js"></script>
 <script src="Network/Connection.js"></script>
 <script src="Network/Neuron.js"></script>
 <script src="Network/Network.js"></script>
-<script src="Network/NetworkController.js"></script>
+<script src="Game/NetworkController.js"></script>
+
+<script src="GeneticAlgorithm/Agent.js"></script>
+<script src="GeneticAlgorithm/Algorithm.js"></script>
 
 <script>
 
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
 
-    humanGame();
+    const playedByAI = true;
+
+    if(playedByAI)
+        aiGame();
+    else
+        humanGame();
 
     function humanGame() {
 
         let game = new Game();
-        game.cars.push(new Car(true).setColor("#FF0000").setPosition(80,40).setRotation(90));
+        game.cars.push(new Car(true));
+        game.initCars();
 
         function tick() {
-
-            game.update(); //Ces fonctions sont dans game
+            game.update();
             game.draw();
-
-            console.log(game.cars[0].nextCheckpoint);
         }
 
         setInterval(tick, 10);
+    }
+
+    function aiGame() {
+        GeneticAlgorithm.launch();
     }
 
 </script>

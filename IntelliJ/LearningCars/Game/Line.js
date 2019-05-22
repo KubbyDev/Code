@@ -80,7 +80,7 @@ class Line {
 
         if(this.visible) {
             ctx.beginPath();
-            ctx.fillStyle = this.color;
+            ctx.strokeStyle = this.color;
             ctx.moveTo(this.start.x, this.start.y);
             ctx.lineTo(this.end.x, this.end.y);
             ctx.stroke();

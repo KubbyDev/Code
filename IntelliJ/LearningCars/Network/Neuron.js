@@ -1,7 +1,9 @@
 class Neuron {
 
+    static MUTATION_PROBABILITY = 0.2;
+
     connections = [];
-    biais = 0;
+    biais = 0.5;
     activation = 0;
 
     simulate() {
@@ -42,7 +44,10 @@ class Neuron {
         return neuron;
     }
 
-    mutate(probability) {
+    mutate() {
 
+        for(let connection of this.connections)
+            if(Math.random() < Neuron.MUTATION_PROBABILITY)
+                connection.mutate();
     }
 }
