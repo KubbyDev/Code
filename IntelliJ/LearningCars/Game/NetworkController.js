@@ -21,13 +21,29 @@ class NetworkController {
     }
 
     getDistances(circuit) {
-        return [
+        let test = [
           this.getDistance(Vector.fromOrientation(this.parentCar.rotation).multiply(1000).toLine(this.parentCar.position), circuit),
           this.getDistance(Vector.fromOrientation(this.parentCar.rotation+45).multiply(1000).toLine(this.parentCar.position), circuit),
           this.getDistance(Vector.fromOrientation(this.parentCar.rotation-45).multiply(1000).toLine(this.parentCar.position), circuit),
           this.getDistance(Vector.fromOrientation(this.parentCar.rotation-90).multiply(1000).toLine(this.parentCar.position), circuit),
           this.getDistance(Vector.fromOrientation(this.parentCar.rotation+90).multiply(1000).toLine(this.parentCar.position), circuit),
         ];
+
+        /*
+        ctx.fillStyle = "#ff0000";
+        let a = Vector.fromOrientation(this.parentCar.rotation).multiply(test[0]).add(this.parentCar.position);
+        ctx.fillRect(a.x-1, a.y-1, 3, 3);
+        a = Vector.fromOrientation(this.parentCar.rotation+45).multiply(test[1]).add(this.parentCar.position);
+        ctx.fillRect(a.x-1, a.y-1, 3, 3);
+        a = Vector.fromOrientation(this.parentCar.rotation-45).multiply(test[2]).add(this.parentCar.position);
+        ctx.fillRect(a.x-1, a.y-1, 3, 3);
+        a = Vector.fromOrientation(this.parentCar.rotation-90).multiply(test[3]).add(this.parentCar.position);
+        ctx.fillRect(a.x-1, a.y-1, 3, 3);
+        a = Vector.fromOrientation(this.parentCar.rotation+90).multiply(test[4]).add(this.parentCar.position);
+        ctx.fillRect(a.x-1, a.y-1, 3, 3);
+         */
+
+        return test;
     }
 
     //Calcule la distance de la premiere collision avec le circuit le long de line

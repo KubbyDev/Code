@@ -32,13 +32,13 @@ class Network {
         //Premiere couche (couche virtuelle des inputs)
         network.inputs = new Array(inputNumber);
         for(let i = 0; i < inputNumber; i++)
-            network.inputs[i] = new Input();
+            network.inputs[i] = new Input(i);
 
         //Derniere couche (couche des outputs)
         network.layers = new Array(1);
         network.layers[0] = new Array(outputNumber);
         for(let i = 0; i < outputNumber; i++)
-            network.layers[0][i] = Neuron.random(network.inputs);
+            network.layers[0][i] = Neuron.random(network.inputs, 1, i);
 
         return network;
     }
@@ -50,7 +50,7 @@ class Network {
         //Premiere couche (couche virtuelle des inputs)
         network.inputs = new Array(this.inputs.length);
         for(let i = 0; i < this.inputs.length; i++)
-            network.inputs[i] = new Input();
+            network.inputs[i] = new Input(i);
 
         //Pour chaque couche
         network.layers = new Array(this.layers.length);
@@ -60,7 +60,7 @@ class Network {
             let neuronsNumber = this.layers[i].length;
             network.layers[i] = new Array(neuronsNumber);
             for(let j = 0; j < neuronsNumber; j++)
-                network.layers[i][j] = this.layers[i][j].copy();
+                network.layers[i][j] = this.layers[i][j].copy(network);
         }
 
         return network;
@@ -71,5 +71,13 @@ class Network {
         for(let layer of this.layers)
             for(let neuron of layer)
                 neuron.mutate();
+    }
+
+    getNeuron(layer, id) {
+
+        if(layer === 0)
+            return this.inputs[id];
+
+        return this.layers[layer-1][id];
     }
 }

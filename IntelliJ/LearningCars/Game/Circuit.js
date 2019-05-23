@@ -14,6 +14,9 @@ class Circuit {
 
         for(let line of this.lines)
             line.draw();
+
+        for(let check of this.checkpoints)
+            check.draw();
     }
 
     static SIMPLE = new Circuit([
@@ -301,6 +304,37 @@ class Circuit {
         new Checkpoint(new Vector(1107, 147), 6, 64, 11),
         new Checkpoint(new Vector(1038, 91), -76, 50, 12),
         new Checkpoint(new Vector(381, 226), 64, 40, 13),
+    ]);
+
+    static BEGINNER = new Circuit([
+        new Line().setStartEnd(new Vector(7, 3),new Vector(14, 334)).setVisible(true),
+        new Line().setStartEnd(new Vector(14, 334),new Vector(298, 428)).setVisible(true),
+        new Line().setStartEnd(new Vector(298, 428),new Vector(351, 624)).setVisible(true),
+        new Line().setStartEnd(new Vector(351, 624),new Vector(556, 671)).setVisible(true),
+        new Line().setStartEnd(new Vector(556, 671),new Vector(948, 676)).setVisible(true),
+        new Line().setStartEnd(new Vector(948, 676),new Vector(1104, 557)).setVisible(true),
+        new Line().setStartEnd(new Vector(1104, 557),new Vector(1093, 388)).setVisible(true),
+        new Line().setStartEnd(new Vector(1093, 388),new Vector(1336, 334)).setVisible(true),
+        new Line().setStartEnd(new Vector(1336, 334),new Vector(1356, 138)).setVisible(true),
+        new Line().setStartEnd(new Vector(1356, 138),new Vector(1263, 22)).setVisible(true),
+        new Line().setStartEnd(new Vector(1263, 22),new Vector(970, 16)).setVisible(true),
+        new Line().setStartEnd(new Vector(970, 16),new Vector(613, 26)).setVisible(true),
+        new Line().setStartEnd(new Vector(8, 3),new Vector(200, 12)).setVisible(true),
+        new Line().setStartEnd(new Vector(200, 12),new Vector(220, 217)).setVisible(true),
+        new Line().setStartEnd(new Vector(220, 217),new Vector(404, 266)).setVisible(true),
+        new Line().setStartEnd(new Vector(404, 266),new Vector(498, 424)).setVisible(true),
+        new Line().setStartEnd(new Vector(498, 424),new Vector(620, 511)).setVisible(true),
+        new Line().setStartEnd(new Vector(620, 511),new Vector(870, 508)).setVisible(true),
+        new Line().setStartEnd(new Vector(870, 508),new Vector(918, 296)).setVisible(true),
+        new Line().setStartEnd(new Vector(918, 296),new Vector(1183, 240)).setVisible(true),
+        new Line().setStartEnd(new Vector(1183, 240),new Vector(1168, 127)).setVisible(true),
+        new Line().setStartEnd(new Vector(1168, 127),new Vector(620, 111)).setVisible(true),
+    ],[
+        new Checkpoint(new Vector(101, 216), 0, 258, 0),
+        new Checkpoint(new Vector(611, 598), -70, 206, 1),
+        new Checkpoint(new Vector(1003, 344), 28, 234, 2),
+        new Checkpoint(new Vector(1270, 128), -2, 228, 3),
+        new Checkpoint(new Vector(621, 61), -90, 110, 4),
     ]);
 }
 

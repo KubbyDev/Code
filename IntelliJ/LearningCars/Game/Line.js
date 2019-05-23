@@ -2,7 +2,7 @@ class Line {
 
     start = new Vector(0,0);
     end = new Vector(0,0);
-    visible = false;
+    visible = true;
     color = "#ffffff";
 
     constructor(start, end) {
@@ -55,9 +55,9 @@ class Line {
         let interceptOther = other.start.y - slopeOther * other.start.x;
 
         //Si une des lignes est verticale
-        if (slopeThis === Infinity)
+        if (Math.abs(slopeThis) === Infinity)
             point = new Vector(this.start.x, slopeOther * this.start.x + interceptOther);
-        else if (slopeOther === Infinity)
+        else if (Math.abs(slopeOther) === Infinity)
             point = new Vector(other.start.x, slopeThis * other.start.x + interceptThis);
         else {
 

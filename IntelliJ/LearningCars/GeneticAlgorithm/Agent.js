@@ -2,6 +2,7 @@ class Agent {
 
     car;
     fitness;
+    time = 0; //Le temps pour arriver a la ligne d'arrivee en ticks
 
     constructor(car) {
 
@@ -16,8 +17,8 @@ class Agent {
 
         //Si la voiture a atteint le dernier checkpoint
         if(this.car.nextCheckpoint === circuit.checkpoints.length)
-            //TODO: On ajoute un nombre inversement proportionnel au temps de parcours du circuit
-            this.fitness = 0;
+            //On ajoute un nombre qui depend du temps de parcours du circuit (plus grand si le temps est plus petit)
+            this.fitness += GeneticAlgorithm.MAX_TICKS - this.time;
         //Si la voiture n'a pas atteint le dernier checkpoint
         else
             //On ajoute 1000 - la distance entre la voiture et le checkpoint suivant
@@ -31,6 +32,8 @@ class Agent {
         this.car.alive = true;
         this.car.nextCheckpoint = 0;
         this.car.areCornersCorrect = false;
+
+        this.time = 0;
     }
 
     copy() {
