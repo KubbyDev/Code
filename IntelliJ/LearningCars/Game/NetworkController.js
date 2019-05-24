@@ -4,6 +4,8 @@ function clamp(val) {
 
 class NetworkController {
 
+    static MAX_RAY_DISTANCE = 200;
+
     network;
     parentCar;
 
@@ -13,7 +15,7 @@ class NetworkController {
     }
 
     getInputs(circuit) {
-        let answer = this.network.simulate(this.getDistances(circuit).map(x => x/1000));
+        let answer = this.network.simulate(this.getDistances(circuit).map(x => x/NetworkController.MAX_RAY_DISTANCE));
         return [
             (clamp(answer[0])-0.5)*2,
             (clamp(answer[1])-0.5)*2
@@ -22,11 +24,11 @@ class NetworkController {
 
     getDistances(circuit) {
         let test = [
-          this.getDistance(Vector.fromOrientation(this.parentCar.rotation).multiply(1000).toLine(this.parentCar.position), circuit),
-          this.getDistance(Vector.fromOrientation(this.parentCar.rotation+45).multiply(1000).toLine(this.parentCar.position), circuit),
-          this.getDistance(Vector.fromOrientation(this.parentCar.rotation-45).multiply(1000).toLine(this.parentCar.position), circuit),
-          this.getDistance(Vector.fromOrientation(this.parentCar.rotation-90).multiply(1000).toLine(this.parentCar.position), circuit),
-          this.getDistance(Vector.fromOrientation(this.parentCar.rotation+90).multiply(1000).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation+45).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation-45).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation-90).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation+90).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
         ];
 
         /*
@@ -49,7 +51,7 @@ class NetworkController {
     //Calcule la distance de la premiere collision avec le circuit le long de line
     getDistance(line, circuit) {
 
-        let minDistance = 1000;
+        let minDistance = NetworkController.MAX_RAY_DISTANCE;
         for(let circuitLine of circuit) {
 
             let collisionPoint = line.getCollisionPoint(circuitLine);

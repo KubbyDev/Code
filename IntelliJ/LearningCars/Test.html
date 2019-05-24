@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script src="Network/NetworkSave.js"></script>
+<script src="Network/Network.js"></script>
+<script src="Network/Neuron.js"></script>
+<script src="Network/Connection.js"></script>
+<script src="Network/Input.js"></script>
+<script>
+
+    let network = Network.random(5,2);
+
+    let serialized = NetworkSave.serialize(network);
+    let deserialized = NetworkSave.parse(serialized);
+
+    console.log(serialized);
+    console.log(deserialized);
+
+</script>
+
+</body>
+</html>

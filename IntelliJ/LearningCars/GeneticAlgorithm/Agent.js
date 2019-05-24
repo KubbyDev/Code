@@ -38,11 +38,17 @@ class Agent {
 
     copy() {
 
+        let agent = Agent.fromNetwork(this.car.controller.network.copy());
+        agent.car.color = this.car.color;
+        return agent;
+    }
+
+    static fromNetwork(network) {
+
         let car = new Car();
 
         car.controller = new NetworkController(car);
-        car.controller.network = this.car.controller.network.copy();
-        car.color = this.car.color;
+        car.controller.network = network;
 
         return new Agent(car);
     }

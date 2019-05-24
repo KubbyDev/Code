@@ -24,6 +24,7 @@
 <script src="Network/Connection.js"></script>
 <script src="Network/Neuron.js"></script>
 <script src="Network/Network.js"></script>
+<script src="Network/NetworkSave.js"></script>
 <script src="Game/NetworkController.js"></script>
 
 <script src="GeneticAlgorithm/Agent.js"></script>
@@ -34,10 +35,10 @@
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
 
-    const playedByAI = true;
+    const training = false;
 
-    if(playedByAI)
-        aiGame();
+    if(training)
+        GeneticAlgorithm.launch();
     else
         humanGame();
 
@@ -45,6 +46,23 @@
 
         let game = new Game();
         game.cars.push(new Car(true));
+        game.cars.push(new Car(false));
+        game.cars[1].controller.network = NetworkSave.parse("5\n" +
+            "\n" +
+            "\n" +
+            "0.37746744549635464\n" +
+            "0 0 0.5994102422992165\n" +
+            "0 1 -0.0031956678762525836\n" +
+            "0 2 -0.01049049730390239\n" +
+            "0 3 -0.11039039546109164\n" +
+            "0 4 0.44793699218040905\n" +
+            "\n" +
+            "0.4884348921104834\n" +
+            "0 0 0.1915520207211041\n" +
+            "0 1 -1.4538109508842891\n" +
+            "0 2 0.7061843164552184\n" +
+            "0 3 1.0771837303212144\n" +
+            "0 4 -1.6996504491478728");
         game.initCars();
 
         function tick() {
@@ -52,11 +70,7 @@
             game.draw();
         }
 
-        setInterval(tick, 10);
-    }
-
-    function aiGame() {
-        GeneticAlgorithm.launch();
+        setInterval(tick, 20);
     }
 
 </script>
