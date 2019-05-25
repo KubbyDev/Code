@@ -5,7 +5,7 @@
     <title>Learning Cars</title>
     <style>
         * { padding: 0; margin: 0; }
-        canvas { background: #7b7b7b; display: block; margin: 0 auto; }
+        canvas { background: #eeeeee; display: block; margin: 0 auto; }
     </style>
 </head>
 <body>
@@ -25,7 +25,22 @@
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
 
-    NetworkDrawer.draw(Network.random(5,2), 1400, 700);
+    NetworkDrawer.draw(NetworkSave.parse("5\n" +
+        "\n" +
+        "\n" +
+        "0.37746744549635464\n" +
+        "0 0 0.5994102422992165\n" +
+        "0 1 -0.0031956678762525836\n" +
+        "0 2 -0.01049049730390239\n" +
+        "0 3 -0.11039039546109164\n" +
+        "0 4 0.44793699218040905\n" +
+        "\n" +
+        "0.4884348921104834\n" +
+        "0 0 0.1915520207211041\n" +
+        "0 1 -1.4538109508842891\n" +
+        "0 2 0.7061843164552184\n" +
+        "0 3 1.0771837303212144\n" +
+        "0 4 -1.6996504491478728"), 1400, 700);
 
 </script>
 

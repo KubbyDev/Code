@@ -34,14 +34,24 @@ class NetworkDrawer {
         function drawConnection(from, to, weight) {
             ctx.beginPath();
             ctx.strokeStyle = redBlueGradient(weight);
-            ctx.moveTo(from.x, from.y);
-            ctx.lineTo(to.x, to.y);
+            ctx.strokeWidth = 5;
+            ctx.moveTo(from.x + topLeftCorner.x, from.y + topLeftCorner.y);
+            ctx.lineTo(to.x + topLeftCorner.x, to.y + topLeftCorner.y);
             ctx.stroke();
             ctx.closePath();
         }
 
         function drawNeuron(center, biais) {
-
+            ctx.beginPath();
+            ctx.arc(center.x + topLeftCorner.x, center.y + topLeftCorner.y, 20, 2*Math.PI, false);
+            ctx.fillStyle = "#000000";
+            ctx.fill();
+            ctx.closePath();
+            ctx.beginPath();
+            ctx.arc(center.x + topLeftCorner.x, center.y + topLeftCorner.y, 15, 2*Math.PI, false);
+            ctx.fillStyle = redBlueGradient(biais);
+            ctx.fill();
+            ctx.closePath();
         }
 
         //Calcul de la longueur de la plus longue couche
@@ -70,6 +80,15 @@ class NetworkDrawer {
                         positions[neuron.layer][neuron.id],
                         positions[connection.target.layer][connection.target.id],
                         connection.weight
-                    )
+                    );
+
+        //Dessine tous les neurones
+        for(let layer of network.layers)
+            for(let neuron of layer)
+                drawNeuron(positions[neuron.layer][neuron.id], neuron.biais);
+
+        //Dessine les inputs comme si c'etait des neurones
+        for(let input of network.inputs)
+            drawNeuron(positions[0][input.id], 0)
     }
 }

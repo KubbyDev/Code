@@ -4,6 +4,7 @@ class Circuit {
     checkpoints;
     startPos = new Vector(80, 40);
     startRot = 90;
+    networkPosition = [Vector.zero, Vector.zero];
 
     constructor(lines, checkpoints) {
         this.lines = lines;
@@ -387,4 +388,10 @@ class Circuit {
         new Checkpoint(new Vector(384, 668), 90, 44, 9),
     ]);
 }
+
+//Training
+Circuit.TRAINING.startPos = new Vector(80, 40);
+Circuit.TRAINING.startRot = 90;
+Circuit.TRAINING.networkPosition = [new Vector(400, 0), new Vector(450, 300)];
+
 

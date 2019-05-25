@@ -39,6 +39,7 @@ class GeneticAlgorithm {
 
             game.update();
             game.draw();
+            game.drawNetwork(game.cars[0].controller.network);
 
             //Detection du passage de la ligne d'arrivee (agent.time === 0 permet de ne faire ca qu'une seule fois)
             for(let agent of agents)
