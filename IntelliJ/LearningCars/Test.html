@@ -1,11 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <title>Learning Cars</title>
+    <style>
+        * { padding: 0; margin: 0; }
+        canvas { background: #7b7b7b; display: block; margin: 0 auto; }
+    </style>
 </head>
 <body>
 
+
+<canvas id="myCanvas" width="1400" height="700"></canvas>
+
+<script src="Game/Vector.js"></script>
+<script src="Network/Drawer.js"></script>
 <script src="Network/NetworkSave.js"></script>
 <script src="Network/Network.js"></script>
 <script src="Network/Neuron.js"></script>
@@ -13,13 +22,10 @@
 <script src="Network/Input.js"></script>
 <script>
 
-    let network = Network.random(5,2);
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
 
-    let serialized = NetworkSave.serialize(network);
-    let deserialized = NetworkSave.parse(serialized);
-
-    console.log(serialized);
-    console.log(deserialized);
+    NetworkDrawer.draw(Network.random(5,2), 1400, 700);
 
 </script>
 

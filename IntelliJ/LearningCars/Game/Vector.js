@@ -8,6 +8,10 @@ class Vector {
         this.y = y;
     }
 
+    static get zero() {
+        return new Vector(0,0);
+    }
+
     add(other) {
         return new Vector(this.x + other.x, this.y + other.y);
     }
@@ -50,7 +54,7 @@ class Vector {
     }
 
     toString() {
-        return "x: " + this.x + ", y: " + this.y + ", z: " + this.z;
+        return "x: " + this.x + ", y: " + this.y;
     }
 
     disp() {
