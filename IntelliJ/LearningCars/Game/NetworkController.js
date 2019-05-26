@@ -11,7 +11,7 @@ class NetworkController {
 
     constructor(parentCar) {
         this.parentCar = parentCar;
-        this.network = Network.random(9, 4);
+        this.network = Network.random(9, 4, 10, 2);
     }
 
     getInputs(circuit) {

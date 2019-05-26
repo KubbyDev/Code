@@ -1,8 +1,8 @@
 class GeneticAlgorithm {
 
     static MAX_TICKS = 30*100;
-    static AGENTS_NUMBER = 200;
-    static SELECTION_SIZE = 50;
+    static AGENTS_NUMBER = 300;
+    static SELECTION_SIZE = 30;
 
     static launch() {
 

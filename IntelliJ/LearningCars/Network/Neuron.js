@@ -50,10 +50,10 @@ class Neuron {
         return neuron;
     }
 
-    static random(inputs, layer, id) {
+    static random(previousLayer, layer, id) {
 
         let neuron = new Neuron(layer, id);
-        for(let input of inputs)
+        for(let input of previousLayer)
             neuron.connections.push(new Connection(input)); //Le weight est set automatiquement par la Connection
 
         neuron.biais = Math.random()*2 -1;
@@ -64,10 +64,25 @@ class Neuron {
     mutate() {
 
         for(let connection of this.connections)
-            if(Math.random() < Neuron.MUTATION_PROBABILITY)
+            if(Math.random() < Connection.MUTATION_PROBABILITY)
                 connection.mutate();
 
         if(Math.random() < Neuron.MUTATION_PROBABILITY)
             this.biais += (Math.random()-0.5)*2 * Neuron.MUTATION_STRENGTH;
     }
+
+    /*
+    addConnection(to) {
+
+        //Regarde si ces neurones sont deja connectes
+        for(let connection of this.connections)
+            if(connection.target === to)
+                return;
+
+        //Si la connection n'existe pas encore, on l'ajoute
+        let newConnection = new Connection(to);
+        newConnection.weight = (Math.random()-0.5)*2 * Connection.MUTATION_STRENGTH;
+        this.connections.push(newConnection);
+    }
+     */
 }
