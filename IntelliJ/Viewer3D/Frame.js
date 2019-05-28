@@ -1,72 +1,65 @@
+class Frame {
 
-let fov = [140,70];
-let cameraPosition = new Vector(2,0,0);
-let cameraOrientation = [-180,0];
-let backgroundColor = "#2e2e2e";
-let objects = [];
-let lights = [new Light(new Vector(1.8,2,2), 20)];
+    static backgroundColor = "#2e2e2e";
+    static objects = [];
+    static lights = [new Light(new Vector(1.8,2,2), 20)];
 
-function setObjects(pObjects) {
-    objects = pObjects;
-}
+    static setObjects(pObjects) {
+        Frame.objects = pObjects;
+    }
 
-function addObject(object) {
-    objects.push(object)
-}
+    static addObject(object) {
+        Frame.objects.push(object)
+    }
 
-function drawFrame() {
+    static draw() {
 
-    let angle = 5;
+        let rays = Camera.getRays(canvas.width, canvas.height);
 
-    cameraOrientation[0] = (cameraOrientation[0]+180 + angle)%360-180;
-    cameraPosition.rotate(-angle);
+        for(let x = 0; x < rays.length; x++)
+            for (let y = 0; y < rays[x].length; y++) {
+                ctx.fillStyle = calcPixel(rays[x][y]);
+                ctx.fillRect(x, y, 1,1);
+            }
 
-    for(let y = 0; y < canvas.height; y++) {
-        for (let x = 0; x < canvas.width; x++) {
-            ctx.fillStyle = calcPixel(x, y);
-            ctx.fillRect(x, y, 1,1)
+        function calcPixel(dir) {
+
+            //Tracage du ray
+            let hit = new Ray(Camera.position, dir).trace();
+            if(!hit.hasHit)
+                return Frame.backgroundColor;
+
+            //Calcul de la couleur du pixel en fonction de l'eclairage
+            let brightness = 0.1;
+            for(let light of Frame.lights) {
+
+                let toLight = light.position
+                    .subtract(hit.position)
+                    .normalized();
+                if(!new Ray(hit.position, toLight).hitsFace()) {
+                    //On ajoute de la luminosite en fonction de la distance avec la lampe,
+                    //de son intensite et de l'angle d'arrivee des rayons lumineux
+                    brightness += light.intensity * Math.abs(Vector.dotProduct(toLight, hit.normal)) / Math.pow(Vector.sqrDistance(light.position, hit.position), 2);
+                }
+            }
+
+            return adjustBrightness(hit.other.material.color, brightness);
+
+            function adjustBrightness(color, multiplier) {
+
+                let colorVec = new Vector(
+                    parseInt(color.substr(1,2),16),
+                    parseInt(color.substr(3,2),16),
+                    parseInt(color.substr(5,2),16)
+                );
+
+                colorVec = colorVec.multiply(multiplier);
+
+                return "#" + Math.round(Math.min(colorVec.x, 255)).toString(16).padStart(2, "00")
+                    + Math.round(Math.min(colorVec.y, 255)).toString(16).padStart(2, "00")
+                    + Math.round(Math.min(colorVec.z, 255)).toString(16).padStart(2, "00");
+            }
         }
     }
 }
 
-function calcPixel(x, y) {
-
-    //Calcul du vecteur directeur du ray
-    let dir = Vector.fromOrientation(
-        ((x/canvas.width)-0.5)*2 *fov[0] + cameraOrientation[0],
-        -((y/canvas.height)-0.5)*2 *fov[1] + cameraOrientation[1]
-    );
-
-    //Tracage du ray
-    let hit = new Ray(cameraPosition, dir).trace();
-    if(!hit.hasHit)
-        return backgroundColor;
-
-    //Calcul de la couleur du pixel en fonction de l'eclairage
-    let brightness = 0.1;
-    for(let light of lights) {
-        let toLight = Vector.subtract(light.position, hit.position).normalized();
-        if(!new Ray(hit.position, toLight).hitsFace()) {
-            //On ajoute de la luminosite en fonction de la distance avec la lampe,
-            //de son intensite et de l'angle d'arrivee des rayons lumineux
-            brightness += light.intensity * Math.abs(Vector.dotProduct(toLight, hit.normal)) / Math.pow(Vector.sqrDistance(light.position, hit.position), 2);
-        }
-    }
-
-    return adjustBrightness(hit.other.color, brightness);
-}
-
-function adjustBrightness(color, multiplier) {
-
-    let colorVec = new Vector(
-        parseInt(color.substr(1,2),16),
-        parseInt(color.substr(3,2),16),
-        parseInt(color.substr(5,2),16)
-    );
-
-    colorVec.multiply(multiplier);
-
-    return "#" + Math.round(Math.min(colorVec.x, 255)).toString(16).padStart(2, "00")
-               + Math.round(Math.min(colorVec.y, 255)).toString(16).padStart(2, "00")
-               + Math.round(Math.min(colorVec.z, 255)).toString(16).padStart(2, "00");
-}

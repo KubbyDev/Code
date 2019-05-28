@@ -60,7 +60,7 @@ class Ray {
 
         //On calcule le hit pour chaque face de chaque objet
 
-        for(let object of objects) {
+        for(let object of Frame.objects) {
             for (let face of object.faces) {
                 let hit = this.collideWith(face);
                 if (hit.hasHit) {
@@ -76,7 +76,7 @@ class Ray {
         let closest = Infinity;
 
         for(let hit of hits) {
-            let sqrDistance = Vector.sqrDistance(hit.position, cameraPosition);
+            let sqrDistance = Vector.sqrDistance(hit.position, Camera.position);
             if (sqrDistance < closest) {
                 closest = sqrDistance;
                 finalHit = hit;
@@ -92,7 +92,7 @@ class Ray {
      */
     hitsFace() {
 
-        for(let object of objects) {
+        for(let object of Frame.objects) {
             for (let face of object.faces) {
                 let hit = this.collideWith(face);
                 if (hit.hasHit)

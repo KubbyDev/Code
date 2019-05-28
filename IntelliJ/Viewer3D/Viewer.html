@@ -13,10 +13,12 @@
     <script src="Light.js"></script>
     <script src="Ray.js"></script>
     <script src="Frame.js"></script>
+    <script src="Camera.js"></script>
+    <script src="Material.js"></script>
 </head>
 <body>
 
-<canvas id="myCanvas" width="800" height="400"></canvas>
+<canvas id="myCanvas" width="800" height="450"></canvas>
 
 <script>
 
@@ -30,11 +32,11 @@
     ];
 
     let mesh = new Mesh([new Face(points)], points);
-    mesh.color = "#1ae130";
+    mesh.material = new Material("#1ae130");
 
-    addObject(mesh);
+    Frame.addObject(mesh);
 
-    addObject(Mesh.parse("# Blender v2.79 (sub 0) OBJ File: ''\n" +
+    Frame.addObject(Mesh.parse("# Blender v2.79 (sub 0) OBJ File: ''\n" +
         "# www.blender.org\n" +
         "mtllib test.mtl\n" +
         "o Cube_Cube.001\n" +
@@ -143,7 +145,12 @@
         "f 8//21 28//21 22//21\n" +
         "f 1//22 24//22 25//22\n"));
 
-    setInterval(drawFrame, 1);
+    setInterval(function() {
+        let angle = -50;
+        Camera.orientation[0] = (Camera.orientation[0]+180 - angle)%360-180;
+        Camera.position = Camera.position.rotate(angle);
+        Frame.draw()
+    }, 10);
 
 </script>
 

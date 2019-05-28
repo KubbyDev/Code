@@ -12,31 +12,19 @@ class Vector {
     }
 
     multiply(mult) {
-        this.x *= mult;
-        this.y *= mult;
-        this.z *= mult;
-        return this;
+        return new Vector(this.x*mult, this.y*mult, this.z*mult);
     }
 
     divide(div) {
-        this.x /= div;
-        this.y /= div;
-        this.z /= div;
-        return this;
+        return new Vector(this.x/div, this.y/div, this.z/div);
     }
 
     add(other) {
-        this.x += other.x;
-        this.y += other.y;
-        this.z += other.z;
-        return this;
+        return new Vector(this.x + other.x, this.y + other.y, this.z + other.z);
     }
 
     subtract(other) {
-        this.x -= other.x;
-        this.y -= other.y;
-        this.z -= other.z;
-        return this;
+        return new Vector(this.x - other.x, this.y - other.y, this.z - other.z);
     }
 
     static add(a, b) {
@@ -136,10 +124,7 @@ class Vector {
         let cos = Math.cos(h *Math.PI/180);
         let sin = Math.sin(h *Math.PI/180);
 
-        let tmp = this.x;
-
-        this.x = this.x*cos + this.z*sin;
-        this.z = this.z*cos - tmp*sin;
+        return new Vector(this.x*cos + this.z*sin, this.y, this.z*cos - this.x*sin);
     }
 
     //PAS SUR QUE CA MARCHE
