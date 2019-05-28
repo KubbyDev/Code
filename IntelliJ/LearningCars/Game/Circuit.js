@@ -4,6 +4,7 @@ class Circuit {
     checkpoints;
     startPos = new Vector(80, 40);
     startRot = 90;
+    networkPosition = [Vector.zero, Vector.zero];
 
     constructor(lines, checkpoints) {
         this.lines = lines;
@@ -375,16 +376,23 @@ class Circuit {
         new Line().setStartEnd(new Vector(1274, 212),new Vector(1200, 684)).setVisible(true),
         new Line().setStartEnd(new Vector(1200, 684),new Vector(384, 684)).setVisible(true),
     ],[
-        new Checkpoint(new Vector(86, 197), -16, 166, 0),
-        new Checkpoint(new Vector(335, 306), -16, 148, 1),
-        new Checkpoint(new Vector(421, 583), -56, 126, 2),
-        new Checkpoint(new Vector(1053, 566), 28, 170, 3),
-        new Checkpoint(new Vector(1043, 217), -78, 112, 4),
-        new Checkpoint(new Vector(833, 492), -86, 130, 5),
-        new Checkpoint(new Vector(955, 122), 52, 100, 6),
-        new Checkpoint(new Vector(1227, 226), -6, 114, 7),
-        new Checkpoint(new Vector(1163, 662), 64, 100, 8),
-        new Checkpoint(new Vector(384, 668), 90, 44, 9),
+        new Checkpoint(new Vector(86, 197), -16, 166),
+        new Checkpoint(new Vector(335, 306), -16, 148),
+        new Checkpoint(new Vector(421, 583), -56, 126),
+        new Checkpoint(new Vector(1053, 566), 28, 170),
+        new Checkpoint(new Vector(1043, 217), -78, 112),
+        new Checkpoint(new Vector(833, 492), -86, 130),
+        new Checkpoint(new Vector(780, 420), 0, 100),
+        new Checkpoint(new Vector(955, 122), 52, 100),
+        new Checkpoint(new Vector(1227, 226), -6, 114),
+        new Checkpoint(new Vector(1163, 662), 64, 100),
+        new Checkpoint(new Vector(384, 668), 90, 44),
     ]);
 }
+
+//Training
+Circuit.TRAINING.startPos = new Vector(80, 40);
+Circuit.TRAINING.startRot = 90;
+Circuit.TRAINING.networkPosition = [new Vector(400, 0), new Vector(450, 300)];
+
 

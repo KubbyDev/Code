@@ -1,6 +1,6 @@
 class Network {
 
-    layers = [];  //Contient des listes de neurones
+    layers = [];  //Contient des listes de neurones (attention: les inputs ne sont pas dedans)
     inputs = [];  //Contient les objets inputs (neurones de la premiere couche (qui n'existe donc pas vraiment))
 
     //Renvoie les activations de la derniere couche
@@ -25,20 +25,35 @@ class Network {
         return answer;
     }
 
-    static random(inputNumber, outputNumber) {
+    static random(inputNumber, outputNumber, neuronsPerHiddenLayer, hiddenLayers) {
+
+        if(hiddenLayers === undefined)
+            hiddenLayers = 1;
+
+        if(neuronsPerHiddenLayer === undefined)
+            hiddenLayers = 0;
 
         let network = new Network();
+        network.layers = new Array(hiddenLayers+1);
 
         //Premiere couche (couche virtuelle des inputs)
         network.inputs = new Array(inputNumber);
         for(let i = 0; i < inputNumber; i++)
             network.inputs[i] = new Input(i);
 
+        //Couches cachees
+        for(let layerID = 1; layerID <= hiddenLayers; layerID++) {
+            network.layers[layerID-1] = new Array(neuronsPerHiddenLayer);
+            for(let neuronID = 0; neuronID < neuronsPerHiddenLayer; neuronID++)
+                network.layers[layerID-1][neuronID] = Neuron.random(
+                    layerID === 1 ? network.inputs : network.layers[layerID-2], layerID, neuronID);
+        }
+
         //Derniere couche (couche des outputs)
-        network.layers = new Array(1);
-        network.layers[0] = new Array(outputNumber);
-        for(let i = 0; i < outputNumber; i++)
-            network.layers[0][i] = Neuron.random(network.inputs, 1, i);
+        network.layers[hiddenLayers] = new Array(outputNumber);
+        for(let neuronID = 0; neuronID < outputNumber; neuronID++)
+            network.layers[hiddenLayers][neuronID] = Neuron.random(
+                hiddenLayers === 0 ? network.inputs : network.layers[hiddenLayers-1], hiddenLayers+1, neuronID);
 
         return network;
     }

@@ -11,24 +11,35 @@ class NetworkController {
 
     constructor(parentCar) {
         this.parentCar = parentCar;
-        this.network = Network.random(5, 2);
+        this.network = Network.random(9, 4, 10, 2);
     }
 
     getInputs(circuit) {
+
         let answer = this.network.simulate(this.getDistances(circuit).map(x => x/NetworkController.MAX_RAY_DISTANCE));
-        return [
-            (clamp(answer[0])-0.5)*2,
-            (clamp(answer[1])-0.5)*2
-        ];
+
+        let forward = answer[0];
+        if(answer[1] > answer[0])
+            forward = -answer[1];
+
+        let right = answer[2];
+        if(answer[3] > answer[2])
+            right = -answer[3];
+
+        return [forward, right];
     }
 
     getDistances(circuit) {
         let test = [
-          this.getDistance(Vector.fromOrientation(this.parentCar.rotation).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
-          this.getDistance(Vector.fromOrientation(this.parentCar.rotation+45).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
-          this.getDistance(Vector.fromOrientation(this.parentCar.rotation-45).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation-135).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
           this.getDistance(Vector.fromOrientation(this.parentCar.rotation-90).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation-45).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation-22).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation+22).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation+45).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
           this.getDistance(Vector.fromOrientation(this.parentCar.rotation+90).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
+          this.getDistance(Vector.fromOrientation(this.parentCar.rotation+135).multiply(NetworkController.MAX_RAY_DISTANCE).toLine(this.parentCar.position), circuit),
         ];
 
         /*

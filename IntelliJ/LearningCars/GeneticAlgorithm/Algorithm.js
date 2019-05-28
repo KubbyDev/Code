@@ -1,8 +1,8 @@
 class GeneticAlgorithm {
 
     static MAX_TICKS = 30*100;
-    static AGENTS_NUMBER = 200;
-    static SELECTION_SIZE = 50;
+    static AGENTS_NUMBER = 300;
+    static SELECTION_SIZE = 30;
 
     static launch() {
 
@@ -39,6 +39,7 @@ class GeneticAlgorithm {
 
             game.update();
             game.draw();
+            game.drawNetwork(game.cars[0].controller.network);
 
             //Detection du passage de la ligne d'arrivee (agent.time === 0 permet de ne faire ca qu'une seule fois)
             for(let agent of agents)

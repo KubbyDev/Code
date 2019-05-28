@@ -1,7 +1,7 @@
 class Game {
 
     cars = [];
-    circuit = Circuit.HARD;
+    circuit = Circuit.SIMPLE;
 
     initCars() {
 
@@ -27,6 +27,9 @@ class Game {
         this.circuit.draw();
     }
 
+    drawNetwork(network) {
+        NetworkDrawer.draw(network, this.circuit.networkPosition[1].x, this.circuit.networkPosition[1].y, this.circuit.networkPosition[0]);
+    }
 }
 
 function drawRect(points, color) {
