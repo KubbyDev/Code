@@ -1,8 +1,8 @@
 class Frame {
 
-    static backgroundColor = "#2e2e2e";
+    static backgroundColor = Color.fromRGB(46, 46, 46);
     static objects = [];
-    static lights = [new Light(new Vector(1.8,2,2), 20)];
+    static lights = [];
 
     static setObjects(pObjects) {
         Frame.objects = pObjects;
@@ -12,22 +12,34 @@ class Frame {
         Frame.objects.push(object)
     }
 
+    static setLights(pLights) {
+        Frame.lights = pLights;
+    }
+
+    static addLight(light) {
+        Frame.lights.push(light);
+    }
+
     static draw() {
 
         let rays = Camera.getRays(canvas.width, canvas.height);
 
         for(let x = 0; x < rays.length; x++)
             for (let y = 0; y < rays[x].length; y++) {
-                ctx.fillStyle = calcPixel(rays[x][y]);
+                ctx.fillStyle = calcPixel(rays[x][y], 2).getString();
                 ctx.fillRect(x, y, 1,1);
             }
 
-        function calcPixel(dir) {
+        function calcPixel(ray, maxBounces) {
+
+            let finalColor = Frame.backgroundColor;
 
             //Tracage du ray
-            let hit = new Ray(Camera.position, dir).trace();
+            let hit = ray.trace();
             if(!hit.hasHit)
                 return Frame.backgroundColor;
+            else
+                finalColor = hit.face.material.color;
 
             //Calcul de la couleur du pixel en fonction de l'eclairage
             let brightness = 0.1;
@@ -35,30 +47,40 @@ class Frame {
 
                 let toLight = light.position
                     .subtract(hit.position)
-                    .normalized();
-                if(!new Ray(hit.position, toLight).hitsFace()) {
+                    .normalize();
+                let lightHit = new Ray(hit.position.add(hit.normal.multiply(0.00001)), toLight).trace();
+                if(! (lightHit.hasHit && Vector.sqrDistance(hit.position, lightHit.position) < Vector.sqrDistance(hit.position, light.position))) {
                     //On ajoute de la luminosite en fonction de la distance avec la lampe,
                     //de son intensite et de l'angle d'arrivee des rayons lumineux
-                    brightness += light.intensity * Math.abs(Vector.dotProduct(toLight, hit.normal)) / Math.pow(Vector.sqrDistance(light.position, hit.position), 2);
+                    brightness += light.intensity * Math.abs(Vector.dotProduct(toLight, hit.normal)) / Vector.sqrDistance(light.position, hit.position);
                 }
             }
+            finalColor = finalColor.adjustBrightness(brightness);
 
-            return adjustBrightness(hit.other.material.color, brightness);
-
-            function adjustBrightness(color, multiplier) {
-
-                let colorVec = new Vector(
-                    parseInt(color.substr(1,2),16),
-                    parseInt(color.substr(3,2),16),
-                    parseInt(color.substr(5,2),16)
+            //Calcul de la transparence
+            if(hit.face.material.opacity < 1)
+                finalColor = finalColor.mix(
+                    hit.face.material.opacity,
+                    calcPixel(
+                        new Ray(hit.position.add(ray.direction.multiply(0.00001)),ray.direction),
+                        maxBounces
+                    ),
+                    1 - hit.face.material.opacity
                 );
 
-                colorVec = colorVec.multiply(multiplier);
-
-                return "#" + Math.round(Math.min(colorVec.x, 255)).toString(16).padStart(2, "00")
-                    + Math.round(Math.min(colorVec.y, 255)).toString(16).padStart(2, "00")
-                    + Math.round(Math.min(colorVec.z, 255)).toString(16).padStart(2, "00");
+            if(hit.face.material.reflexivity > 0 && maxBounces > 0) {
+                let reflected = hit.normal.multiply(-2 * Vector.dotProduct(hit.normal, ray.direction)).add(ray.direction);
+                finalColor = finalColor.mix(
+                    1 - hit.face.material.reflexivity,
+                    calcPixel(
+                        new Ray(hit.position.add(reflected.multiply(0.00001)), reflected),
+                        maxBounces-1
+                    ),
+                    hit.face.material.reflexivity
+                )
             }
+
+            return finalColor;
         }
     }
 }

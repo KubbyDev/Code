@@ -72,7 +72,7 @@ class Vector {
     /** The forward vector of (0,0) is (1,0,0)
      * @param h horizontal orientation
      * @param v vertical orientation
-     * @returns The forward vector of the given orientation
+     * @returns Vector: The forward vector of the given orientation
      */
     static fromOrientation(h, v) {
 
@@ -102,9 +102,9 @@ class Vector {
     }
 
     /**
-     * @returns The same vector with length 1
+     * @returns Vector: the same vector with length 1
      */
-    normalized() {
+    normalize() {
         return this.divide(this.length());
     }
 
@@ -129,7 +129,7 @@ class Vector {
 
     //PAS SUR QUE CA MARCHE
     toOrientation() {
-        let v = new Vector(this.x, this.y, this.z).normalized();
+        let v = new Vector(this.x, this.y, this.z).normalize();
         return [Math.atan2(v.z, v.x)*180/Math.PI, Math.asin(v.y)*180/Math.PI];
     }
 

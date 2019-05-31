@@ -6,7 +6,7 @@ class Material {
 
     constructor(color, opacity, reflexivity) {
 
-        if(!color) color = "#FFFFFF";
+        if(!color) color = Color.fromRGB(0,0,0);
         if(!opacity) opacity = 1;
         if(!reflexivity) reflexivity = 0;
 

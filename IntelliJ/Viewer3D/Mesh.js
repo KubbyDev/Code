@@ -6,7 +6,6 @@ class Mesh {
         this.position = Vector.zero;
         this.faces = faces;
         this.points = points;
-        this.material = new Material("#00f8ff");
     }
 
     scale(value) {
@@ -88,5 +87,6 @@ class Face {
 
     constructor(points) {
         this.points = points;
+        this.material = new Material(Color.fromRGB(0,248,255));
     }
 }
