@@ -140,4 +140,12 @@ class Vector {
     disp() {
         console.log(this.toString());
     }
+
+    clamp(min, max) {
+        return new Vector(
+            Math.max(min, Math.min(this.x, max)),
+            Math.max(min, Math.min(this.y, max)),
+            Math.max(min, Math.min(this.z, max))
+        );
+    }
 }

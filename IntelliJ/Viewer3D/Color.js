@@ -29,9 +29,9 @@ class Color {
     calcString(vec) {
 
         this.string = "#"
-            + Math.round(Math.min(vec.x, 255)).toString(16).padStart(2, "00")
-            + Math.round(Math.min(vec.y, 255)).toString(16).padStart(2, "00")
-            + Math.round(Math.min(vec.z, 255)).toString(16).padStart(2, "00");
+            + Math.round(Math.max(0, Math.min(vec.x, 255))).toString(16).padStart(2, "00")
+            + Math.round(Math.max(0, Math.min(vec.y, 255))).toString(16).padStart(2, "00")
+            + Math.round(Math.max(0, Math.min(vec.z, 255))).toString(16).padStart(2, "00");
         return this.string;
     }
 
@@ -41,7 +41,7 @@ class Color {
             parseInt(str.substr(1,2),16),
             parseInt(str.substr(3,2),16),
             parseInt(str.substr(5,2),16)
-        );
+        ).clamp(0, 255);
         return this.vector;
     }
 
@@ -57,7 +57,7 @@ class Color {
 
     static fromVector(vector) {
         let color = new Color();
-        color.vector = vector;
+        color.vector = vector.clamp(0, 255);
         return color;
     }
 

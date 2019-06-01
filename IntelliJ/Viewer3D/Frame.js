@@ -26,20 +26,21 @@ class Frame {
 
         for(let x = 0; x < rays.length; x++)
             for (let y = 0; y < rays[x].length; y++) {
-                ctx.fillStyle = calcPixel(rays[x][y], 2).getString();
+                ctx.fillStyle = calcPixel(rays[x][y]).getString();
                 ctx.fillRect(x, y, 1,1);
             }
 
         function calcPixel(ray, maxBounces) {
 
-            let finalColor = Frame.backgroundColor;
+            if(!maxBounces)
+                maxBounces = 2;
 
             //Tracage du ray
             let hit = ray.trace();
             if(!hit.hasHit)
                 return Frame.backgroundColor;
-            else
-                finalColor = hit.face.material.color;
+
+            let finalColor = hit.face.material.color;
 
             //Calcul de la couleur du pixel en fonction de l'eclairage
             let brightness = 0.1;
@@ -48,14 +49,32 @@ class Frame {
                 let toLight = light.position
                     .subtract(hit.position)
                     .normalize();
+                let lightSqrDistance = Vector.sqrDistance(hit.position, light.position);
+
                 let lightHit = new Ray(hit.position.add(hit.normal.multiply(0.00001)), toLight).trace();
-                if(! (lightHit.hasHit && Vector.sqrDistance(hit.position, lightHit.position) < Vector.sqrDistance(hit.position, light.position))) {
-                    //On ajoute de la luminosite en fonction de la distance avec la lampe,
-                    //de son intensite et de l'angle d'arrivee des rayons lumineux
-                    brightness += light.intensity * Math.abs(Vector.dotProduct(toLight, hit.normal)) / Vector.sqrDistance(light.position, hit.position);
+                let exposure = 1;
+
+                //Tant qu'on touche une face mais qu'elle n'est pas opaque et qu'on ne depasse pas la lumiere
+                while(lightHit.hasHit &&
+                    Vector.sqrDistance(hit.position, lightHit.position) < lightSqrDistance &&
+                    lightHit.face.material.opacity < 1) {
+
+                    //On modifie l'exposition en fonction de l'opactite de la face
+                    exposure *= 1 - Math.pow(lightHit.face.material.opacity, 2);
+
+                    //On relance un rayon
+                    lightHit = new Ray(lightHit.position.add(toLight.multiply(0.00001)), toLight).trace();
                 }
+
+                //A moins qu'on ait touche une face opaque avant avoir depasse la lumiere
+                if(! (lightHit.hasHit && lightHit.face.material.opacity === 1 && Vector.sqrDistance(hit.position, lightHit.position) < lightSqrDistance))
+                    brightness += light.intensity
+                        * Math.abs(Vector.dotProduct(toLight, hit.normal))  //Inclinaison de la face
+                        / Vector.distance(light.position, hit.position)     //Distance de la lumiere
+                        * exposure;                                         //Exposition (depend de l'opacite des faces traversees)
             }
-            finalColor = finalColor.adjustBrightness(brightness);
+
+            finalColor = finalColor.adjustBrightness(Math.min(1,brightness*hit.face.material.opacity));
 
             //Calcul de la transparence
             if(hit.face.material.opacity < 1)

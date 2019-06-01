@@ -3,7 +3,7 @@ class Light {
 
     position;
     intensity;
-    color = "#FFFFFF";
+    color = Color.fromRGB(255,0,0);
 
     constructor(position, intensity) {
         this.position = position;
