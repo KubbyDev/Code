@@ -1,7 +1,7 @@
 class Game {
 
     cars = [];
-    circuit = Circuit.SIMPLE;
+    circuit = Circuit.TRAINING;
 
     initCars() {
 
