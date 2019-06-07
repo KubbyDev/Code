@@ -2,49 +2,37 @@ class Message {
 
     static LINE_SPACING = 0;
     static FONT_SIZE = 15;
+    static TEXT_LEFT_OFFSET = 60;
 
     text = "";
-    user = User.default;
+    sender = User.default;
 
-    constructor(text, user) {
+    constructor(text, sender) {
 
         if(!text)
             return;
 
         this.text = text;
 
-        if(!user)
+        if(!sender)
             return;
 
-        this.user = user;
+        this.sender = sender;
     }
 
     /**
-     * Calcule le nombre de pixels que le message prend en hauteur en fonction de la largeur d'affichage
-     * @param width
-     */
-    getHeight(width) { //TODO: Faire un math.max avec la hauteur de l'image
-        return Math.ceil(Message.FONT_SIZE * 0.55 * this.text.length / width) * (Message.LINE_SPACING + Message.FONT_SIZE);
-    }
-
-    /**
-     * Affiche le message en revenant a la ligne si besoin (la position x y est le coin haut gauche, w est le nombre de pixels de large)
-     * @param ctx
-     * @param x
-     * @param y
+     * Coupe le message en revenant a la ligne si besoin (w est le nombre de pixels de large)
      * @param w
      */
-    draw(ctx, x, y, w) {
+    cutInLines(w) {
 
-        ctx.fillStyle = "#000000";
-        ctx.font = Message.FONT_SIZE + "px monospace";
-
+        let lines = [];
+        let currentLine = "";
         let words = this.text.split(' ');
 
         let charsNumber = w/(0.55*Message.FONT_SIZE)-1; //Nombre de caracteres affichables sur une ligne
         let totalWidth = 0;
         let wordIndex = 0;
-        let lineIndex = 0;
 
         //Pour chaque mot
         while(wordIndex < words.length) {
@@ -52,12 +40,8 @@ class Message {
             //Si on a pas depasse la longueur max
             if(totalWidth + words[wordIndex].length <= charsNumber) {
 
-                //On affiche le mot et on passe au suivant
-                ctx.fillText(
-                    words[wordIndex] + " ",
-                    totalWidth * Message.FONT_SIZE * 0.55 + x,
-                    lineIndex * (Message.LINE_SPACING + Message.FONT_SIZE) + y
-                );
+                //On ajoute le mot et on passe au suivant
+                currentLine += words[wordIndex] + " ";
                 totalWidth += words[wordIndex].length +1;
                 wordIndex++;
             }
@@ -75,10 +59,49 @@ class Message {
                 else {
 
                     //On passe a la ligne suivante
-                    lineIndex++;
+                    lines.push(currentLine);
+                    currentLine = "";
                     totalWidth = 0;
                 }
             }
+        }
+
+        lines.push(currentLine);
+        return lines;
+    }
+
+    /**
+     * Renvoie la place en pixels que prendra le message en hauteur
+     * @param lines
+     */
+    getHeight(lines) {
+        return lines.length * (Message.LINE_SPACING + Message.FONT_SIZE) + (Message.FONT_SIZE*1.1) + Message.LINE_SPACING; //TODO math.max avec l'image
+    }
+
+    /**
+     * Dessine le message (x, y = coin haut gauche)
+     * @param lines
+     * @param ctx
+     * @param x
+     * @param y
+     */
+    draw(lines, ctx, x, y) {
+
+        ctx.fillStyle = "#ff5100";
+        ctx.font = (Message.FONT_SIZE*1.1) + "px monospace";
+
+        ctx.fillText(this.sender.nickname, x + Message.TEXT_LEFT_OFFSET, y);
+        y += (Message.FONT_SIZE*1.1) + Message.LINE_SPACING;
+
+        ctx.fillStyle = "#000000";
+        ctx.font = Message.FONT_SIZE + "px monospace";
+
+        for(let i = 0; i < lines.length; i++) {
+            ctx.fillText(
+                lines[i],
+                x + Message.TEXT_LEFT_OFFSET,
+                i * (Message.LINE_SPACING + Message.FONT_SIZE) + y
+            );
         }
     }
 }

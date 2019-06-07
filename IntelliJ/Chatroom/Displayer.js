@@ -1,7 +1,6 @@
 class Displayer {
 
-    static MESSAGE_SPACING = 5;
-    static TEXT_LEFT_OFFSET = 10;
+    static MESSAGE_SPACING = 15;
 
     static #x; //Coin haut gauche position x
     static #y; //Coin haut gauche position y
@@ -71,15 +70,19 @@ class Displayer {
     static update(ctx) {  //TODO: Et de la position de la scrollbar.
 
         ctx.fillStyle = "#e0e0e0";
-        ctx.fillRect(this.#x, this.#y, this.#w, this.#h);
+        ctx.fillRect(Displayer.#x, Displayer.#y, Displayer.#w, Displayer.#h);
 
-        let writeHeight = Message.FONT_SIZE + Displayer.MESSAGE_SPACING + Displayer.#y;
-        for(let i = 0; i < this.#messages.length; i++) {
+        let writeHeight = Displayer.#y + Displayer.#h;
+        for(let message of Displayer.#messages) {
+
+            //Coupe le message en revenant a la ligne quand il le faut
+            let lines = message.cutInLines(Displayer.#w - Message.TEXT_LEFT_OFFSET);
+
+            //Calcule la place que va prendre le message en hauteur
+            writeHeight -= Displayer.MESSAGE_SPACING + message.getHeight(lines);
 
             //Affiche le message
-            this.#messages[i].draw(ctx, Displayer.TEXT_LEFT_OFFSET + Displayer.#x, writeHeight, Displayer.#w - Displayer.TEXT_LEFT_OFFSET);
-
-            writeHeight += Displayer.MESSAGE_SPACING + this.#messages[i].getHeight(Displayer.#w - Displayer.TEXT_LEFT_OFFSET);
+            message.draw(lines, ctx, Displayer.#x, writeHeight);
         }
     }
 }

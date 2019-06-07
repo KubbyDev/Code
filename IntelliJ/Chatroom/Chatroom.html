@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<canvas id="canvas" width="480" height="320"></canvas>
+<canvas id="canvas" width="1920" height="1080"></canvas>
 
 <script src="Displayer.js"></script>
 <script src="Message.js"></script>
@@ -19,12 +19,13 @@
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
-    Displayer.init(10,10,400,800);
+    Displayer.init(10,10,400,600);
 
     let m1 = "llllllllllllllllllllllllllllllll ufzeiuncizne z zviznevczneifnzejcnilzejnczenb cze znienc nze ncze cnzcjnzeicjnzejcnzjenczkjnczkjneclkzncjzefzecbdbdfbdbdbd";
     let m2 = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww";
 
     Displayer.addMessage(new Message(m1));
+    Displayer.addMessage(new Message("GNEGNE", new User("TaMere")));
     Displayer.addMessage(new Message(m2));
 
     Displayer.update(ctx);
