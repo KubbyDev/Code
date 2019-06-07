@@ -1,17 +1,20 @@
 class Displayer {
 
-    static #x = 0;
-    static #y = 0;
-    static #width = 800;
-    static #height = 400;
+    static MESSAGE_SPACING = 5;
+    static TEXT_LEFT_OFFSET = 10;
+
+    static #x; //Coin haut gauche position x
+    static #y; //Coin haut gauche position y
+    static #w; //Largeur
+    static #h; //Hauteur
     static #initialised = false;
     static #messages = [];
 
     //Getters des proprietes definies au dessus
     static get topLeftX () {return Displayer.#x;}
     static get topLeftY () {return Displayer.#y;}
-    static get Width () {return Displayer.#width;}
-    static get Height () {return Displayer.#height;}
+    static get width () {return Displayer.#w;}
+    static get height () {return Displayer.#h;}
     static get Messages () {return Displayer.#messages;}
 
     /**
@@ -37,11 +40,9 @@ class Displayer {
 
         Displayer.#x = x;
         Displayer.#y = y;
-        Displayer.#width = width;
-        Displayer.#height = height;
+        Displayer.#w = width;
+        Displayer.#h = height;
         Displayer.#initialised = true;
-
-        Displayer.update();
     }
 
     /**
@@ -65,9 +66,20 @@ class Displayer {
 
     /**
      * Met a jour l'affichage en fonction des messages presents a ce moment
-     * Et de la position de la scrollbar
+     * @param ctx: canvas 2D context
      */
-    static update() {
+    static update(ctx) {  //TODO: Et de la position de la scrollbar.
 
+        ctx.fillStyle = "#e0e0e0";
+        ctx.fillRect(this.#x, this.#y, this.#w, this.#h);
+
+        let writeHeight = Message.FONT_SIZE + Displayer.MESSAGE_SPACING + Displayer.#y;
+        for(let i = 0; i < this.#messages.length; i++) {
+
+            //Affiche le message
+            this.#messages[i].draw(ctx, Displayer.TEXT_LEFT_OFFSET + Displayer.#x, writeHeight, Displayer.#w - Displayer.TEXT_LEFT_OFFSET);
+
+            writeHeight += Displayer.MESSAGE_SPACING + this.#messages[i].getHeight(Displayer.#w - Displayer.TEXT_LEFT_OFFSET);
+        }
     }
 }

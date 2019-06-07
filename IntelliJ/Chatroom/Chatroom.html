@@ -6,14 +6,28 @@
 </head>
 <body>
 
+<canvas id="canvas" width="480" height="320"></canvas>
+
 <script src="Displayer.js"></script>
 <script src="Message.js"></script>
+<script src="User.js"></script>
 
 <script>
 
     //Aides: https://github.com/deadcoder0904/chatroom
 
-    Displayer.update()
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    Displayer.init(10,10,400,800);
+
+    let m1 = "llllllllllllllllllllllllllllllll ufzeiuncizne z zviznevczneifnzejcnilzejnczenb cze znienc nze ncze cnzcjnzeicjnzejcnzjenczkjnczkjneclkzncjzefzecbdbdfbdbdbd";
+    let m2 = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww";
+
+    Displayer.addMessage(new Message(m1));
+    Displayer.addMessage(new Message(m2));
+
+    Displayer.update(ctx);
 
 </script>
 
