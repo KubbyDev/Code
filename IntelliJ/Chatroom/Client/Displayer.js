@@ -2,19 +2,12 @@ class Displayer {
 
     static MESSAGE_SPACING = 15;
 
-    static #x; //Coin haut gauche position x
-    static #y; //Coin haut gauche position y
-    static #w; //Largeur
-    static #h; //Hauteur
+    static x; //Coin haut gauche position x
+    static y; //Coin haut gauche position y
+    static width; //Largeur
+    static height; //Hauteur
+    static messages = [];
     static #initialised = false;
-    static #messages = [];
-
-    //Getters des proprietes definies au dessus
-    static get topLeftX () {return Displayer.#x;}
-    static get topLeftY () {return Displayer.#y;}
-    static get width () {return Displayer.#w;}
-    static get height () {return Displayer.#h;}
-    static get Messages () {return Displayer.#messages;}
 
     /**
      * Cree un displayer vide et pret a recevoir des messages
@@ -37,10 +30,10 @@ class Displayer {
             return;
         }
 
-        Displayer.#x = x;
-        Displayer.#y = y;
-        Displayer.#w = width;
-        Displayer.#h = height;
+        Displayer.x = x;
+        Displayer.y = y;
+        Displayer.width = width;
+        Displayer.height = height;
         Displayer.#initialised = true;
     }
 
@@ -60,7 +53,7 @@ class Displayer {
             return;
         }
 
-        Displayer.#messages.unshift(message);
+        Displayer.messages.unshift(message);
     }
 
     /**
@@ -69,20 +62,25 @@ class Displayer {
      */
     static update(ctx) {  //TODO: Et de la position de la scrollbar.
 
+        //Fond de l'ecran des messages
         ctx.fillStyle = "#e0e0e0";
-        ctx.fillRect(Displayer.#x, Displayer.#y, Displayer.#w, Displayer.#h);
+        ctx.fillRect(Displayer.x, Displayer.y, Displayer.width, Displayer.height);
 
-        let writeHeight = Displayer.#y + Displayer.#h;
-        for(let message of Displayer.#messages) {
+        //Messages
+        let writeHeight = Displayer.y + Displayer.height;
+        for(let message of Displayer.messages) {
 
             //Coupe le message en revenant a la ligne quand il le faut
-            let lines = message.cutInLines(Displayer.#w - Message.TEXT_LEFT_OFFSET);
+            let lines = message.cutInLines(Displayer.width - Message.TEXT_LEFT_OFFSET);
 
             //Calcule la place que va prendre le message en hauteur
             writeHeight -= Displayer.MESSAGE_SPACING + message.getHeight(lines);
 
+            if(writeHeight < 0)
+                break;
+
             //Affiche le message
-            message.draw(lines, ctx, Displayer.#x, writeHeight);
+            message.draw(lines, ctx, Displayer.x, writeHeight);
         }
     }
 }

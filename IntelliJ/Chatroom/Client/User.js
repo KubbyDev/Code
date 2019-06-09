@@ -1,19 +1,24 @@
 class User {
 
-    nickname = "Anonymous";
-    #_picture; //TODO: Anonymous picture
+    nickname;
+    picture;  //Une ImageHTMLElement
 
     constructor(nickname, picture) {
 
+        //Valeurs de base
+        this.nickname = "Anonymous";
+        this.picture = new Image();
+        this.picture.src = "Anonymous.png";
+
+        //Pseudo
         if(!nickname)
             return;
-
         this.nickname = nickname;
 
+        //Image de profil
         if(!picture)
             return;
-
-        this.#_picture = picture;
+        this.picture = picture;
     }
 
     /**
@@ -22,9 +27,5 @@ class User {
      */
     static get default() {
         return new User();
-    }
-
-    get picture() {
-        //TODO: Get picture (with resize)
     }
 }
