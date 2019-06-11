@@ -14,8 +14,8 @@ class Network {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
                     text: text,
-                    nickname: Network.localUser.nickname
-                    //picture: btoa(JSON.stringify(Network.localUser.picture))
+                    nickname: Network.localUser.nickname,
+                    picture: Network.localUser.picture64,
                 })
         };
         console.log(options);
@@ -38,12 +38,33 @@ class Network {
         Displayer.messages = messages.reverse().map(message =>
             new Message(
                 message.text,
-                new User(
-                    message.nickname
-                    //atob(message.picture))
+                User.fromBase64(
+                    message.nickname,
+                    message.picture
             )));
     }
+
+    static changePicture() {
+
+        if(imageField.files === undefined)
+            return;
+
+        Network.localUser.picture.src = URL.createObjectURL(imageField.files[0]);
+        Network.localUser.calculateBase64();
+    }
+
+    static changeNickname() {
+
+        if(nicknameField.value === "")
+            return;
+
+        Network.localUser.nickname = nicknameField.value;
+    }
 }
+
+//On recupere les images que l'utilisateur upload comme image de profil
+imageField.addEventListener('change', Network.changePicture);
+nicknameField.addEventListener('change', Network.changeNickname);
 
 //On recupere les nouveaux messages toutes les secondes
 setInterval(Network.getMessages, 1000);

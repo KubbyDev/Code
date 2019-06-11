@@ -14,14 +14,11 @@ app.post('/messages', (request, response) => {
     response.json({
         errors: 'None'
     });
-
 });
 
 //TODO Optimiser les transfert (eviter d'envoyer 200 fois les images)
 
 //Envoi des messages
 app.get('/messages', (resquest, response) => {
-
     response.json(messages);
-
 });

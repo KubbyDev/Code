@@ -1,0 +1,17 @@
+{
+  "name": "chatroom",
+  "version": "1.0.0",
+  "description": "A chat room",
+  "main": "Server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^1.19.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
