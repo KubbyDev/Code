@@ -8,16 +8,15 @@
 
 <canvas id="canvas" width="600" height="600"></canvas>
 
-<script src="Connection.js"></script>
+<script src="User.js"></script>
+<script src="Network.js"></script>
+<script src="Displayer.js"></script>
+<script src="Message.js"></script>
 
 <div>
     <input type="text" id="inputField" name="name" size="50 " placeholder="Send a message">
-    <button onclick="Connection.send(inputField.value)">Envoyer</button>
+    <button onclick="Network.send(inputField.value)">Envoyer</button>
 </div>
-
-<script src="Displayer.js"></script>
-<script src="Message.js"></script>
-<script src="User.js"></script>
 
 <script>
 

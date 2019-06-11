@@ -1,8 +1,3 @@
-function test() {
-    console.log("gne");
-}
-
-'use strict';
 class Message {
 
     static LINE_SPACING = 0;
