@@ -46,8 +46,15 @@ class Network {
 
     static changePicture() {
 
+        imageErrorMessage.innerHTML = "";
+
         if(imageField.files === undefined)
             return;
+
+        if(imageField.files[0].size > 100000) { //Si la taille est superieure a 100 KB
+            imageErrorMessage.innerHTML = "The file size must be under 100 KB !";
+            return;
+        }
 
         Network.localUser.picture.src = URL.createObjectURL(imageField.files[0]);
         Network.localUser.calculateBase64();

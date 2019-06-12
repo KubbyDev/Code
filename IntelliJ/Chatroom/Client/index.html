@@ -12,8 +12,9 @@
     <input type="text" id="inputField" name="name" size="50 " placeholder="Send a message">
     <button onclick="Network.send(inputField.value)">Envoyer</button>
 </div>
-<div><input accept="image/*" type="file" id="imageField"/></div>
-<div><input type="text" id="nicknameField" name="name" size="50 " placeholder="Change your Nickname"></div>
+<hr/>
+<div>Change nickname: <input type="text" id="nicknameField" name="name" size="50 " placeholder="Change your Nickname"></div>
+<div>Change profile picture: <input accept="image/*" type="file" id="imageField"/><p id="imageErrorMessage"></div>
 
 <script>
 
@@ -22,6 +23,7 @@
     let inputField = document.getElementById("inputField");
     let imageField = document.getElementById("imageField"); //TODO: EMPECHER D'ENVOYER DES IMAGES TROP GRANDES
     let nicknameField = document.getElementById("nicknameField");
+    let imageErrorMessage = document.getElementById("imageErrorMessage");
 
 </script>
 
