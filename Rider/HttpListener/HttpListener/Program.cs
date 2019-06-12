@@ -5,8 +5,8 @@ class Program
 {
     public static void Main(string[] args)
     {
-
-        SimpleListenerExample(new [] {"http://localhost:4000/"});
+        while(true)
+            SimpleListenerExample(new [] {"http://*:4000/"});
     }
 
     public static void SimpleListenerExample(string[] prefixes)

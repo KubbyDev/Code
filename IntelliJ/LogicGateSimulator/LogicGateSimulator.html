@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logic Gate Simulator</title>
+</head>
+<body>
+
+<canvas id="canvas" width="1400" height="700"></canvas>
+
+<script src="Gate/Basic.js"></script>
+<script src="Gate/Connection.js"></script>
+<script src="Gate/Gate.js"></script>
+
+<script>
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    let up = Basic.DOWN(30,30);
+    let up2 = Basic.UP(30, 80);
+    let and = Basic.AND(100, 50, [up, up2]);
+    let or = Basic.OR(200, 80, [and, up2]);
+    let gates = [up, up2, and, or];
+
+    function update() {
+
+        Gate.updateAll(gates);
+        Gate.drawAll(gates);
+    }
+
+    setInterval(update, 10);
+
+</script>
+
+</body>
+</html>
