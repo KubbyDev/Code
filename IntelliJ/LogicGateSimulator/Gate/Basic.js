@@ -79,4 +79,10 @@ class Basic {
             .setFonctionnalProperties((i) => i[0], input)
             .setGraphicProperties(x,y,40,40,"#000000", "")
     }
+
+    static SWITCH(x,y,input) {
+        return new Switch()
+            .setFonctionnalProperties((i) => i[0], input)
+            .setGraphicProperties(x,y,30,20,"#ffbb25","SWITCH")
+    }
 }

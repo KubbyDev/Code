@@ -1,5 +1,7 @@
 class Clock extends Gate {
 
+    //Proprietes fonctionnelles ----------------------------------------------------------------------------------------
+
     period = 50; //Le nombre de frames avant un changement d'etat
     current = 0; //Le nombre de frames avant le prochain changement d'etat
 

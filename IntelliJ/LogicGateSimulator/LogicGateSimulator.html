@@ -13,17 +13,18 @@
 <script src="Gate/Gate.js"></script>
 <script src="Gate/Special/Clock.js"></script>
 <script src="Gate/Special/Output.js"></script>
+<script src="Gate/Special/Switch.js"></script>
 
-<script src="UserInteraction.js"></script>
+<script src="Interface/Interface.js"></script>
+<script src="Interface/UserInteraction.js"></script>
 
 <script>
 
-    //TODO: Rendre le dessin des connections plus robuste et ancrer correctement aux inputs
-    //TODO: Ajouter une porte Switch (et un Mode Interaction)
     //TODO: Systeme d'ajout de portes basiques (liste sur la droite, drag pour ajouter) (En mode Build)
     //TODO: Systeme de destruction de portes
     //TODO: Gestionnaire des connections (Mode Connection)
     //TODO: Systeme de creation de porte custom a partir d'un circuit
+    //TODO: Zoom
 
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
@@ -40,21 +41,22 @@
     let not12 = Basic.NOT(150,280,[not11]);
     let not21 = Basic.NOT(100,480,[clock2]);
     let not22 = Basic.NOT(150,480,[not21]);
-    let xor1 = Basic.XOR(200,300,[clock1, not12]);
-    let xor2 = Basic.XOR(200,500,[clock2, not22]);
+    let xor1 = Basic.XOR(200,300, [not12, clock1]);
+    let xor2 = Basic.XOR(200,500,[not22, clock2]);
     let nor1 = Basic.NOR(300, 300, []);
-    let nor2 = Basic.NOR(300, 500, [xor2, nor1]);
+    let nor2 = Basic.NOR(300, 500, [nor1, xor2]);
     nor1.setInputs([xor1,nor2]);
 
-    let output = Basic.OUTPUT(400, 300, [nor1]);
+    let switch1 = Basic.SWITCH(400,300,[nor1]);
+    let output = Basic.OUTPUT(500, 300, [switch1]);
 
-    gates = [clock1, clock2, not11, not12, not21, not22, xor1, xor2, nor1, nor2, output];
+    gates = [clock1, clock2, not11, not12, not21, not22, xor1, xor2, nor1, nor2, switch1, output];
 
     function update() {
 
         userInteractions();
         Gate.updateAll(gates);
-        ctx.fillStyle = "#f7f7f7";
+        ctx.fillStyle = Interface.BACKGROUND_COLOR;
         ctx.fillRect(0,0,canvas.width, canvas.height);
         Gate.drawAll(gates);
     }

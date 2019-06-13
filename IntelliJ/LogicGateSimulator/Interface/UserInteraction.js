@@ -16,17 +16,35 @@ let selectedGate = null;
 
 document.addEventListener('click', function(event) {
 
+    //Mode build: gestion du drag and drop
     if(mode === 0)
         if(selectedGate === null)
             selectedGate = getGateAtPosition(mouseX, mouseY, gates);
         else
             selectedGate = null;
 
+    //Mode interaction: interaction avec les switch
+    if(mode === 2) {
+        let selectedSwitch = getGateAtPosition(mouseX, mouseY, gates);
+        if(selectedSwitch instanceof Switch)
+            selectedSwitch.switch();
+    }
 });
 
 document.onkeydown = function(event) {
 
-
+    switch(event.key) {
+        case 'b':
+            mode = 0;
+            selectedGate = null;
+            break;
+        case 'c':
+            mode = 1;
+            break;
+        case 'i':
+            mode = 2;
+            break;
+    }
 
 };
 

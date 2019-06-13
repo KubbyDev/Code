@@ -14,20 +14,22 @@ class Connection {
 
     downColor = "#d3d3d3";
     upColor = "#ea120c";
-    intermediates = [];
 
-    draw() {
+    /***
+     * Dessine la connexion. position definit la position de la connection sur le cote input de l'origine
+     * @param position
+     */
+    draw(position) {
 
-        //Calcule les points intermediaires par lesquels cette connexion passe avant d'arriver a sa cible
-        this.calculateIntermediates();
+        //Position de la connection sur le cote input de l'origine
+        let inputY = this.origin.y - this.origin.height/2 + position*this.origin.height;
 
+        //Dessine la connection
         ctx.beginPath();
         ctx.strokeStyle = this.destination.output ? this.upColor : this.downColor;
-        ctx.moveTo(this.origin.x, this.origin.y);
-
-        for(let point of this.intermediates)
+        ctx.moveTo(this.origin.x - this.origin.width/2, inputY);
+        for(let point of this.calculateIntermediates(this.destination.x, this.destination.y, this.origin.x, inputY))
             ctx.lineTo(point[0], point[1]);
-
         ctx.lineTo(this.destination.x, this.destination.y);
         ctx.stroke();
         ctx.closePath();
@@ -35,23 +37,24 @@ class Connection {
 
     /***
      * Calcule les points intermediaires par lesquels cette connexion passe avant d'arriver a sa cible
+     * From est la porte qui a la connection comme output, To est celle qui a la connection comme input
      */
-    calculateIntermediates() {
+    calculateIntermediates(fromX, fromY, toX, toY) {
 
-        let averageX = (this.origin.x + this.destination.x) /2;
-        let averageY = (this.origin.y + this.destination.y) /2;
+        let averageX = (toX + fromX) /2;
+        let averageY = (toY + fromY) /2;
 
-        if(this.origin.x < this.destination.x + 20) //Cas ou la porte d'arrivee est derriere la porte de depart
-            this.intermediates = [
-                [this.origin.x - 30, this.origin.y],
-                [this.origin.x - 30, averageY],
-                [this.destination.x + 30, averageY],
-                [this.destination.x + 30, this.destination.y],
+        if(toX - this.origin.width/2 - 5 < fromX + this.destination.width/2 + 5) //Cas ou la porte d'arrivee est derriere la porte de depart
+            return [
+                [toX - this.origin.width/2 - 5, toY],
+                [toX - this.origin.width/2 - 5, averageY],
+                [fromX + this.destination.width/2 + 5, averageY],
+                [fromX + this.destination.width/2 + 5, fromY],
             ];
         else
-            this.intermediates = [
-                [averageX, this.origin.y],
-                [averageX, this.destination.y]
+            return [
+                [averageX, toY],
+                [averageX, fromY]
             ];
     }
 }

@@ -133,8 +133,8 @@ class Gate {
 
         //Dessine toutes les connections de chaque gate
         for(let gate of gates)
-            for(let connection of gate.inputs)
-                connection.draw();
+            for(let i = 0; i < gate.inputs.length; i++)
+                gate.inputs[i].draw((i+1)/(gate.inputs.length+1));
 
         //Dessine toutes les gates
         for(let gate of gates)
