@@ -64,6 +64,8 @@ class Gate {
     height = 20;
     color = "#379f1f";
     name = "Gate";
+    fontSize = 10;
+    hideName = false;
 
     /***
      * Modifie les proprietes graphiques de la gate
@@ -102,8 +104,16 @@ class Gate {
      * @param y
      */
     draw() {
+
         this.drawBody();
-        //TODO: Afficher le nom
+
+        if(!this.hideName) {
+            ctx.fillStyle = "#000000";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = this.fontSize + "px Arial";
+            ctx.fillText(this.name, this.x, this.y);
+        }
     }
 
     /***

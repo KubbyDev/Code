@@ -36,7 +36,7 @@ class Connection {
     /***
      * Calcule les points intermediaires par lesquels cette connexion passe avant d'arriver a sa cible
      */
-    calculateIntermediates() { //TODO rendre ce truc plus robuste
+    calculateIntermediates() {
 
         let averageX = (this.origin.x + this.destination.x) /2;
         let averageY = (this.origin.y + this.destination.y) /2;
