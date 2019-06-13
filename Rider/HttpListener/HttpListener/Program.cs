@@ -6,7 +6,7 @@ class Program
     public static void Main(string[] args)
     {
         while(true)
-            SimpleListenerExample(new [] {"http://*:4000/"});
+            SimpleListenerExample(new [] {"http://192.168.1.28:4000/"});
     }
 
     public static void SimpleListenerExample(string[] prefixes)

@@ -3,7 +3,7 @@ class Gate {
     //Proprietes fonctionnelles ----------------------------------------------------------------------------------------
 
     activation;            //Fonction d'activation de la porte (and => a && b)
-    inputs;                //References aux connections vers les portes auquelles cette portes est connectee
+    inputs = [];           //References aux connections vers les portes auquelles cette portes est connectee
     tempOutput = false;    //La valeur de l'output pendant le tick. Il passe dans output a la fin du tick
     output = false;        //Valeur de la sortie de la porte
 
@@ -15,7 +15,7 @@ class Gate {
     setFonctionnalProperties(activation, inputs) {
 
         this.activation = activation;
-        this.inputs = inputs.map(inputGate => new Connection(this, inputGate));
+        this.setInputs(inputs);
         return this;
     }
 
@@ -102,11 +102,17 @@ class Gate {
      * @param y
      */
     draw() {
+        this.drawBody();
+        //TODO: Afficher le nom
+    }
+
+    /***
+     * Dessine le corps de la porte (cette methode peut etre redefinie pour une forme custom)
+     */
+    drawBody() {
 
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
-
-        //TODO: Afficher le nom
     }
 
     /***
