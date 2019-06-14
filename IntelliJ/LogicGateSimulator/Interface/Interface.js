@@ -1,6 +1,7 @@
 class Interface {
 
     static BACKGROUND_COLOR = "#353535";
+    static BUTTON_SPACING = 5;
 
     //0 = BUILD: cliquer une fois pour selectionner une porte, puis une autre fois pour la placer
     //Cliquer sur les portes a droite pour les ajouter, ou drag une porte dans la poubelle pour la supprimer

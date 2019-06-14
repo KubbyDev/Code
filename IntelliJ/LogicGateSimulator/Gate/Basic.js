@@ -79,13 +79,13 @@ class Basic {
             .setGraphicProperties(x,y,40,40,"#3d79e7", "CLOCK");
     }
 
-    static OUTPUT(x,y, input) {
+    static OUTPUT(x, y, input) {
         return new Output()
             .setFonctionnalProperties((i) => i[0], input, 1)
             .setGraphicProperties(x,y,40,40,"#000000", "")
     }
 
-    static SWITCH(x,y,input) {
+    static SWITCH(x, y, input) {
         return new Switch()
             .setFonctionnalProperties((i) => i[0], input, 1)
             .setGraphicProperties(x,y,30,20,"#ffbb25","SWITCH")

@@ -18,14 +18,16 @@ class Button {
 
     x = 0;
     y = 0;
-    width = 50;
+    width = 80;
     height = 50;
     name = "";
     color = "#000000";
     fontSize = 14;
 
-    setGraphicProperties(name,color) {
+    setGraphicProperties(width, height, name,color) {
 
+        this.width = width;
+        this.height = height;
         this.name = name;
         this.color = color;
         return this;
