@@ -17,7 +17,7 @@ class Switch extends Gate {
     /***
      * Inverse l'etat de l'interrupteur
      */
-    switch() {
+    onClick() {
         this.isOn = !this.isOn;
     }
 
@@ -25,8 +25,7 @@ class Switch extends Gate {
 
     drawBody() {
 
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+        super.drawBody();
 
         if(!this.isOn) {
             ctx.fillStyle = Interface.BACKGROUND_COLOR;

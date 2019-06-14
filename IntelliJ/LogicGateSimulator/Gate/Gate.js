@@ -6,16 +6,19 @@ class Gate {
     inputs = [];           //References aux connections vers les portes auquelles cette portes est connectee
     tempOutput = false;    //La valeur de l'output pendant le tick. Il passe dans output a la fin du tick
     output = false;        //Valeur de la sortie de la porte
+    maxInputs = 0;         //Le nombre d'inputs que cette porte accepte
 
     /***
      * Modifie les proprietes fonctionnelles de la gate
      * @param activation
      * @param inputs
+     * @param maxInputs
      */
-    setFonctionnalProperties(activation, inputs) {
+    setFonctionnalProperties(activation, inputs, maxInputs) {
 
         this.activation = activation;
-        this.setInputs(inputs);
+        this.maxInputs = maxInputs !== undefined ? maxInputs : 0;
+        this.setInputs(inputs !== undefined ? inputs : []);
         return this;
     }
 
@@ -24,8 +27,17 @@ class Gate {
      * @param inputGates
      */
     setInputs(inputGates) {
-        this.inputs = inputGates.map(inputGate => new Connection(this, inputGate));
+        this.inputs = inputGates.map(inputGate => new Connection(this, inputGate)).slice(0,this.maxInputs);
         return this;
+    }
+
+    /***
+     * Ajoute une entree a cette porte (ne fait rien si elle a deja tous ses inputs)
+     * @param gate
+     */
+    addInput(gate) {
+        if (this.inputs.length < this.maxInputs)
+            this.inputs.push(new Connection(this, gate));
     }
 
     /***
@@ -54,6 +66,21 @@ class Gate {
 
         for(let gate of gates)
             gate.tickEnd();
+    }
+
+    /***
+     * Supprime toutes les connections a la porte gate parmis les portes allGates
+     * @param gate
+     * @param allGates
+     */
+    static removeAllConnectionsTo(gate, allGates) {
+
+        for(let g of allGates)
+            for(let i = 0; i < g.inputs.length; i++)
+                if(g.inputs[i].destination === gate) {
+                    g.inputs.splice(i, 1);
+                    i--;
+                }
     }
 
     //Proprietes graphiques --------------------------------------------------------------------------------------------
@@ -99,16 +126,14 @@ class Gate {
     }
 
     /***
-     * Dessine la gate a la position demandee (position du centre)
-     * @param x
-     * @param y
+     * Dessine la gate
      */
     draw() {
 
         this.drawBody();
 
         if(!this.hideName) {
-            ctx.fillStyle = "#000000";
+            ctx.fillStyle = "#ffffff";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.font = this.fontSize + "px Arial";

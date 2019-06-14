@@ -7,6 +7,14 @@
 <body>
 
 <canvas id="canvas" width="1400" height="700"></canvas>
+<style>
+    html, body {
+        overflow: hidden;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+</style>
 
 <script src="Gate/Basic.js"></script>
 <script src="Gate/Connection.js"></script>
@@ -14,15 +22,19 @@
 <script src="Gate/Special/Clock.js"></script>
 <script src="Gate/Special/Output.js"></script>
 <script src="Gate/Special/Switch.js"></script>
+<script src="Gate/Special/Input.js"></script>
 
 <script src="Interface/Interface.js"></script>
-<script src="Interface/UserInteraction.js"></script>
+<script src="Interface/Button.js"></script>
+<script src="Interface/Interactions/UserInteraction.js"></script>
+<script src="Interface/Interactions/BuildMode.js"></script>
+<script src="Interface/Interactions/WiringMode.js"></script>
+<script src="Interface/Interactions/InteractionMode.js"></script>
 
 <script>
 
     //TODO: Systeme d'ajout de portes basiques (liste sur la droite, drag pour ajouter) (En mode Build)
     //TODO: Systeme de destruction de portes
-    //TODO: Gestionnaire des connections (Mode Connection)
     //TODO: Systeme de creation de porte custom a partir d'un circuit
     //TODO: Zoom
 
@@ -48,20 +60,41 @@
     nor1.setInputs([xor1,nor2]);
 
     let switch1 = Basic.SWITCH(400,300,[nor1]);
-    let output = Basic.OUTPUT(500, 300, [switch1]);
+    let input1 = Basic.INPUT(420,250);
+    let andf = Basic.AND(450,300);
+    let output = Basic.OUTPUT(500, 300);
+    let andf2 = Basic.AND(0,0);
 
-    gates = [clock1, clock2, not11, not12, not21, not22, xor1, xor2, nor1, nor2, switch1, output];
+    gates = [clock1, clock2, not11, not12, not21, not22, xor1, xor2, nor1, nor2, switch1, andf, input1, output, andf2];
 
-    function update() {
+    Interface.init();
 
-        userInteractions();
+    setInterval(() => {
+
+        Interface.clear();
+        UserInteraction.update();
         Gate.updateAll(gates);
-        ctx.fillStyle = Interface.BACKGROUND_COLOR;
-        ctx.fillRect(0,0,canvas.width, canvas.height);
         Gate.drawAll(gates);
-    }
+        Interface.draw();
 
-    setInterval(update, 10);
+    }, 10);
+
+    //Outil pour supprimer des elements d'une array
+    Array.prototype.remove = function(value) {
+        return this.filter(function(e){
+            return e !== value;
+        });
+    };
+
+    //Garde toujours le canvas en pleine page
+    function resizeCanvas() {
+        canvas.width = window.innerWidth+1;
+        setTimeout(function() {
+            canvas.height = window.innerHeight+1;
+        }, 0);
+    }
+    window.onresize = resizeCanvas;
+    resizeCanvas();
 
 </script>
 

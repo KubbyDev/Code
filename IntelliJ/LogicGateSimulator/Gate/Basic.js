@@ -15,7 +15,7 @@ class Basic {
     static NOT(x, y, input) {
 
         let g = new Gate()
-            .setFonctionnalProperties((i) => !i[0], input)
+            .setFonctionnalProperties((i) => !i[0], input, 1)
             .setGraphicProperties(x,y,30,20,"#379f1f","NOT");
 
         g.drawBody = function() {
@@ -34,38 +34,43 @@ class Basic {
 
     static AND(x, y, inputs) {
         return new Gate()
-            .setFonctionnalProperties((i) => i[0] && i[1], inputs)
+            .setFonctionnalProperties((i) => i[0] && i[1], inputs, 2)
             .setGraphicProperties(x,y,40,40,"#379f1f","AND");
     }
 
     static OR(x, y, inputs) {
         return new Gate()
-            .setFonctionnalProperties((i) => i[0] || i[1], inputs)
+            .setFonctionnalProperties((i) => i[0] || i[1], inputs, 2)
             .setGraphicProperties(x,y,40,40,"#379f1f","OR");
     }
 
     static XOR(x, y, inputs) {
         return new Gate()
-            .setFonctionnalProperties((i) => i[0] !== i[1], inputs)
+            .setFonctionnalProperties((i) => i[0] !== i[1], inputs, 2)
             .setGraphicProperties(x,y,40,40,"#379f1f","XOR");
     }
 
     static NAND(x, y, inputs) {
         return new Gate()
-            .setFonctionnalProperties((i) => !(i[0] && i[1]), inputs)
+            .setFonctionnalProperties((i) => !(i[0] && i[1]), inputs, 2)
             .setGraphicProperties(x,y,40,40,"#379f1f","NAND");
     }
 
     static NOR(x, y, inputs) {
         return new Gate()
-            .setFonctionnalProperties((i) => !(i[0] || i[1]), inputs)
+            .setFonctionnalProperties((i) => !(i[0] || i[1]), inputs, 2)
             .setGraphicProperties(x,y,40,40,"#379f1f","NOR");
     }
 
     static XNOR(x, y, inputs) {
         return new Gate()
-            .setFonctionnalProperties((i) => i[0] === i[1], inputs)
+            .setFonctionnalProperties((i) => i[0] === i[1], inputs, 2)
             .setGraphicProperties(x,y,40,40,"#379f1f","XNOR");
+    }
+
+    static INPUT(x, y) {
+        return new Input()
+            .setGraphicProperties(x,y,40,40,"#db7ed2","INPUT")
     }
 
     static CLOCK(x, y, period) {
@@ -76,13 +81,13 @@ class Basic {
 
     static OUTPUT(x,y, input) {
         return new Output()
-            .setFonctionnalProperties((i) => i[0], input)
+            .setFonctionnalProperties((i) => i[0], input, 1)
             .setGraphicProperties(x,y,40,40,"#000000", "")
     }
 
     static SWITCH(x,y,input) {
         return new Switch()
-            .setFonctionnalProperties((i) => i[0], input)
+            .setFonctionnalProperties((i) => i[0], input, 1)
             .setGraphicProperties(x,y,30,20,"#ffbb25","SWITCH")
     }
 }

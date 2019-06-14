@@ -12,8 +12,9 @@ class Connection {
 
     //Proprietes graphiques --------------------------------------------------------------------------------------------
 
-    downColor = "#d3d3d3";
-    upColor = "#ea120c";
+    static WIDTH = 3;
+    static DOWN_COLOR = "#d3d3d3";
+    static UP_COLOR = "#ea120c";
 
     /***
      * Dessine la connexion. position definit la position de la connection sur le cote input de l'origine
@@ -26,7 +27,8 @@ class Connection {
 
         //Dessine la connection
         ctx.beginPath();
-        ctx.strokeStyle = this.destination.output ? this.upColor : this.downColor;
+        ctx.lineWidth = Connection.WIDTH;
+        ctx.strokeStyle = this.destination.output ? Connection.UP_COLOR : Connection.DOWN_COLOR;
         ctx.moveTo(this.origin.x - this.origin.width/2, inputY);
         for(let point of this.calculateIntermediates(this.destination.x, this.destination.y, this.origin.x, inputY))
             ctx.lineTo(point[0], point[1]);
