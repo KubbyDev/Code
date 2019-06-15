@@ -46,13 +46,17 @@ document.onkeydown = function(event) {
     }
 };
 
+//On traque les entrees par la molette de la souris
+canvas.addEventListener('wheel', function(event) {
+    Interface.zoom(1 - event.deltaY/1000);
+});
+
 /***
- * Renvoie la porte a la position demandee parmis les portes en parametre
+ * Renvoie la porte a la position demandee
  * @param x
  * @param y
- * @param gates
  */
-function getGateAtPosition(x, y, gates) {
+function getGateAtPosition(x, y) {
 
     for (let gate of gates)
         if (Math.abs(x - gate.x) < gate.width / 2 && Math.abs(y - gate.y) < gate.height / 2)

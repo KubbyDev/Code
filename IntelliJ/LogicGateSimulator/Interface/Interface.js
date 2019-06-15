@@ -2,6 +2,7 @@ class Interface {
 
     static BACKGROUND_COLOR = "#353535";
     static BUTTON_SPACING = 5;
+    static ZOOM_FACTOR = 1; //Plus ce nombre est grand, plus les portes seront grossies
 
     //0 = BUILD: cliquer une fois pour selectionner une porte, puis une autre fois pour la placer
     //Cliquer sur les portes a droite pour les ajouter, ou drag une porte dans la poubelle pour la supprimer
@@ -17,8 +18,10 @@ class Interface {
         ctx.fillRect(0,0,canvas.width, canvas.height);
     }
 
+    /***
+     * Dessine le menu contextuel du mode actuel
+     */
     static draw() {
-
         Interface.getCurrentMode().updateContextualMenu();
     }
 
@@ -47,6 +50,28 @@ class Interface {
             case 0: return BuildMode;
             case 1: return WiringMode;
             case 2: return InteractionMode;
+        }
+    }
+
+    /***
+     * Zoome ou dezoome
+     * @param factor
+     */
+    static zoom(factor) {
+
+        Interface.ZOOM_FACTOR *= factor;
+        CIRCLE_RADIUS *= factor;
+        Connection.WIDTH *= factor;
+
+        for(let gate of gates) {
+
+            gate.width *= factor;
+            gate.height *= factor;
+
+            gate.x = (gate.x - mouseX)*factor + mouseX;
+            gate.y = (gate.y - mouseY)*factor + mouseY;
+
+            gate.fontSize *= factor;
         }
     }
 }

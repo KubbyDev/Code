@@ -19,13 +19,24 @@ class Basic {
             .setGraphicProperties(x,y,30,20,"#379f1f","NOT");
 
         g.drawBody = function() {
+
             ctx.beginPath();
+
             ctx.moveTo(this.x - this.width/2, this.y - this.height/2);
-            ctx.lineTo(this.x + this.width/2, this.y);
+            ctx.lineTo(this.x + this.width/2 - CIRCLE_RADIUS*2, this.y);
             ctx.lineTo(this.x - this.width/2, this.y + this.height/2);
+            ctx.lineTo(this.x - this.width/2, this.y - this.height/2);
+
             ctx.fillStyle = this.color;
             ctx.fill();
+
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#000000";
+            ctx.stroke();
+
             ctx.closePath();
+
+            fillCircle(this.x + this.width/2 - CIRCLE_RADIUS, this.y);
         };
         g.hideName = true;
 
@@ -33,39 +44,206 @@ class Basic {
     }
 
     static AND(x, y, inputs) {
-        return new Gate()
+
+        let g = new Gate()
             .setFonctionnalProperties((i) => i[0] && i[1], inputs, 2)
             .setGraphicProperties(x,y,40,40,"#379f1f","AND");
+
+        g.drawBody = function() {
+
+            ctx.beginPath();
+
+            ctx.moveTo(this.x - this.width/2, this.y - this.height/2);
+            ctx.lineTo(this.x + this.width/2 - this.height/2, this.y - this.height/2);
+            ctx.arc(this.x + this.width/2 - this.height/2, this.y, this.height/2, -Math.PI/2, Math.PI/2);
+            ctx.lineTo(this.x - this.width/2, this.y + this.height/2);
+            ctx.lineTo(this.x - this.width/2, this.y - this.height/2);
+
+            ctx.fillStyle = this.color;
+            ctx.fill();
+
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#000000";
+            ctx.stroke();
+
+            ctx.closePath();
+        };
+        g.hideName = true;
+
+        return g;
     }
 
     static OR(x, y, inputs) {
-        return new Gate()
+        let g = new Gate()
             .setFonctionnalProperties((i) => i[0] || i[1], inputs, 2)
             .setGraphicProperties(x,y,40,40,"#379f1f","OR");
+
+        g.drawBody = function() {
+
+            ctx.beginPath();
+
+            ctx.moveTo(this.x - this.width/2, this.y + this.height/2);
+            ctx.quadraticCurveTo(this.x - this.width/4, this.y, this.x - this.width/2, this.y - this.height/2);
+            ctx.quadraticCurveTo(this.x + this.width/4, this.y - this.height/2, this.x + this.width/2, this.y);
+            ctx.moveTo(this.x - this.width/2, this.y + this.height/2);
+            ctx.quadraticCurveTo(this.x + this.width/4, this.y + this.height/2, this.x + this.width/2, this.y);
+
+            ctx.fillStyle = this.color;
+            ctx.fill();
+
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#000000";
+            ctx.stroke();
+
+            ctx.closePath();
+        };
+        g.hideName = true;
+
+        return g;
     }
 
     static XOR(x, y, inputs) {
-        return new Gate()
+        let g = new Gate()
             .setFonctionnalProperties((i) => i[0] !== i[1], inputs, 2)
-            .setGraphicProperties(x,y,40,40,"#379f1f","XOR");
+            .setGraphicProperties(x,y,45,40,"#379f1f","XOR");
+
+        g.drawBody = function() {
+
+            ctx.beginPath();
+
+            ctx.moveTo(this.x - this.width/2 + this.width/8, this.y + this.height/2);
+            ctx.quadraticCurveTo(this.x - this.width/4 + this.width/8, this.y, this.x - this.width/2 + this.width/8, this.y - this.height/2);
+            ctx.quadraticCurveTo(this.x + this.width/4, this.y - this.height/2, this.x + this.width/2, this.y);
+            ctx.moveTo(this.x - this.width/2 + this.width/8, this.y + this.height/2);
+            ctx.quadraticCurveTo(this.x + this.width/4, this.y + this.height/2, this.x + this.width/2, this.y);
+
+            ctx.fillStyle = this.color;
+            ctx.fill();
+
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#000000";
+            ctx.stroke();
+
+            ctx.closePath();
+            ctx.beginPath();
+
+            ctx.moveTo(this.x - this.width/2, this.y + this.height/2);
+            ctx.quadraticCurveTo(this.x - this.width/4, this.y, this.x - this.width/2, this.y - this.height/2);
+
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = "#000000";
+            ctx.stroke();
+
+            ctx.closePath();
+        };
+        g.hideName = true;
+
+        return g;
     }
 
     static NAND(x, y, inputs) {
-        return new Gate()
+
+        let g = new Gate()
             .setFonctionnalProperties((i) => !(i[0] && i[1]), inputs, 2)
-            .setGraphicProperties(x,y,40,40,"#379f1f","NAND");
+            .setGraphicProperties(x,y,50,40,"#379f1f","NAND");
+
+        g.drawBody = function() {
+
+            ctx.beginPath();
+
+            ctx.moveTo(this.x - this.width/2, this.y - this.height/2);
+            ctx.lineTo(this.x + this.width/2 - this.height/2 - CIRCLE_RADIUS*2, this.y - this.height/2);
+            ctx.arc(this.x + this.width/2 - this.height/2 - CIRCLE_RADIUS*2, this.y, this.height/2, -Math.PI/2, Math.PI/2);
+            ctx.lineTo(this.x - this.width/2, this.y + this.height/2);
+            ctx.lineTo(this.x - this.width/2, this.y - this.height/2);
+
+            ctx.fillStyle = this.color;
+            ctx.fill();
+
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#000000";
+            ctx.stroke();
+
+            ctx.closePath();
+
+            fillCircle(this.x + this.width/2 - CIRCLE_RADIUS, this.y);
+        };
+        g.hideName = true;
+
+        return g;
     }
 
     static NOR(x, y, inputs) {
-        return new Gate()
+
+        let g = new Gate()
             .setFonctionnalProperties((i) => !(i[0] || i[1]), inputs, 2)
-            .setGraphicProperties(x,y,40,40,"#379f1f","NOR");
+            .setGraphicProperties(x,y,50,40,"#379f1f","NOR");
+
+        g.drawBody = function() {
+
+            ctx.beginPath();
+
+            ctx.moveTo(this.x - this.width/2, this.y + this.height/2);
+            ctx.quadraticCurveTo(this.x - this.width/4, this.y, this.x - this.width/2, this.y - this.height/2);
+            ctx.quadraticCurveTo(this.x + this.width/4 - 2*CIRCLE_RADIUS, this.y - this.height/2, this.x + this.width/2 - 2*CIRCLE_RADIUS, this.y);
+            ctx.moveTo(this.x - this.width/2, this.y + this.height/2);
+            ctx.quadraticCurveTo(this.x + this.width/4 - 2*CIRCLE_RADIUS, this.y + this.height/2, this.x + this.width/2 - 2*CIRCLE_RADIUS, this.y);
+
+            ctx.fillStyle = this.color;
+            ctx.fill();
+
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#000000";
+            ctx.stroke();
+
+            ctx.closePath();
+
+            fillCircle(this.x + this.width/2 - CIRCLE_RADIUS, this.y);
+        };
+        g.hideName = true;
+
+        return g;
     }
 
     static XNOR(x, y, inputs) {
-        return new Gate()
+        let g = new Gate()
             .setFonctionnalProperties((i) => i[0] === i[1], inputs, 2)
-            .setGraphicProperties(x,y,40,40,"#379f1f","XNOR");
+            .setGraphicProperties(x,y,55,40,"#379f1f","XNOR");
+
+        g.drawBody = function() {
+
+            ctx.beginPath();
+
+            ctx.moveTo(this.x - this.width/2 + this.width/8, this.y + this.height/2);
+            ctx.quadraticCurveTo(this.x - this.width/4 + this.width/8, this.y, this.x - this.width/2 + this.width/8, this.y - this.height/2);
+            ctx.quadraticCurveTo(this.x + this.width/4 - 2*CIRCLE_RADIUS, this.y - this.height/2, this.x + this.width/2 - 2*CIRCLE_RADIUS, this.y);
+            ctx.moveTo(this.x - this.width/2 + this.width/8, this.y + this.height/2);
+            ctx.quadraticCurveTo(this.x + this.width/4 - 2*CIRCLE_RADIUS, this.y + this.height/2, this.x + this.width/2 - 2*CIRCLE_RADIUS, this.y);
+
+            ctx.fillStyle = this.color;
+            ctx.fill();
+
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#000000";
+            ctx.stroke();
+
+            ctx.closePath();
+            ctx.beginPath();
+
+            ctx.moveTo(this.x - this.width/2, this.y + this.height/2);
+            ctx.quadraticCurveTo(this.x - this.width/4, this.y, this.x - this.width/2, this.y - this.height/2);
+
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = "#000000";
+            ctx.stroke();
+
+            ctx.closePath();
+
+            fillCircle(this.x + this.width/2 - CIRCLE_RADIUS, this.y);
+        };
+        g.hideName = true;
+
+        return g;
     }
 
     static INPUT(x, y) {
@@ -88,6 +266,6 @@ class Basic {
     static SWITCH(x, y, input) {
         return new Switch()
             .setFonctionnalProperties((i) => i[0], input, 1)
-            .setGraphicProperties(x,y,30,20,"#ffbb25","SWITCH")
+            .setGraphicProperties(x,y,45,20,"#ffbb25","SWITCH")
     }
 }

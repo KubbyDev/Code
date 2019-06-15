@@ -2,7 +2,7 @@ class Gate {
 
     //Proprietes fonctionnelles ----------------------------------------------------------------------------------------
 
-    activation;            //Fonction d'activation de la porte (and => a && b)
+    activation;            //Fonction d'activation de la porte (exemple: and = a && b)
     inputs = [];           //References aux connections vers les portes auquelles cette portes est connectee
     tempOutput = false;    //La valeur de l'output pendant le tick. Il passe dans output a la fin du tick
     output = false;        //Valeur de la sortie de la porte
@@ -33,10 +33,15 @@ class Gate {
 
     /***
      * Ajoute une entree a cette porte (ne fait rien si elle a deja tous ses inputs)
+     * Met l'entree a un index precis si il est renseigne
      * @param gate
+     * @param index
      */
-    addInput(gate) {
-        if (this.inputs.length < this.maxInputs)
+    addInput(gate, index) {
+
+        if(index && index < this.maxInputs)
+            this.inputs[index] = new Connection(this, gate);
+        else if (this.inputs.length < this.maxInputs)
             this.inputs.push(new Connection(this, gate));
     }
 
@@ -77,10 +82,40 @@ class Gate {
 
         for(let g of allGates)
             for(let i = 0; i < g.inputs.length; i++)
-                if(g.inputs[i].destination === gate) {
-                    g.inputs.splice(i, 1);
-                    i--;
-                }
+                if(g.inputs[i].destination === gate)
+                    g.inputs[i] = undefined;
+    }
+
+    /***
+     * Renvoie l'index du connecteur le plus proche.
+     * Si c'est un input l'index sera positif (1 et +), negatif si c'est un output (-1 et -)
+     * @param x
+     * @param y
+     */
+    getConnector(x,y) {
+
+        if(x > this.x || this.maxInputs < 1) //Si on est sur la droite de la porte ou qu'elle n'a pas d'inputs
+            return -1; //renvoie l'output
+
+        let minDistY = Infinity;
+        let minIndex = 0;
+        for(let i = 0; i < this.maxInputs; i++) {
+            let dist = Math.abs(this.getInputPosition(i)[1] - y);
+            if(dist < minDistY) {
+                minIndex = i+1;
+                minDistY = dist;
+            }
+        }
+
+        return minIndex;
+    }
+
+    /***
+     * Renvoie la porte correspondante pour un numero d'output donne
+     * (Utile pour les portes custom)
+     */
+    getGateForOutput(index) {
+        return this;
     }
 
     //Proprietes graphiques --------------------------------------------------------------------------------------------
@@ -91,7 +126,7 @@ class Gate {
     height = 20;
     color = "#379f1f";
     name = "Gate";
-    fontSize = 10;
+    fontSize = 8;
     hideName = false;
 
     /***
@@ -107,8 +142,8 @@ class Gate {
 
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
+        this.width = width * Interface.ZOOM_FACTOR;
+        this.height = height * Interface.ZOOM_FACTOR;
         this.color = color;
         this.name = name;
         return this;
@@ -148,6 +183,9 @@ class Gate {
 
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
     }
 
     /***
@@ -158,11 +196,23 @@ class Gate {
 
         //Dessine toutes les connections de chaque gate
         for(let gate of gates)
-            for(let i = 0; i < gate.inputs.length; i++)
-                gate.inputs[i].draw((i+1)/(gate.inputs.length+1));
+            for(let i = 0; i < gate.maxInputs; i++)
+                if(gate.inputs[i])
+                    gate.inputs[i].draw(i);
 
         //Dessine toutes les gates
         for(let gate of gates)
             gate.draw();
+    }
+
+    /***
+     * Renvoie la position de l'input index sur la porte
+     * @param index
+     */
+    getInputPosition(index) {
+        return [
+            this.x - this.width/2  + this.width/4,
+            this.y - this.height/2 + this.height*(index+1)/(this.maxInputs+1)
+        ]
     }
 }

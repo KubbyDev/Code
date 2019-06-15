@@ -10,7 +10,7 @@ class BuildMode {
         if(BuildMode.selectedGate !== null)
             BuildMode.selectedGate = null;
         else
-            BuildMode.selectedGate = getGateAtPosition(mouseX, mouseY, gates);
+            BuildMode.selectedGate = getGateAtPosition(mouseX, mouseY);
     }
 
     static update() {
@@ -32,6 +32,12 @@ class BuildMode {
     static updateContextualMenu() {
 
         //GL si t'essayes de comprendre ce foutoir
+
+        //On met tous les boutons a l'exterieur de base pour eviter tout probleme
+        for(let button of BuildMode.buttons) {
+            button.x = -100;
+            button.y = -100;
+        }
 
         //Bouton destroy
         BuildMode.buttons[0].x = canvas.width - BuildMode.buttons[0].width/2 - Interface.BUTTON_SPACING;

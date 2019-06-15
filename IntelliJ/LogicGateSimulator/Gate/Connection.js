@@ -17,20 +17,20 @@ class Connection {
     static UP_COLOR = "#ea120c";
 
     /***
-     * Dessine la connexion. position definit la position de la connection sur le cote input de l'origine
-     * @param position
+     * Dessine la connexion
+     * @param i: index de l'input sur la porte a laquelle cette connexion est connectee
      */
-    draw(position) {
+    draw(i) {
 
         //Position de la connection sur le cote input de l'origine
-        let inputY = this.origin.y - this.origin.height/2 + position*this.origin.height;
+        let position = this.origin.getInputPosition(i);
 
         //Dessine la connection
         ctx.beginPath();
         ctx.lineWidth = Connection.WIDTH;
         ctx.strokeStyle = this.destination.output ? Connection.UP_COLOR : Connection.DOWN_COLOR;
-        ctx.moveTo(this.origin.x - this.origin.width/2, inputY);
-        for(let point of this.calculateIntermediates(this.destination.x, this.destination.y, this.origin.x, inputY))
+        ctx.moveTo(position[0], position[1]);
+        for(let point of this.calculateIntermediates(this.destination.x, this.destination.y, this.origin.x, position[1]))
             ctx.lineTo(point[0], point[1]);
         ctx.lineTo(this.destination.x, this.destination.y);
         ctx.stroke();
@@ -46,12 +46,12 @@ class Connection {
         let averageX = (toX + fromX) /2;
         let averageY = (toY + fromY) /2;
 
-        if(toX - this.origin.width/2 - 5 < fromX + this.destination.width/2 + 5) //Cas ou la porte d'arrivee est derriere la porte de depart
+        if(toX - this.origin.width/2 - this.origin.width/6 < fromX + this.destination.width/2 + this.destination.width/6) //Cas ou la porte d'arrivee est derriere la porte de depart
             return [
-                [toX - this.origin.width/2 - 5, toY],
-                [toX - this.origin.width/2 - 5, averageY],
-                [fromX + this.destination.width/2 + 5, averageY],
-                [fromX + this.destination.width/2 + 5, fromY],
+                [toX - this.origin.width/2 - this.origin.width/6, toY],
+                [toX - this.origin.width/2 - this.origin.width/6, averageY],
+                [fromX + this.destination.width/2 + this.destination.width/6, averageY],
+                [fromX + this.destination.width/2 + this.destination.width/6, fromY],
             ];
         else
             return [

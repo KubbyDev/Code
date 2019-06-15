@@ -3,7 +3,7 @@ class CustomGate extends Gate {
     //Proprietes fonctionnelles ----------------------------------------------------------------------------------------
 
     internGates = [];
-    outputGate;
+    outputGates;
     //TODO: gerer les outputs multiples
 
     update() {
@@ -26,6 +26,10 @@ class CustomGate extends Gate {
      */
     setInternGates(internGates) {
         this.internGates = internGates;
+    }
+
+    getGateForOutput(index) {
+        return this.outputGates[index];
     }
 
     //Proprietes graphiques --------------------------------------------------------------------------------------------

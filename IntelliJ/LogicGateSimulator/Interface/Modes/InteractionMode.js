@@ -4,9 +4,9 @@ class InteractionMode {
 
     static onClick() {
 
-        let selectedSwitch = getGateAtPosition(mouseX, mouseY, gates);
-        if(selectedSwitch && typeof selectedSwitch.onClick === 'function') //Si la fonction onClick existe
-            selectedSwitch.onClick();
+        let selectedGate = getGateAtPosition(mouseX, mouseY);
+        if(selectedGate && typeof selectedGate.onClick === 'function') //Si la fonction onClick existe
+            selectedGate.onClick();
     }
 
     static update() {
