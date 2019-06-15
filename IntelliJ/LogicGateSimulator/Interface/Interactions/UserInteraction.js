@@ -35,7 +35,7 @@ document.onkeydown = function(event) {
             Interface.mode = 0;
             BuildMode.onEnable();
             break;
-        case 'c':
+        case 'w':
             Interface.mode = 1;
             WiringMode.onEnable();
             break;

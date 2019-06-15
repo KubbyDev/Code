@@ -40,32 +40,6 @@
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
-    let up = Basic.UP(30,30);
-    let clock = Basic.CLOCK(30,80,50);
-    let and = Basic.AND(100, 50, [up, clock]);
-    let or = Basic.OR(200, 80, [and, clock]);
-    let gates = [up, clock, and, or];
-
-    let clock1 = Basic.CLOCK(30,300,100);
-    let clock2 = Basic.CLOCK(30,500,50).setPeriod(100,50);
-    let not11 = Basic.NOT(100,280,[clock1]);
-    let not12 = Basic.NOT(150,280,[not11]);
-    let not21 = Basic.NOT(100,480,[clock2]);
-    let not22 = Basic.NOT(150,480,[not21]);
-    let xor1 = Basic.XOR(200,300, [not12, clock1]);
-    let xor2 = Basic.XOR(200,500,[not22, clock2]);
-    let nor1 = Basic.NOR(300, 300, []);
-    let nor2 = Basic.NOR(300, 500, [nor1, xor2]);
-    nor1.setInputs([xor1,nor2]);
-
-    let switch1 = Basic.SWITCH(400,300,[nor1]);
-    let input1 = Basic.INPUT(420,250);
-    let andf = Basic.AND(450,300);
-    let output = Basic.OUTPUT(500, 300);
-    let andf2 = Basic.AND(0,0);
-
-    gates = [clock1, clock2, not11, not12, not21, not22, xor1, xor2, nor1, nor2, switch1, andf, input1, output, andf2];
-
     Interface.init();
 
     setInterval(() => {
