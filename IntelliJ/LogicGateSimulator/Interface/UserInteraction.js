@@ -44,6 +44,8 @@ document.onkeydown = function(event) {
             InteractionMode.onEnable();
             break;
     }
+
+    Interface.getCurrentMode().onKeyPressed(event.key);
 };
 
 //On traque les entrees par la molette de la souris

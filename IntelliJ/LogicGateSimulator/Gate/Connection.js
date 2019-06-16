@@ -10,6 +10,19 @@ class Connection {
     destination;   //La gate de laquelle cette connection part (output d'une porte)
     origin;        //La gate qui contient cette connection (cette connection est donc son input)
 
+    /***
+     * Renvoie la porte qui determine l'etat de cette connection
+     * En general c'est destination, mais si destination est un Node
+     * Faut remonter plus loin
+     */
+    getInput() {
+
+        if(this.destination instanceof ConnectionNode)
+            return this.destination.inputs[0].getInput();
+
+        return this.destination;
+    }
+
     //Proprietes graphiques --------------------------------------------------------------------------------------------
 
     static WIDTH = 3;
@@ -22,17 +35,17 @@ class Connection {
      */
     draw(i) {
 
-        //Position de la connection sur le cote input de l'origine
-        let position = this.origin.getInputPosition(i);
+        let inputPosition = this.origin.getInputPosition(i); //Position de la connection sur le cote input de l'origine
+        let outputPosition = this.destination.getOutputPosition(); //Position de la connection sur le cote output de la destination
 
         //Dessine la connection
         ctx.beginPath();
         ctx.lineWidth = Connection.WIDTH;
-        ctx.strokeStyle = this.destination.output ? Connection.UP_COLOR : Connection.DOWN_COLOR;
-        ctx.moveTo(position[0], position[1]);
-        for(let point of this.calculateIntermediates(this.destination.x, this.destination.y, this.origin.x, position[1]))
+        ctx.strokeStyle = this.getInput().output ? Connection.UP_COLOR : Connection.DOWN_COLOR;
+        ctx.moveTo(inputPosition[0], inputPosition[1]);
+        for(let point of this.calculateIntermediates(this.destination.x, this.destination.y, this.origin.x, inputPosition[1]))
             ctx.lineTo(point[0], point[1]);
-        ctx.lineTo(this.destination.x, this.destination.y);
+        ctx.lineTo(outputPosition[0], outputPosition[1]);
         ctx.stroke();
         ctx.closePath();
     }

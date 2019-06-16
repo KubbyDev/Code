@@ -5,6 +5,9 @@ class BuildMode {
     static listLength = 0; //Nombre de boutons affiches dans la liste de droite
     static buttons; //Les boutons du menu contextuel (menu de droite)
 
+    /***
+     * Appellee quand l'utilisateur fait un clic avec ce mode selectionne
+     */
     static onClick() {
 
         if(BuildMode.selectedGate !== null)
@@ -13,6 +16,9 @@ class BuildMode {
             BuildMode.selectedGate = getGateAtPosition(mouseX, mouseY);
     }
 
+    /***
+     * Appellee a chaque frame quand ce mode est selectionne
+     */
     static update() {
 
         if(BuildMode.selectedGate) {
@@ -21,8 +27,10 @@ class BuildMode {
         }
     }
 
+    /***
+     * Appellee quand l'utilisateur passe sur ce mode
+     */
     static onEnable() {
-
         BuildMode.selectedGate = null;
     }
 
@@ -77,11 +85,7 @@ class BuildMode {
         BuildMode.buttons = [
             new Button()
                 .setGraphicProperties(80, 50, "Destroy", "#ae110b")
-                .setOnClick(() => {
-                    gates = gates.remove(BuildMode.selectedGate);
-                    Gate.removeAllConnectionsTo(BuildMode.selectedGate, gates);
-                    BuildMode.selectedGate = null;
-                }),
+                .setOnClick(() => BuildMode.removeGate(BuildMode.selectedGate)),
             new Button()
                 .setGraphicProperties(80, 30, "UP", "#379f1f")
                 .setOnClick(() => {
@@ -94,95 +98,75 @@ class BuildMode {
                 }),
             new Button()
                 .setGraphicProperties(80, 80, "AND", "#379f1f")
-                .setOnClick(() => {
-                    let gate = Basic.AND(mouseX, mouseY);
-                    BuildMode.selectedGate = gate;
-                    gates.push(gate);
-                }),
+                .setOnClick(() => BuildMode.addGate(Basic.AND(mouseX, mouseY))),
             new Button()
                 .setGraphicProperties(80, 80, "OR", "#379f1f")
-                .setOnClick(() => {
-                    let gate = Basic.OR(mouseX, mouseY);
-                    BuildMode.selectedGate = gate;
-                    gates.push(gate);
-                }),
+                .setOnClick(() => BuildMode.addGate(Basic.OR(mouseX, mouseY))),
             new Button()
                 .setGraphicProperties(80, 80, "NOT", "#379f1f")
-                .setOnClick(() => {
-                    let gate = Basic.NOT(mouseX, mouseY);
-                    BuildMode.selectedGate = gate;
-                    gates.push(gate);
-                }),
+                .setOnClick(() => BuildMode.addGate(Basic.NOT(mouseX, mouseY))),
             new Button()
                 .setGraphicProperties(80, 80, "XOR", "#379f1f")
-                .setOnClick(() => {
-                    let gate = Basic.XOR(mouseX, mouseY);
-                    BuildMode.selectedGate = gate;
-                    gates.push(gate);
-                }),
+                .setOnClick(() => BuildMode.addGate(Basic.XOR(mouseX, mouseY))),
             new Button()
                 .setGraphicProperties(80, 80, "NOR", "#379f1f")
-                .setOnClick(() => {
-                    let gate = Basic.NOR(mouseX, mouseY);
-                    BuildMode.selectedGate = gate;
-                    gates.push(gate);
-                }),
+                .setOnClick(() => BuildMode.addGate(Basic.NOR(mouseX, mouseY))),
             new Button()
                 .setGraphicProperties(80, 80, "NAND", "#379f1f")
-                .setOnClick(() => {
-                    let gate = Basic.NAND(mouseX, mouseY);
-                    BuildMode.selectedGate = gate;
-                    gates.push(gate);
-                }),
+                .setOnClick(() => BuildMode.addGate(Basic.NAND(mouseX, mouseY))),
             new Button()
                 .setGraphicProperties(80, 80, "XNOR", "#379f1f")
-                .setOnClick(() => {
-                    let gate = Basic.XNOR(mouseX, mouseY);
-                    BuildMode.selectedGate = gate;
-                    gates.push(gate);
-                }),
+                .setOnClick(() => BuildMode.addGate(Basic.XNOR(mouseX, mouseY))),
             new Button()
                 .setGraphicProperties(80, 80, "UP", "#379f1f")
-                .setOnClick(() => {
-                    let gate = Basic.UP(mouseX, mouseY);
-                    BuildMode.selectedGate = gate;
-                    gates.push(gate);
-                }),
+                .setOnClick(() => BuildMode.addGate(Basic.UP(mouseX, mouseY))),
             new Button()
                 .setGraphicProperties(80, 80, "DOWN", "#379f1f")
-                .setOnClick(() => {
-                    let gate = Basic.DOWN(mouseX, mouseY);
-                    BuildMode.selectedGate = gate;
-                    gates.push(gate);
-                }),
+                .setOnClick(() => BuildMode.addGate(Basic.DOWN(mouseX, mouseY))),
             new Button()
                 .setGraphicProperties(80, 80, "CLOCK", "#379f1f")
-                .setOnClick(() => {
-                    let gate = Basic.CLOCK(mouseX, mouseY, 50);
-                    BuildMode.selectedGate = gate;
-                    gates.push(gate);
-                }),
+                .setOnClick(() => BuildMode.addGate(Basic.CLOCK(mouseX, mouseY, 50))),
             new Button()
                 .setGraphicProperties(80, 80, "INPUT", "#379f1f")
-                .setOnClick(() => {
-                    let gate = Basic.INPUT(mouseX, mouseY);
-                    BuildMode.selectedGate = gate;
-                    gates.push(gate);
-                }),
+                .setOnClick(() => BuildMode.addGate(Basic.INPUT(mouseX, mouseY))),
             new Button()
                 .setGraphicProperties(80, 80, "OUTPUT", "#379f1f")
-                .setOnClick(() => {
-                    let gate = Basic.OUTPUT(mouseX, mouseY);
-                    BuildMode.selectedGate = gate;
-                    gates.push(gate);
-                }),
+                .setOnClick(() => BuildMode.addGate(Basic.OUTPUT(mouseX, mouseY))),
             new Button()
                 .setGraphicProperties(80, 80, "SWITCH", "#379f1f")
-                .setOnClick(() => {
-                    let gate = Basic.SWITCH(mouseX, mouseY);
-                    BuildMode.selectedGate = gate;
-                    gates.push(gate);
-                })
+                .setOnClick(() => BuildMode.addGate(Basic.SWITCH(mouseX, mouseY))),
+            new Button()
+                .setGraphicProperties(80, 80, "NODE", "#379f1f")
+                .setOnClick(() => BuildMode.addGate(Basic.NODE(mouseX, mouseY))),
         ]
+    }
+
+    /***
+     * Ajoute une porte a l'affichage principal
+     * @param gate
+     */
+    static addGate(gate) {
+        BuildMode.selectedGate = gate;
+        gates.push(gate);
+    }
+
+    /***
+     * Supprime une porte de l'affichage principal
+     * @param gate
+     */
+    static removeGate(gate) {
+        gates = gates.remove(gate);
+        Gate.removeAllConnectionsTo(gate, gates);
+        BuildMode.selectedGate = null;
+    }
+
+    /***
+     * Appelle par UserInteraction a chaque key press dans ce mode
+     * @param key
+     */
+    static onKeyPressed(key) {
+
+        if(key === 'Delete')
+            BuildMode.removeGate(BuildMode.selectedGate);
     }
 }

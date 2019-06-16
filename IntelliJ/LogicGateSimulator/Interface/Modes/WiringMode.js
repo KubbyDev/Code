@@ -5,6 +5,9 @@ class WiringMode {
     static inputIndex; //L'index de l'input selectionne parmis les inputs de la porte qui sert d'output (selectedOutput)
     static buttons; //Les boutons du menu contextuel (menu de droite)
 
+    /***
+     * Appellee quand l'utilisateur fait un clic avec ce mode selectionne
+     */
     static onClick() {
 
         let gate = getGateAtPosition(mouseX, mouseY);
@@ -38,6 +41,9 @@ class WiringMode {
         }
     }
 
+    /***
+     * Appellee a chaque frame quand ce mode est selectionne
+     */
     static update() {
 
         //Si un input ou un output est selectionne
@@ -46,7 +52,7 @@ class WiringMode {
             //Un des points sera la souris, l'autre sera soit l'input selectionne, soit l'output selectionne
             let otherPoint = WiringMode.selectedOutput
                 ? WiringMode.selectedOutput.getInputPosition(WiringMode.inputIndex)
-                : [WiringMode.selectedInput.x, WiringMode.selectedInput.y];
+                : [WiringMode.selectedInput.x  + WiringMode.selectedInput.width/2 - Connection.WIDTH, WiringMode.selectedInput.y];
 
             //Dessin d'une ligne d'un point a l'autre
             ctx.beginPath();
@@ -59,6 +65,9 @@ class WiringMode {
         }
     }
 
+    /***
+     * Appellee quand l'utilisateur passe sur ce mode
+     */
     static onEnable() {
         WiringMode.selectedInput = null;
         WiringMode.selectedOutput = null;
@@ -72,5 +81,12 @@ class WiringMode {
 
     static init() {
         WiringMode.buttons = [];
+    }
+
+    /***
+     * Appelle par UserInteraction a chaque key press dans ce mode
+     * @param key
+     */
+    static onKeyPressed(key) {
     }
 }

@@ -263,6 +263,12 @@ class Basic {
             .setGraphicProperties(x,y,40,40,"#000000", "")
     }
 
+    static NODE(x,y, input) {
+        return new ConnectionNode()
+            .setFonctionnalProperties((i) => i[0], input, 1)
+            .setGraphicProperties(x,y,10,7,"#000000", "")
+    }
+
     static SWITCH(x, y, input) {
         return new Switch()
             .setFonctionnalProperties((i) => i[0], input, 1)

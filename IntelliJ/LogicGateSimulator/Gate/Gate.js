@@ -49,7 +49,7 @@ class Gate {
      * Met a jour la sortie de la porte en fonction des entrees
      */
     update() {
-        let inputs = this.inputs.map(connection => connection.destination.output);
+        let inputs = this.inputs.map(connection => connection !== undefined && connection.getInput().output);
         this.tempOutput = this.activation(inputs);
     }
 
@@ -82,7 +82,7 @@ class Gate {
 
         for(let g of allGates)
             for(let i = 0; i < g.inputs.length; i++)
-                if(g.inputs[i].destination === gate)
+                if(g.inputs[i] && g.inputs[i].destination === gate)
                     g.inputs[i] = undefined;
     }
 
@@ -213,6 +213,16 @@ class Gate {
         return [
             this.x - this.width/2  + this.width/4,
             this.y - this.height/2 + this.height*(index+1)/(this.maxInputs+1)
+        ]
+    }
+
+    /***
+     * Renvoie la position de l'output sur la porte
+     */
+    getOutputPosition() {
+        return [
+            this.x + this.width/2 - Connection.WIDTH,
+            this.y
         ]
     }
 }

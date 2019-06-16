@@ -1,5 +1,10 @@
 class Output extends Gate {
 
+    /*
+        Ampoule
+        Sert aussi a designer les sorties des CustomGates
+     */
+
     //Proprietes fonctionnelles ----------------------------------------------------------------------------------------
 
     tickEnd() {

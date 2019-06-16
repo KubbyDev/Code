@@ -2,6 +2,9 @@ class InteractionMode {
 
     static buttons; //Les boutons du menu contextuel (menu de droite)
 
+    /***
+     * Appellee quand l'utilisateur fait un clic avec ce mode selectionne
+     */
     static onClick() {
 
         let selectedGate = getGateAtPosition(mouseX, mouseY);
@@ -9,9 +12,15 @@ class InteractionMode {
             selectedGate.onClick();
     }
 
+    /***
+     * Appellee a chaque frame quand ce mode est selectionne
+     */
     static update() {
     }
 
+    /***
+     * Appellee quand l'utilisateur passe sur ce mode
+     */
     static onEnable() {
     }
 
@@ -23,5 +32,12 @@ class InteractionMode {
 
     static init() {
         InteractionMode.buttons = [];
+    }
+
+    /***
+     * Appelle par UserInteraction a chaque key press dans ce mode
+     * @param key
+     */
+    static onKeyPressed(key) {
     }
 }

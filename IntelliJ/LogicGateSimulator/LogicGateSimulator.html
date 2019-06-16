@@ -24,6 +24,8 @@
 <script src="Gate/Special/Output.js"></script>
 <script src="Gate/Special/Switch.js"></script>
 <script src="Gate/Special/Input.js"></script>
+<script src="Gate/Special/ConnectionNode.js"></script>
+<script src="Gate/Special/CustomGate.js"></script>
 
 <script src="Interface/Interface.js"></script>
 <script src="Interface/Button.js"></script>
@@ -40,6 +42,9 @@
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
+    let gates = [];
+
+    /*
     let up = Basic.UP(30,30);
     let clock = Basic.CLOCK(30,80,50);
     let and = Basic.AND(100, 50, [up, clock]);
@@ -65,6 +70,7 @@
     let andf2 = Basic.AND(0,0);
 
     gates = [clock1, clock2, not11, not12, not21, not22, xor1, xor2, nor1, nor2, switch1, andf, input1, output, andf2];
+     */
 
     Interface.init();
 

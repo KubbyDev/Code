@@ -1,5 +1,10 @@
 class Input extends Gate {
 
+    /*
+        Bouton on/off
+        Sert aussi a designer les entrees des CustomGates
+     */
+
     //Proprietes fonctionnelles ----------------------------------------------------------------------------------------
 
     isOn = true;

@@ -1,5 +1,9 @@
 class Switch extends Gate {
 
+    /*
+        Interrupteur
+     */
+
     //Proprietes fonctionnelles ----------------------------------------------------------------------------------------
 
     isOn = true;

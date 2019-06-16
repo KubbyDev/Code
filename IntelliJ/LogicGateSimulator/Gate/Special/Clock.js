@@ -1,5 +1,10 @@
 class Clock extends Gate {
 
+    /*
+        Cette porte n'a pas d'input
+        Elle compte le nombre de frames et sa sortie change d'etat tout les <period> frames
+     */
+
     //Proprietes fonctionnelles ----------------------------------------------------------------------------------------
 
     period = 50; //Le nombre de frames avant un changement d'etat
