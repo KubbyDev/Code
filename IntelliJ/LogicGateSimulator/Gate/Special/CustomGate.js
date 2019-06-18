@@ -82,59 +82,178 @@ class CustomGate extends Gate {
     }
 
     /***
-     * Cree une CustomGate a partir des portes presentes sur l'affichage
-     * @returns {*}
-     */
-    static construct() {
-
-        let customGate = new CustomGate();
-
-        //Parcours toutes les portes de haut en bas (pour avoir les inputs et les outputs dans le bon ordre)
-        for(let gate of gates.sort((a,b) => a.y - b.y)) {
-
-            if(gate instanceof Output && gate.inputs.length > 0) {
-
-                //Si c'est un output on le remplace par une ConnectionNode
-                customGate.outputGates.push(Basic.NODE(0,0,gate.inputs.map(connection => connection.destination)));
-            }
-            else if(gate instanceof Input) {
-
-                //Si c'est un input on le remplace par une Gate qui fait rien
-                let input = new Gate();
-                customGate.inputGates.push(input);
-                customGate.maxInputs++;
-
-                for(let g of gates)
-                    for(let connection of g.inputs)
-                        if(connection.destination === gate)
-                            connection.destination = input;
-            }
-            else {
-
-                //Sinon on le place juste dans les internGates
-                customGate.internGates.push(gate);
-            }
-        }
-
-        gates = [];
-
-        return customGate
-            .setGraphicProperties(mouseX, mouseY,30,60,30+Math.max(customGate.maxInputs,customGate.outputGates.length)*20,"#379f1f","CustomGate");
-    }
-
-    /***
      * Cree une CustomGate a partir du string qui lui est donne
+     * Format: Name;input_1&...&input_n;output_1&...&output_n;intern_1&...&intern_n
+     * Input: Name
+     * Output: Name§input_1_index§...§input_n_index
+     * InternGate: Type§input_1_index§...§input_n_index
      * @param rawData
      */
     static parse(rawData) {
 
+        let customGate = new CustomGate();
+
+        let parts = rawData.split(';');
+
+        //Decodage des inputs
+        let inputsData = parts[1].split('&').filter(data => data !== "");
+        for(let i = 0; i < inputsData.length; i++) {
+            let input = new Gate();
+            input.name = inputsData[i];
+            customGate.inputGates[i] = input;
+        }
+        customGate.maxInputs = inputsData.length;
+
+        //Decodage des outputs
+        let outputsData = parts[2].split('&').filter(data => data !== "");
+        for(let i = 0; i < outputsData.length; i++) {
+            let data = outputsData[i].split('§');
+            let output = new ConnectionNode();
+            output.name = data[0];
+            customGate.outputGates[i] = output;
+        }
+
+        //Decodage des internGates
+        let gatesData = parts[3].split('&').filter(data => data !== "");
+        for(let i = 0; i < gatesData.length; i++) {
+            let data = gatesData[i].split('§');
+            customGate.internGates[i] = Basic[data[0]](0,0);
+        }
+
+        //Decodage des connexions
+        function connect(gate, data) {
+
+            //Pour chaque index dans les donnees
+            for(let i = 1; i < data.length; i++) {
+                if(data[i] !== '') //Si l'index n'est pas vide
+                    //On cree une connection qui amene vers un input si l'index fait reference a un input sinon vers une internGate
+                    gate.inputs[i-1] = new Connection(gate, data[i] < customGate.maxInputs
+                        ? customGate.inputGates[data[i]]
+                        : customGate.internGates[data[i] - customGate.maxInputs]);
+            }
+        }
+        //Outputs
+        for(let i = 0; i < outputsData.length; i++) {
+            let data = outputsData[i].split('§').filter(data => data !== "");
+            connect(customGate.outputGates[i], data);
+        }
+        //InternGates
+        for(let i = 0; i < gatesData.length; i++) {
+            let data = gatesData[i].split('§').filter(data => data !== "");
+            connect(customGate.internGates[i], data);
+        }
+
+        return customGate
+            .setGraphicProperties(mouseX, mouseY,60,30+Math.max(customGate.maxInputs,customGate.outputGates.length)*20,"#379f1f",parts[0]);
     }
 
     /***
-     * Cree un string representant la custom gate pour pouvoir ensuite la dupliquer
+     * Serialize l'affichage principal
+     * Format: Name;input_1&...&input_n;output_1&...&output_n;intern_1&...&intern_n
+     * Input: Name
+     * Output: Name§input_1_index§...§input_n_index
+     * InternGate: Type§input_1_index§...§input_n_index
      */
-    serialize() {
+    static serialize(name, inputNames, outputNames) {
 
+        let data = "";
+
+        function addSeparator(lastToRemove, separator) {
+
+            if(data[data.length-1] === lastToRemove)
+                data = data.substring(0,data.length-1) + separator;
+            else
+                data += separator;
+        }
+
+        //Cette fonction renvoie l'index de la porte en parametre
+        //L'indexation prend d'abord les inputs qui ont donc un index entre 0 et le nombre d'inputs
+        //Puis les internGates (les outputs ne sont pas indexes parce qu'aucune porte n'y est connecte)
+        function getIndex(g) {
+
+            let isInput = g instanceof Input;
+            let currentIndex = isInput ? 0 : inputNames.length;
+
+            //On parcours toutes les portes sauf les outputs
+            for(let i = 0; i < gates.length; i++) {
+
+                //Si on a trouve la porte on renvoie l'index
+                if(gates[i] === g)
+                    return currentIndex;
+
+                //Si la porte n'est pas celle qu'on cherche
+
+                if(isInput) { //Si on cherche des inputs
+
+                    //Si la porte trouvee est un input mais pas celui qu'on cherche on incremente
+                    if(gates[i] instanceof Input)
+                        currentIndex++;
+                }
+                else { //Si on cherche une internGate
+
+                    //Si c'est un output on s'en fous, sinon on incremente le currentIndex
+                    if(!(gates[i] instanceof Output) && !(gates[i] instanceof Input))
+                        currentIndex++;
+                }
+            }
+
+            return -1;
+        }
+
+        data = name + ';';
+
+        //Range les gates par ordre de hauteur pour que les inputs et les outputs soient dans le bon ordre
+        gates = gates.sort((a,b) => a.y - b.y);
+
+        //Inputs
+        for(let inputName of inputNames)
+            data += inputName + '&';
+
+        //Supprime le dernier & et rajoute un ;
+        addSeparator('&', ';');
+
+        //Outputs
+        let index = 0;
+        for(let gate of gates) {
+
+            if (gate instanceof Output) {
+
+                data += outputNames[index] + '§';
+                for (let input of gate.inputs) {
+                    if (input)
+                        data += getIndex(input.destination) + '§';
+                }
+                index++;
+
+                //Supprime le dernier § et rajoute un &
+                addSeparator('§', '&');
+            }
+        }
+
+        //Supprime le dernier & et rajoute un ;
+        addSeparator('&', ';');
+
+        //Intern Gates
+        for(let gate of gates) {
+
+            if (!(gate instanceof Output) && !(gate instanceof Input)) {
+
+                data += gate.name + '§'; //name est toujours le type de la porte (sauf pour les custom)
+                for (let input of gate.inputs) {
+                    if (input)
+                        data += getIndex(input.destination) + '§';
+                }
+                index++;
+
+                //Supprime le dernier § et rajoute un &
+                addSeparator('§', '&');
+            }
+        }
+
+        //Supprime le dernier &
+        addSeparator('&', '');
+
+        return data;
     }
 
     //Proprietes graphiques --------------------------------------------------------------------------------------------
