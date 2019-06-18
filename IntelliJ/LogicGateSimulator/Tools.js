@@ -29,3 +29,7 @@ function resizeCanvas() {
 }
 window.onresize = resizeCanvas;
 resizeCanvas();
+
+function closePopup(popup) {
+
+}

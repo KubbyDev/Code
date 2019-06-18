@@ -5,28 +5,29 @@ class CustomGate extends Gate {
     /*
         Fonctionnement des outputs:
         Il n'y a pas d'output reel mais seulement certaines portes du circuit interne
-        marquees comme output (contenues dans outputGates). Au moment de connecter une
-        autre porte a un output de cette CustomGate, on connecte en fait la porte directement
-        a la porte interne correspondant a l'output selectionne grace a getGateForOutput.
+        marquees comme output (contenues dans outputGates, ce sont des ConnectionNodes).
+        Au moment de connecter une autre porte a un output de cette CustomGate, on
+        connecte en fait la porte directement a la ConnectionNodes correspondant a
+        l'output selectionne grace a getGateForOutput.
         A la construction on cherche les portes Output, et on marque comme OutputGate les
         inputs de ces portes.
      */
 
     /*
         Fonctionnement des inputs:
-        A la construction on cherche les portes Input, et on les remplace par des CustomGateInput
-        qui serviront d'inputs
+        A la construction on cherche les portes Input, et on les remplace par des Gates
+        qui ne font rien mais qui serviront d'inputs
      */
 
     internGates = []; //Liste des portes contenues dans cette CustomGate
-    customGateInputs = [];  //Liste des CustomGateInput. Ils ne sont pas presents dans internGates
-    outputGates = []; //Liste des Nodes qui servent d'output
+    inputGates = [];  //Liste des portes qui servent d'input. Ils ne sont pas presents dans internGates
+    outputGates = []; //Liste des Nodes qui servent d'output. Ils ne sont pas presents dans internGates
 
     update() {
 
-        //Recupere les valeurs d'entrees et les met dans les CustomGateInput
-        for(let i = 0; i < this.customGateInputs.length; i++)
-            this.customGateInputs[i].output = this.inputs[i] && this.inputs[i].getInput().output;
+        //Recupere les valeurs d'entrees et les met dans les inputGates
+        for(let i = 0; i < this.inputGates.length; i++)
+            this.inputGates[i].output = this.inputs[i] && this.inputs[i].getValue();
 
         for(let gate of this.internGates)
             gate.update();
@@ -80,12 +81,16 @@ class CustomGate extends Gate {
         return minIndex;
     }
 
-    static construct(fromGates) {
+    /***
+     * Cree une CustomGate a partir des portes presentes sur l'affichage
+     * @returns {*}
+     */
+    static construct() {
 
         let customGate = new CustomGate();
 
         //Parcours toutes les portes de haut en bas (pour avoir les inputs et les outputs dans le bon ordre)
-        for(let gate of fromGates.sort((a,b) => a.y - b.y)) {
+        for(let gate of gates.sort((a,b) => a.y - b.y)) {
 
             if(gate instanceof Output && gate.inputs.length > 0) {
 
@@ -94,12 +99,12 @@ class CustomGate extends Gate {
             }
             else if(gate instanceof Input) {
 
-                //Si c'est un input on le remplace par un CustomGateInput
-                let input = CustomGateInput.create();
-                customGate.customGateInputs.push(input);
+                //Si c'est un input on le remplace par une Gate qui fait rien
+                let input = new Gate();
+                customGate.inputGates.push(input);
                 customGate.maxInputs++;
 
-                for(let g of fromGates)
+                for(let g of gates)
                     for(let connection of g.inputs)
                         if(connection.destination === gate)
                             connection.destination = input;
@@ -111,8 +116,25 @@ class CustomGate extends Gate {
             }
         }
 
+        gates = [];
+
         return customGate
-            .setGraphicProperties(30,30,60,30+Math.max(customGate.maxInputs,customGate.outputGates.length)*20,"#379f1f","CustomGate");
+            .setGraphicProperties(mouseX, mouseY,30,60,30+Math.max(customGate.maxInputs,customGate.outputGates.length)*20,"#379f1f","CustomGate");
+    }
+
+    /***
+     * Cree une CustomGate a partir du string qui lui est donne
+     * @param rawData
+     */
+    static parse(rawData) {
+
+    }
+
+    /***
+     * Cree un string representant la custom gate pour pouvoir ensuite la dupliquer
+     */
+    serialize() {
+
     }
 
     //Proprietes graphiques --------------------------------------------------------------------------------------------
@@ -120,7 +142,6 @@ class CustomGate extends Gate {
     draw() {
 
         //Met a jour la position des outputs pour que les connexions s'affichent correctement
-        //TODO
         for(let i = 0; i < this.outputGates.length; i++) {
 
             let position = this.getOutputPosition(i);
@@ -141,13 +162,4 @@ class CustomGate extends Gate {
             this.y - this.height/2 + this.height*(index+1)/(this.outputGates.length+1)
         ]
     }
-}
-
-class CustomGateInput extends Gate {
-
-    static create() {
-
-        return new CustomGateInput();
-    }
-
 }

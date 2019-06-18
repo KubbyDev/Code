@@ -18,9 +18,19 @@ class Connection {
     getInput() {
 
         if(this.destination instanceof ConnectionNode)
-            return this.destination.inputs[0].getInput();
+            if(this.destination.inputs[0])
+                return this.destination.inputs[0].getInput();
+            else
+                return undefined;
 
         return this.destination;
+    }
+
+    /***
+     * Renvoie l'etat (on/off) de la connexion
+     */
+    getValue() {
+        return this.getInput() !== undefined && this.getInput().output;
     }
 
     //Proprietes graphiques --------------------------------------------------------------------------------------------
@@ -41,7 +51,7 @@ class Connection {
         //Dessine la connection
         ctx.beginPath();
         ctx.lineWidth = Connection.WIDTH;
-        ctx.strokeStyle = this.getInput().output ? Connection.UP_COLOR : Connection.DOWN_COLOR;
+        ctx.strokeStyle = this.getValue() ? Connection.UP_COLOR : Connection.DOWN_COLOR;
         ctx.moveTo(inputPosition[0], inputPosition[1]);
         for(let point of this.calculateIntermediates(this.destination.x, this.destination.y, this.origin.x, inputPosition[1]))
             ctx.lineTo(point[0], point[1]);

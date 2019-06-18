@@ -49,7 +49,7 @@ class Gate {
      * Met a jour la sortie de la porte en fonction des entrees
      */
     update() {
-        let inputs = this.inputs.map(connection => connection !== undefined && connection.getInput().output);
+        let inputs = this.inputs.map(connection => connection !== undefined && connection.getValue());
         this.tempOutput = this.activation(inputs);
     }
 
@@ -146,6 +146,9 @@ class Gate {
         this.height = height * Interface.ZOOM_FACTOR;
         this.color = color;
         this.name = name;
+
+        this.fontSize *= Interface.ZOOM_FACTOR;
+
         return this;
     }
 

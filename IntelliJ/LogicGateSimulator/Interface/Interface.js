@@ -12,6 +12,7 @@ class Interface {
     //2 = INTERACTION: Cliquer sur un interrupteur pour changer son etat
 
     static mode = 0;
+    static blockInputs = false;
 
     static clear() {
         ctx.fillStyle = Interface.BACKGROUND_COLOR;
@@ -39,6 +40,10 @@ class Interface {
         BuildMode.init();
         WiringMode.init();
         InteractionMode.init();
+    }
+
+    static update() {
+        Interface.getCurrentMode().update();
     }
 
     /***
@@ -73,6 +78,16 @@ class Interface {
 
             gate.fontSize *= factor;
         }
+    }
+
+    static openPopup() {
+        popupBackground.style.display = 'block';
+        Interface.blockInputs = true;
+    }
+
+    static closePopup() {
+        popupBackground.style.display = 'none';
+        Interface.blockInputs = false;
     }
 }
 

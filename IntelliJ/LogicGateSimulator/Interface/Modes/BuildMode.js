@@ -155,9 +155,15 @@ class BuildMode {
      * @param gate
      */
     static removeGate(gate) {
+
         gates = gates.remove(gate);
-        Gate.removeAllConnectionsTo(gate, gates);
         BuildMode.selectedGate = null;
+
+        if(gate instanceof CustomGate)
+            for(let outputGate of gate.outputGates)
+                Gate.removeAllConnectionsTo(outputGate, gates);
+        else
+            Gate.removeAllConnectionsTo(gate, gates);
     }
 
     /***

@@ -1,9 +1,3 @@
-class UserInteraction {
-
-    static update() {
-        Interface.getCurrentMode().update();
-    }
-}
 
 //Traque la position de la souris
 let mouseX = 0;
@@ -15,6 +9,9 @@ document.addEventListener('mousemove', function(event) {
 
 //Traque les clics souris
 document.addEventListener('click', function() {
+
+    if(Interface.blockInputs)
+        return;
 
     //Si on a clique sur un bouton on appelle son onClick
     let clickedButton = Interface.getButtonAtPosition(mouseX, mouseY);
@@ -29,6 +26,9 @@ document.addEventListener('click', function() {
 
 //Traque les entrees clavier
 document.onkeydown = function(event) {
+
+    if(Interface.blockInputs)
+        return;
 
     switch(event.key) {
         case 'b':
@@ -50,6 +50,10 @@ document.onkeydown = function(event) {
 
 //On traque les entrees par la molette de la souris
 canvas.addEventListener('wheel', function(event) {
+
+    if(Interface.blockInputs)
+        return;
+
     Interface.zoom(1 - event.deltaY/1000);
 });
 

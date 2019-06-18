@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Logic Gate Simulator</title>
+    <link rel="stylesheet" type="text/css" href="Style.css"/>
 </head>
 <body>
 
 <canvas id="canvas" width="1400" height="700"></canvas>
-<style>
-    html, body {
-        overflow: hidden;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-</style>
+<div id="popup_bg">
+    <div id="popup_main_div">
+        <div id="clock_popup">
+            <input id="clockInput"/>
+            <button id="clockDone" onclick="Clock.choosePeriod()">Select</button>
+        </div>
+    </div>
+</div>
 
 <script src="Tools.js"></script>
 
@@ -36,11 +38,11 @@
 
 <script>
 
-    //TODO: Pouvoir modifier la periode de la clock
     //TODO: Systeme de creation de porte custom a partir d'un circuit
 
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
+    const popupBackground = document.getElementById("popup_bg");
 
     let gates = [];
 
@@ -77,7 +79,7 @@
     setInterval(() => {
 
         Interface.clear();
-        UserInteraction.update();
+        Interface.update();
         Gate.updateAll(gates);
         Gate.drawAll(gates);
         Interface.draw();

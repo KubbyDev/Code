@@ -20,6 +20,31 @@ class Clock extends Gate {
     }
 
     /***
+     * Ouvre un popup pour choisir la periode
+     */
+    onClick() {
+
+        Interface.openPopup();
+
+        document.getElementById("clock_popup").style.display = 'block';
+        Clock.openedPopup = this;
+    }
+
+    static openedPopup; //Cette variable enregistre la clock qui a requis l'ouverture d'un popup (celle qui doit donc etre modifiee)
+    /***
+     * Cette fonction est appellee par le bouton Done du popup
+     */
+    static choosePeriod() {
+
+        let chosenValue = document.getElementById("clockInput").value;
+        if(!isNaN(chosenValue))
+            Clock.openedPopup.setPeriod(chosenValue);
+        document.getElementById("clock_popup").style.display = 'none';
+
+        Interface.closePopup();
+    }
+
+    /***
      * Change la periode de la clock (nombre de frames entre 2 changements d'etat)
      * @param period
      * @param current
