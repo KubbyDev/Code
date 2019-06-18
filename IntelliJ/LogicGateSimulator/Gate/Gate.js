@@ -39,7 +39,7 @@ class Gate {
      */
     addInput(gate, index) {
 
-        if(index && index < this.maxInputs)
+        if(index !== undefined && index < this.maxInputs)
             this.inputs[index] = new Connection(this, gate);
         else if (this.inputs.length < this.maxInputs)
             this.inputs.push(new Connection(this, gate));
@@ -125,6 +125,7 @@ class Gate {
     width = 20;
     height = 20;
     color = "#379f1f";
+    type = "Gate";
     name = "Gate";
     fontSize = 8;
     hideName = false;
@@ -136,16 +137,17 @@ class Gate {
      * @param width
      * @param height
      * @param color
-     * @param name
+     * @param type
      */
-    setGraphicProperties(x, y, width, height, color, name) {
+    setGraphicProperties(x, y, width, height, color, type, name) {
 
         this.x = x;
         this.y = y;
         this.width = width * Interface.ZOOM_FACTOR;
         this.height = height * Interface.ZOOM_FACTOR;
         this.color = color;
-        this.name = name;
+        this.type = type;
+        this.name = name !== undefined ? name : type;
 
         this.fontSize *= Interface.ZOOM_FACTOR;
 

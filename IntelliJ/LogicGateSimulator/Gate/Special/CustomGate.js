@@ -2,23 +2,6 @@ class CustomGate extends Gate {
 
     //Proprietes fonctionnelles ----------------------------------------------------------------------------------------
 
-    /*
-        Fonctionnement des outputs:
-        Il n'y a pas d'output reel mais seulement certaines portes du circuit interne
-        marquees comme output (contenues dans outputGates, ce sont des ConnectionNodes).
-        Au moment de connecter une autre porte a un output de cette CustomGate, on
-        connecte en fait la porte directement a la ConnectionNodes correspondant a
-        l'output selectionne grace a getGateForOutput.
-        A la construction on cherche les portes Output, et on marque comme OutputGate les
-        inputs de ces portes.
-     */
-
-    /*
-        Fonctionnement des inputs:
-        A la construction on cherche les portes Input, et on les remplace par des Gates
-        qui ne font rien mais qui serviront d'inputs
-     */
-
     internGates = []; //Liste des portes contenues dans cette CustomGate
     inputGates = [];  //Liste des portes qui servent d'input. Ils ne sont pas presents dans internGates
     outputGates = []; //Liste des Nodes qui servent d'output. Ils ne sont pas presents dans internGates
@@ -108,7 +91,7 @@ class CustomGate extends Gate {
         let outputsData = parts[2].split('&').filter(data => data !== "");
         for(let i = 0; i < outputsData.length; i++) {
             let data = outputsData[i].split('§');
-            let output = new ConnectionNode();
+            let output = Basic.NODE(0,0);
             output.name = data[0];
             customGate.outputGates[i] = output;
         }
@@ -144,7 +127,7 @@ class CustomGate extends Gate {
         }
 
         return customGate
-            .setGraphicProperties(mouseX, mouseY,60,30+Math.max(customGate.maxInputs,customGate.outputGates.length)*20,"#379f1f",parts[0]);
+            .setGraphicProperties(mouseX, mouseY,100,30+Math.max(customGate.maxInputs,customGate.outputGates.length)*20,"#379f1f",parts[0]);
     }
 
     /***
@@ -158,6 +141,28 @@ class CustomGate extends Gate {
 
         let data = "";
 
+        //Casse une CustomGate (passe les internGates dans fromGates)
+        function breakCustomGate(customGate) {
+
+            //Pour chaque porte dans les outputs ou dans les internes
+            for(let gate of customGate.internGates.concat(customGate.outputGates)) {
+
+                for (let i = 0; i < gate.maxInputs; i++) {
+
+                    let inputIndex = customGate.inputGates.indexOf(gate.inputs[i].destination);
+
+                    //Si la connection donne sur un input de la CustomGate
+                    if (inputIndex !== -1) //On se connecte a la destination de l'input correspondant sur la CustomGate
+                        gate.inputs[i].destination = customGate.inputs[inputIndex].destination;
+                    //Si ca donne sur une autre porte interne, aucun probleme
+                }
+
+                gates.push(gate);
+            }
+        }
+
+        //Supprime le caractere lastToRemove a la fin de data si il existe
+        //et ajoute le caractere separator derriere
         function addSeparator(lastToRemove, separator) {
 
             if(data[data.length-1] === lastToRemove)
@@ -200,10 +205,17 @@ class CustomGate extends Gate {
             return -1;
         }
 
-        data = name + ';';
+        //Casse toutes les CustomGates (Passe les internGates dans fromGates)
+        let previousLength = gates.length; //Enregistre la longeur de la liste avant l'ajout des portes resultantes du cassage des CustomGates
+        for(let i = 0; i < previousLength; i++)
+            if(gates[i] instanceof CustomGate)
+                breakCustomGate(gates[i]);
 
-        //Range les gates par ordre de hauteur pour que les inputs et les outputs soient dans le bon ordre
-        gates = gates.sort((a,b) => a.y - b.y);
+        //Supprime toutes les CustomGates de la liste puis
+        //range les gates par ordre de hauteur pour que les inputs et les outputs soient dans le bon ordre
+        gates = gates.filter(g => !(g instanceof CustomGate)).sort((a,b) => a.y - b.y);
+
+        data = name + ';';
 
         //Inputs
         for(let inputName of inputNames)
@@ -238,7 +250,7 @@ class CustomGate extends Gate {
 
             if (!(gate instanceof Output) && !(gate instanceof Input)) {
 
-                data += gate.name + '§'; //name est toujours le type de la porte (sauf pour les custom)
+                data += gate.type + '§'; //name est toujours le type de la porte (sauf pour les custom)
                 for (let input of gate.inputs) {
                     if (input)
                         data += getIndex(input.destination) + '§';
@@ -252,6 +264,8 @@ class CustomGate extends Gate {
 
         //Supprime le dernier &
         addSeparator('&', '');
+
+        gates = [];
 
         return data;
     }
@@ -269,6 +283,20 @@ class CustomGate extends Gate {
         }
 
         super.draw();
+
+        //Affiche les noms des inputs et outputs
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = (this.fontSize*0.8) + "px Arial";
+        for(let i = 0; i < this.outputGates.length; i++) {
+            let position = this.getOutputPosition(i);
+            ctx.fillText(this.outputGates[i].name, position[0] - this.width/10, position[1]);
+        }
+        for(let i = 0; i < this.inputGates.length; i++) {
+            let position = this.getInputPosition(i);
+            ctx.fillText(this.inputGates[i].name, position[0] - this.width/10, position[1]);
+        }
     }
 
     /***

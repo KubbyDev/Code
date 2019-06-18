@@ -35,7 +35,7 @@ class WiringMode {
 
         //Si l'input et l'output sont definis on cree une connexion
         if(WiringMode.selectedOutput && WiringMode.selectedInput) {
-            WiringMode.selectedOutput.addInput(WiringMode.selectedInput, [WiringMode.inputIndex]);
+            WiringMode.selectedOutput.addInput(WiringMode.selectedInput, WiringMode.inputIndex);
             WiringMode.selectedInput = null;
             WiringMode.selectedOutput = null;
         }

@@ -248,7 +248,7 @@ class Basic {
 
     static INPUT(x, y) {
         return new Input()
-            .setGraphicProperties(x,y,40,40,"#db7ed2","INPUT")
+            .setGraphicProperties(x,y,40,40,"#db7ed2", "INPUT")
     }
 
     static CLOCK(x, y, period) {
@@ -260,18 +260,18 @@ class Basic {
     static OUTPUT(x, y, input) {
         return new Output()
             .setFonctionnalProperties((i) => i[0], input, 1)
-            .setGraphicProperties(x,y,40,40,"#000000", "")
+            .setGraphicProperties(x,y,40,40,"#000000", "OUTPUT", "")
     }
 
     static NODE(x,y, input) {
         return new ConnectionNode()
             .setFonctionnalProperties((i) => i[0], input, 1)
-            .setGraphicProperties(x,y,10,7,"#000000", "")
+            .setGraphicProperties(x,y,10,7,"#000000", "NODE", "")
     }
 
     static SWITCH(x, y, input) {
         return new Switch()
             .setFonctionnalProperties((i) => i[0], input, 1)
-            .setGraphicProperties(x,y,45,20,"#ffbb25","SWITCH")
+            .setGraphicProperties(x,y,45,20,"#ffbb25", "SWITCH")
     }
 }

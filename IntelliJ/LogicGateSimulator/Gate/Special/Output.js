@@ -12,6 +12,11 @@ class Output extends Gate {
         this.color = this.output ? this.upColor : this.downColor;
     }
 
+    //Empeche l'Output d'avoir des outputs
+    getConnector(x,y) {
+        return 1;
+    }
+
     //Proprietes graphiques --------------------------------------------------------------------------------------------
 
     upColor = "#ea120c";
