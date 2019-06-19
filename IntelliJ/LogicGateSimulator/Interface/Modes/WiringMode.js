@@ -68,7 +68,8 @@ class WiringMode {
     /***
      * Appellee quand l'utilisateur passe sur ce mode
      */
-    static onEnable() {
+    static enable() {
+        Interface.mode = 1;
         WiringMode.selectedInput = null;
         WiringMode.selectedOutput = null;
     }

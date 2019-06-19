@@ -21,7 +21,8 @@ class InteractionMode {
     /***
      * Appellee quand l'utilisateur passe sur ce mode
      */
-    static onEnable() {
+    static enable() {
+        Interface.mode = 2;
     }
 
     /***
@@ -35,7 +36,7 @@ class InteractionMode {
     }
 
     /***
-     * Appelle par UserInteraction a chaque key press dans ce mode
+     * Apelle par UserInteraction a chaque key press dans ce mode
      * @param key
      */
     static onKeyPressed(key) {

@@ -32,16 +32,13 @@ document.onkeydown = function(event) {
 
     switch(event.key) {
         case 'b':
-            Interface.mode = 0;
-            BuildMode.onEnable();
+            BuildMode.enable();
             break;
         case 'w':
-            Interface.mode = 1;
-            WiringMode.onEnable();
+            WiringMode.enable();
             break;
         case 'i':
-            Interface.mode = 2;
-            InteractionMode.onEnable();
+            InteractionMode.enable();
             break;
     }
 

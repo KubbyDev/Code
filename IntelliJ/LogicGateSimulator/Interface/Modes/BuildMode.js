@@ -4,6 +4,7 @@ class BuildMode {
     static selectorPosition = 0; //Index du premier bouton affiche dans la liste de droite
     static listLength = 0; //Nombre de boutons affiches dans la liste de droite
     static buttons; //Les boutons du menu contextuel (menu de droite)
+    static lastCustomGate; //La derniere CustomGate ajoutee
 
     /***
      * Appellee quand l'utilisateur fait un clic avec ce mode selectionne
@@ -30,7 +31,8 @@ class BuildMode {
     /***
      * Appellee quand l'utilisateur passe sur ce mode
      */
-    static onEnable() {
+    static enable() {
+        Interface.mode = 0;
         BuildMode.selectedGate = null;
     }
 
@@ -58,26 +60,34 @@ class BuildMode {
             - BuildMode.buttons[0].height
             - 2*BuildMode.buttons[1].height
             - 5*Interface.BUTTON_SPACING)
-            / (BuildMode.buttons[3].height+Interface.BUTTON_SPACING));
+            / (BuildMode.buttons[5].height+Interface.BUTTON_SPACING));
 
         //Boutons de controle de la liste de creation de gates
         BuildMode.buttons[1].x = canvas.width - BuildMode.buttons[1].width/2 - Interface.BUTTON_SPACING;
         BuildMode.buttons[1].y = BuildMode.buttons[1].height/2 + Interface.BUTTON_SPACING;
         BuildMode.buttons[2].x = canvas.width - BuildMode.buttons[2].width/2 - Interface.BUTTON_SPACING;
-        BuildMode.buttons[2].y = BuildMode.buttons[3].height*BuildMode.listLength + 1.5*BuildMode.buttons[1].height + Interface.BUTTON_SPACING*(2+BuildMode.listLength);
+        BuildMode.buttons[2].y = BuildMode.buttons[5].height*BuildMode.listLength + 1.5*BuildMode.buttons[1].height + Interface.BUTTON_SPACING*(2+BuildMode.listLength);
         BuildMode.buttons[1].draw();
         BuildMode.buttons[2].draw();
 
         //Boutons de creation de gates
         for(let i = 0; i < BuildMode.listLength; i++) {
 
-            if(BuildMode.selectorPosition+i+3 > BuildMode.buttons.length) //Si il n'y a pas assez de boutons on sort
+            if(BuildMode.selectorPosition+i+5 > BuildMode.buttons.length) //Si il n'y a pas assez de boutons on sort
                 break;
 
-            BuildMode.buttons[BuildMode.selectorPosition+i+3].x = canvas.width - BuildMode.buttons[3].width/2 - Interface.BUTTON_SPACING;
-            BuildMode.buttons[BuildMode.selectorPosition+i+3].y = BuildMode.buttons[1].height + (i+0.5)*(BuildMode.buttons[3].height) + (i+2)*Interface.BUTTON_SPACING;
-            BuildMode.buttons[BuildMode.selectorPosition+i+3].draw();
+            BuildMode.buttons[BuildMode.selectorPosition+i+5].x = canvas.width - BuildMode.buttons[5].width/2 - Interface.BUTTON_SPACING;
+            BuildMode.buttons[BuildMode.selectorPosition+i+5].y = BuildMode.buttons[1].height + (i+0.5)*(BuildMode.buttons[5].height) + (i+2)*Interface.BUTTON_SPACING;
+            BuildMode.buttons[BuildMode.selectorPosition+i+5].draw();
         }
+
+        //Boutons des Custom Gates
+        BuildMode.buttons[3].x = BuildMode.buttons[3].width/2 + Interface.BUTTON_SPACING;
+        BuildMode.buttons[3].y = canvas.height - BuildMode.buttons[3].height/2 - Interface.BUTTON_SPACING;
+        BuildMode.buttons[4].x = BuildMode.buttons[3].width + BuildMode.buttons[4].width/2 + 2*Interface.BUTTON_SPACING;
+        BuildMode.buttons[4].y = canvas.height - BuildMode.buttons[4].height/2 - Interface.BUTTON_SPACING;
+        BuildMode.buttons[3].draw();
+        BuildMode.buttons[4].draw();
     }
 
     static init() {
@@ -88,14 +98,16 @@ class BuildMode {
                 .setOnClick(() => BuildMode.removeGate(BuildMode.selectedGate)),
             new Button()
                 .setGraphicProperties(80, 30, "UP", "#379f1f")
-                .setOnClick(() => {
-                    BuildMode.selectorPosition = Math.max(0, BuildMode.selectorPosition-1);
-                }),
+                .setOnClick(() => BuildMode.selectorPosition = Math.max(0, BuildMode.selectorPosition-1)),
             new Button()
                 .setGraphicProperties(80, 30, "DOWN", "#379f1f")
-                .setOnClick(() => {
-                    BuildMode.selectorPosition = Math.min(BuildMode.buttons.length-BuildMode.listLength-3, BuildMode.selectorPosition+1);
-                }),
+                .setOnClick(() => BuildMode.selectorPosition = Math.min(BuildMode.buttons.length-BuildMode.listLength-5, BuildMode.selectorPosition+1)),
+            new Button()
+                .setGraphicProperties(150, 60, "Create Custom Gate", "#379f1f")
+                .setOnClick(() => {}),
+            new Button()
+                .setGraphicProperties(150, 60, "Last Custom Gate", "#379f1f")
+                .setOnClick(() => BuildMode.addGate(CustomGate.parse(BuildMode.lastCustomGate))),
             new Button()
                 .setGraphicProperties(80, 80, "AND", "#379f1f")
                 .setOnClick(() => BuildMode.addGate(Basic.AND(mouseX, mouseY))),

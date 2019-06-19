@@ -13,6 +13,7 @@ class Interface {
 
     static mode = 0;
     static blockInputs = false;
+    static buttons;
 
     static clear() {
         ctx.fillStyle = Interface.BACKGROUND_COLOR;
@@ -23,12 +24,23 @@ class Interface {
      * Dessine le menu contextuel du mode actuel
      */
     static draw() {
+
         Interface.getCurrentMode().updateContextualMenu();
+
+        Interface.buttons[0].x = (0.5)*Interface.buttons[0].width + Interface.BUTTON_SPACING;
+        Interface.buttons[0].y = Interface.buttons[0].height/2 + Interface.BUTTON_SPACING;
+        Interface.buttons[1].x = (1.5)*Interface.buttons[0].width + 2*Interface.BUTTON_SPACING;
+        Interface.buttons[1].y = Interface.buttons[0].height/2 + Interface.BUTTON_SPACING;
+        Interface.buttons[2].x = (2.5)*Interface.buttons[0].width + 3*Interface.BUTTON_SPACING;
+        Interface.buttons[2].y = Interface.buttons[0].height/2 + Interface.BUTTON_SPACING;
+        Interface.buttons[0].draw();
+        Interface.buttons[1].draw();
+        Interface.buttons[2].draw();
     }
 
     static getButtonAtPosition(x, y) {
 
-        for (let button of Interface.getCurrentMode().buttons)
+        for (let button of Interface.getCurrentMode().buttons.concat(Interface.buttons))
             if (Math.abs(x - button.x) < button.width / 2 && Math.abs(y - button.y) < button.height / 2)
                 return button;
 
@@ -40,6 +52,18 @@ class Interface {
         BuildMode.init();
         WiringMode.init();
         InteractionMode.init();
+
+        Interface.buttons = [
+            new Button()
+                .setGraphicProperties(90, 40, "Build", "#ffffff")
+                .setOnClick(() => BuildMode.enable()),
+            new Button()
+                .setGraphicProperties(90, 40, "Wiring", "#ffffff")
+                .setOnClick(() => WiringMode.enable()),
+            new Button()
+                .setGraphicProperties(90, 40, "Interaction", "#ffffff")
+                .setOnClick(() => InteractionMode.enable())
+            ];
     }
 
     static update() {
