@@ -27,6 +27,11 @@ document.addEventListener('click', function() {
 //Traque les entrees clavier
 document.onkeydown = function(event) {
 
+    switch(event.key) {
+        case 'Escape':
+            Interface.closePopup();
+    }
+
     if(Interface.blockInputs)
         return;
 

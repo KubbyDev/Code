@@ -5,6 +5,7 @@ class CustomGate extends Gate {
     internGates = []; //Liste des portes contenues dans cette CustomGate
     inputGates = [];  //Liste des portes qui servent d'input. Ils ne sont pas presents dans internGates
     outputGates = []; //Liste des Nodes qui servent d'output. Ils ne sont pas presents dans internGates
+    string;
 
     update() {
 
@@ -75,6 +76,7 @@ class CustomGate extends Gate {
     static parse(rawData) {
 
         let customGate = new CustomGate();
+        customGate.string = rawData;
 
         let parts = rawData.split(';');
 
@@ -270,6 +272,32 @@ class CustomGate extends Gate {
         return data;
     }
 
+    /***
+     * Affiche un popup qui montre le string serialise de la porte
+     */
+    onClick() {
+
+        Interface.openPopup();
+
+        let mainDiv = document.getElementById("popup_main_div");
+        let div = document.createElement("DIV");
+
+        let separator = document.createElement("HR");
+        div.appendChild(separator);
+
+        let p = document.createElement("P");
+        p.innerHTML = this.string;
+        p.style.wordWrap = "break-word";
+        div.appendChild(p);
+
+        let button = document.createElement("BUTTON");
+        button.addEventListener('click', Interface.closePopup);
+        button.innerHTML = "OK";
+        div.appendChild(button);
+
+        mainDiv.appendChild(div);
+    }
+
     //Proprietes graphiques --------------------------------------------------------------------------------------------
 
     draw() {
@@ -308,5 +336,82 @@ class CustomGate extends Gate {
             this.x + this.width/2 - Connection.WIDTH,
             this.y - this.height/2 + this.height*(index+1)/(this.outputGates.length+1)
         ]
+    }
+
+    /***
+     * Affiche le menu de selection de noms des inputs/outputs pour creer une nouvelle custom gate
+     */
+    static openPopup() {
+
+        Interface.openPopup();
+
+        //Compte le nombre d'inputs et d'outputs de la Custom Gate
+        let nbInputs = 0;
+        let nbOutputs = 0;
+        for(let gate of gates) {
+            if(gate instanceof Input)
+                nbInputs++;
+            if(gate instanceof Output)
+                nbOutputs++;
+        }
+
+        let mainDiv = document.getElementById("popup_main_div");
+        let div = document.createElement("DIV");
+
+        function addInput(name) {
+            let input = document.createElement("INPUT");
+            input.id = name;
+            input.minlength="0";
+            input.maxlength="6";
+            div.appendChild(input);
+        }
+
+        function addSeparator(name) {
+            let separator = document.createElement("HR");
+            separator.innerHTML = name;
+            div.appendChild(separator);
+        }
+
+        addSeparator("Gate name");
+        addInput("name");
+
+        //Cree les fields pour les inputs
+        addSeparator("Input names");
+        for(let i = 0; i < nbInputs; i++)
+            addInput("input" + i);
+
+        //Cree les fields pour les outputs
+        addSeparator("Output names");
+        for(let i = 0; i < nbOutputs; i++)
+            addInput("output" + i);
+
+        addSeparator("");
+        let button = document.createElement("BUTTON");
+        button.addEventListener('click', () => {
+
+            //Recuperation des inputs
+            let inputs = [];
+            for(let i = 0; i < nbInputs; i++)
+                inputs[i] = document.getElementById("input" + i).value;
+
+            //Recuperation des outputs
+            let outputs = [];
+            for(let i = 0; i < nbOutputs; i++)
+                outputs[i] = document.getElementById("output" + i).value;
+
+            //Creation de la porte
+            let gate = CustomGate.parse(CustomGate.serialize(document.getElementById("name").value, inputs, outputs));
+            gates.push(gate);
+
+            //Affichage de l'interface pour afficher le string serialise
+            Interface.closePopup();
+            gate.onClick();
+
+            //Enregistrement de cette porte comme lastCustomGate
+            BuildMode.lastCustomGate = gate.string;
+        });
+        button.innerHTML = "Done";
+        div.appendChild(button);
+        mainDiv.appendChild(div);
     }
 }

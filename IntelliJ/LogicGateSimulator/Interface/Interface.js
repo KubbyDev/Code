@@ -105,11 +105,20 @@ class Interface {
     }
 
     static openPopup() {
+
         popupBackground.style.display = 'block';
         Interface.blockInputs = true;
     }
 
     static closePopup() {
+
+        let mainDiv = document.getElementById("popup_main_div");
+        let child = mainDiv.lastElementChild;
+        while (child) {
+            mainDiv.removeChild(child);
+            child = mainDiv.lastElementChild;
+        }
+
         popupBackground.style.display = 'none';
         Interface.blockInputs = false;
     }

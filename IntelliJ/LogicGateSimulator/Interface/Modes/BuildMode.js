@@ -4,7 +4,7 @@ class BuildMode {
     static selectorPosition = 0; //Index du premier bouton affiche dans la liste de droite
     static listLength = 0; //Nombre de boutons affiches dans la liste de droite
     static buttons; //Les boutons du menu contextuel (menu de droite)
-    static lastCustomGate; //La derniere CustomGate ajoutee
+    static lastCustomGate = ""; //La derniere CustomGate ajoutee
 
     /***
      * Appellee quand l'utilisateur fait un clic avec ce mode selectionne
@@ -84,10 +84,17 @@ class BuildMode {
         //Boutons des Custom Gates
         BuildMode.buttons[3].x = BuildMode.buttons[3].width/2 + Interface.BUTTON_SPACING;
         BuildMode.buttons[3].y = canvas.height - BuildMode.buttons[3].height/2 - Interface.BUTTON_SPACING;
-        BuildMode.buttons[4].x = BuildMode.buttons[3].width + BuildMode.buttons[4].width/2 + 2*Interface.BUTTON_SPACING;
-        BuildMode.buttons[4].y = canvas.height - BuildMode.buttons[4].height/2 - Interface.BUTTON_SPACING;
+        if(BuildMode.lastCustomGate !== "") {
+
+            BuildMode.buttons[4].x = BuildMode.buttons[3].width + BuildMode.buttons[4].width/2 + 2*Interface.BUTTON_SPACING;
+            BuildMode.buttons[4].y = canvas.height - BuildMode.buttons[4].height/2 - Interface.BUTTON_SPACING;
+            BuildMode.buttons[4].draw();
+        } else {
+
+            BuildMode.buttons[4].x = -100;
+            BuildMode.buttons[4].y = -100;
+        }
         BuildMode.buttons[3].draw();
-        BuildMode.buttons[4].draw();
     }
 
     static init() {
@@ -104,7 +111,7 @@ class BuildMode {
                 .setOnClick(() => BuildMode.selectorPosition = Math.min(BuildMode.buttons.length-BuildMode.listLength-5, BuildMode.selectorPosition+1)),
             new Button()
                 .setGraphicProperties(150, 60, "Create Custom Gate", "#379f1f")
-                .setOnClick(() => {}),
+                .setOnClick(() => CustomGate.openPopup()),
             new Button()
                 .setGraphicProperties(150, 60, "Last Custom Gate", "#379f1f")
                 .setOnClick(() => BuildMode.addGate(CustomGate.parse(BuildMode.lastCustomGate))),
@@ -150,7 +157,42 @@ class BuildMode {
             new Button()
                 .setGraphicProperties(80, 80, "NODE", "#379f1f")
                 .setOnClick(() => BuildMode.addGate(Basic.NODE(mouseX, mouseY))),
+            new Button()
+                .setGraphicProperties(80,80, "CUSTOM", "#379f1f")
+                .setOnClick(() => BuildMode.openCustomGatePopup())
         ]
+    }
+
+    /***
+     * Ouvre le popup qui demande de donner un string pour la CustomGate
+     */
+    static openCustomGatePopup() {
+
+        Interface.openPopup();
+
+        let mainDiv = document.getElementById("popup_main_div");
+        let div = document.createElement("DIV");
+
+        let separator = document.createElement("HR");
+        separator.innerHTML = "Data for your gate (you can generate it with the Build Custom Gate button)";
+        div.appendChild(separator);
+
+        let input = document.createElement("INPUT");
+        input.id = "rawData";
+        input.minlength="0";
+        input.maxlength="6";
+        div.appendChild(input);
+
+        let button = document.createElement("BUTTON");
+        button.addEventListener('click', () => {
+            let gate = CustomGate.parse(document.getElementById("rawData").value);
+            BuildMode.addGate(gate);
+            BuildMode.lastCustomGate = gate.string;
+            Interface.closePopup();
+        });
+        button.innerHTML = "Done";
+        div.appendChild(button);
+        mainDiv.appendChild(div);
     }
 
     /***

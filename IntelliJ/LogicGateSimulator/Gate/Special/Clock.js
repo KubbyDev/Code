@@ -26,7 +26,17 @@ class Clock extends Gate {
 
         Interface.openPopup();
 
-        document.getElementById("clock_popup").style.display = 'block';
+        let mainDiv = document.getElementById("popup_main_div");
+        let input = document.createElement("INPUT");
+        input.id = "clockInput";
+        let button = document.createElement("BUTTON");
+        button.addEventListener('click', Clock.choosePeriod);
+        button.innerHTML = "Done";
+        let div = document.createElement("DIV");
+        div.appendChild(input);
+        div.appendChild(button);
+        mainDiv.appendChild(div);
+
         Clock.openedPopup = this;
     }
 
@@ -39,7 +49,6 @@ class Clock extends Gate {
         let chosenValue = document.getElementById("clockInput").value;
         if(!isNaN(chosenValue))
             Clock.openedPopup.setPeriod(chosenValue);
-        document.getElementById("clock_popup").style.display = 'none';
 
         Interface.closePopup();
     }
