@@ -70,7 +70,7 @@ class CustomGate extends Gate {
      * Format: Name;input_1&...&input_n;output_1&...&output_n;intern_1&...&intern_n
      * Input: Name
      * Output: Name§input_1_index§...§input_n_index
-     * InternGate: Type§input_1_index§...§input_n_index
+     * InternGate: Type@param_2@...@param_n§input_1_index§...§input_n_index
      * @param rawData
      */
     static parse(rawData) {
@@ -101,8 +101,9 @@ class CustomGate extends Gate {
         //Decodage des internGates
         let gatesData = parts[3].split('&').filter(data => data !== "");
         for(let i = 0; i < gatesData.length; i++) {
-            let data = gatesData[i].split('§');
-            customGate.internGates[i] = Basic[data[0]](0,0);
+            let gateParameters = gatesData[i].split('§')[0].split('@');
+            customGate.internGates[i] = Basic[gateParameters[0]](0,0);
+            customGate.internGates[i].parseParameters(gateParameters);
         }
 
         //Decodage des connexions
@@ -117,6 +118,7 @@ class CustomGate extends Gate {
                         : customGate.internGates[data[i] - customGate.maxInputs]);
             }
         }
+
         //Outputs
         for(let i = 0; i < outputsData.length; i++) {
             let data = outputsData[i].split('§').filter(data => data !== "");
@@ -137,7 +139,7 @@ class CustomGate extends Gate {
      * Format: Name;input_1&...&input_n;output_1&...&output_n;intern_1&...&intern_n
      * Input: Name
      * Output: Name§input_1_index§...§input_n_index
-     * InternGate: Type§input_1_index§...§input_n_index
+     * InternGate: Type@param_2@...@param_n§input_1_index§...§input_n_index
      */
     static serialize(name, inputNames, outputNames) {
 
@@ -252,7 +254,7 @@ class CustomGate extends Gate {
 
             if (!(gate instanceof Output) && !(gate instanceof Input)) {
 
-                data += gate.type + '§'; //name est toujours le type de la porte (sauf pour les custom)
+                data += gate.type + gate.serializeParameters() + '§';
                 for (let input of gate.inputs) {
                     if (input)
                         data += getIndex(input.destination) + '§';

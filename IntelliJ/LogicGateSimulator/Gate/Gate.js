@@ -118,6 +118,19 @@ class Gate {
         return this;
     }
 
+    /***
+     * Renvoie un string qui contient les caracteristique de la porte (la periode pour une clock par exemple)
+     */
+    serializeParameters() {
+        return "";
+    }
+
+    /***
+     * Applique les caracteristiques de la porte (Apellee dans CustomGate.parse)
+     */
+    parseParameters(parameters) {
+    }
+
     //Proprietes graphiques --------------------------------------------------------------------------------------------
 
     x = 10;

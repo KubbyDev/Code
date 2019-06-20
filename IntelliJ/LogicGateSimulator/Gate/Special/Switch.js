@@ -25,6 +25,14 @@ class Switch extends Gate {
         this.isOn = !this.isOn;
     }
 
+    serializeParameters() {
+        return "@" + (this.isOn ? "1" : "0");
+    }
+
+    parseParameters(parameters) {
+        this.isOn = parameters[1] === "1"; //0 est le type de la porte
+    }
+
     //Proprietes graphiques --------------------------------------------------------------------------------------------
 
     drawBody() {

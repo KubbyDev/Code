@@ -12,11 +12,11 @@ class Clock extends Gate {
 
     update() {
 
+        this.current--;
         if(this.current < 0) {
             this.current = this.period;
             this.tempOutput = !this.output;
         }
-        this.current--;
     }
 
     /***
@@ -69,4 +69,12 @@ class Clock extends Gate {
         return this;
     }
 
+    serializeParameters() {
+        return `@${this.period}@${this.current}`;
+    }
+
+    parseParameters(parameters) {
+        this.period = parameters[1]; //0 est le type de la porte
+        this.current = parameters[2];
+    }
 }

@@ -50,12 +50,12 @@ class Connection {
 
         //Dessine la connection
         ctx.beginPath();
-        ctx.lineWidth = Connection.WIDTH;
-        ctx.strokeStyle = this.getValue() ? Connection.UP_COLOR : Connection.DOWN_COLOR;
         ctx.moveTo(inputPosition[0], inputPosition[1]);
         for(let point of this.calculateIntermediates(this.destination.x, this.destination.y, this.origin.x, inputPosition[1]))
             ctx.lineTo(point[0], point[1]);
         ctx.lineTo(outputPosition[0], outputPosition[1]);
+        ctx.lineWidth = Connection.WIDTH;
+        ctx.strokeStyle = this.getValue() ? Connection.UP_COLOR : Connection.DOWN_COLOR;
         ctx.stroke();
         ctx.closePath();
     }
