@@ -8,10 +8,10 @@ function Piece(isWhite) {
 
 Piece.prototype.move = function (x, y) {
 
-    board.tiles[this.x][this.y] = undefined;
+    board.tiles[this.x][this.y].piece = undefined;
     this.x = x;
     this.y = y;
-    board.tiles[x][y] = this;
+    board.tiles[x][y].piece = this;
 };
 
 Piece.prototype.draw = function () {

@@ -16,19 +16,19 @@ Pawn.prototype.getPossibleMoves = function() {
     var moves = [];
 
     //Si il n'y a rien une case devant
-    if(board.isInBounds(this.x, this.y+(this.isWhite?1:-1)) && !board.tiles[this.x][this.y+(this.isWhite?1:-1)].piece) {
+    if(board.isInBounds(this.x, this.y+(this.isWhite?1:-1)) && !board.hasPieceAtPosition(this.x,this.y+(this.isWhite?1:-1))) {
 
         moves.push([this.x, this.y+(this.isWhite?1:-1)]);
 
         //Si il n'y a rien 2 cases devant et qu'on a jamais bouge
-        if(board.isInBounds(this.x, this.y+2*(this.isWhite?1:-1)) && !board.tiles[this.x][this.y+2*(this.isWhite?1:-1)].piece && !this.hasMoved)
+        if(board.isInBounds(this.x,this.y+2*(this.isWhite?1:-1)) && !board.hasPieceAtPosition(this.x,this.y+2*(this.isWhite?1:-1)) && !this.hasMoved)
             moves.push([this.x,this.y+2*(this.isWhite?1:-1)]);
     }
 
     //Si il y a un ennemi en diagonale
-    if(board.isInBounds(this.x+1, this.y+(this.isWhite?1:-1)) && board.tiles[this.x+1][this.y+(this.isWhite?1:-1)].piece)
+    if(board.isInBounds(this.x+1, this.y+(this.isWhite?1:-1)) && board.hasPieceAtPosition(this.x+1,this.y+(this.isWhite?1:-1),!this.isWhite))
         moves.push([this.x+1,this.y+(this.isWhite?1:-1)]);
-    if(board.isInBounds(this.x-1, this.y+(this.isWhite?1:-1)) && board.tiles[this.x-1][this.y+(this.isWhite?1:-1)].piece)
+    if(board.isInBounds(this.x-1, this.y+(this.isWhite?1:-1)) && board.hasPieceAtPosition(this.x-1,this.y+(this.isWhite?1:-1),!this.isWhite))
         moves.push([this.x-1,this.y+(this.isWhite?1:-1)]);
 
     return moves;

@@ -69,3 +69,18 @@ Board.prototype.addPiece = function (x,y,piece) {
     piece.y = y;
     board.tiles[x][y].piece = piece;
 };
+
+/**
+ * Regarde si il y a une piece de la team donnee a la position donnee
+ * Si aucune team n'est donnee on regarde n'importe quelle team
+ * @param x
+ * @param y
+ * @param isWhite
+ */
+Board.prototype.hasPieceAtPosition = function (x,y,isWhite) {
+
+    if(isWhite === undefined)
+        return board.tiles[x][y].piece;
+
+    return board.tiles[x][y].piece && board.tiles[x][y].piece.isWhite === isWhite;
+};

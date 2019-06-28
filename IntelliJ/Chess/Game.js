@@ -2,8 +2,9 @@
 var board = new Board();
 Init();
 var possibleMoves = [];
+var selectedPiece;
 var whiteTurn = true;
-setTimeout(updateDisplay, 0);
+setTimeout(updateDisplay, 500);
 
 //Traque la position de la souris sur le canvas
 var mouseX = 0;
@@ -15,8 +16,30 @@ document.addEventListener('mousemove', function(event) {
 
 //On Click
 document.addEventListener('click', function () {
-    possibleMoves = board.tiles[Math.floor(mouseX/100)][Math.floor(mouseY/100)].piece.getPossibleMoves();
+
+    //Recuperation de la tile sur laquelle l'utilisateur a clique
+    var selectedTile = board.tiles[Math.floor(mouseX/100)][Math.floor(mouseY/100)];
+
+    //Si on a clique sur un endroit ou on peut bouger et qu'on a une piece selectionnee on bouge
+    if(selectedPiece && possibleMoves.filter(function (p) { return p[0] === selectedTile.x && p[1] === selectedTile.y }).length > 0) {
+        selectedPiece.move(selectedTile.x, selectedTile.y);
+        possibleMoves = [];
+        selectedPiece = undefined;
+        whiteTurn = !whiteTurn;
+    }
+    //Si on clique sur une autre piece alliee on la selectionne
+    else if(selectedTile.piece && selectedTile.piece.isWhite === whiteTurn && selectedTile.piece !== selectedPiece) {
+        selectedPiece = selectedTile.piece;
+        possibleMoves = selectedPiece.getPossibleMoves();
+    }
+    //Sinon on annule la selection
+    else {
+        possibleMoves = [];
+        selectedPiece = undefined;
+    }
+
     updateDisplay();
+
 });
 
 function updateDisplay() {
