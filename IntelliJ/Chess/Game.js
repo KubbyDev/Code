@@ -1,7 +1,7 @@
 
 var board = new Board();
 Init();
-var possibleMoves = [];
+var allowedMoves = [];
 var selectedPiece;
 var whiteTurn = true;
 setTimeout(updateDisplay, 500);
@@ -21,20 +21,20 @@ document.addEventListener('click', function () {
     var selectedTile = board.tiles[Math.floor(mouseX/100)][Math.floor(mouseY/100)];
 
     //Si on a clique sur un endroit ou on peut bouger et qu'on a une piece selectionnee on bouge
-    if(selectedPiece && possibleMoves.filter(function (p) { return p[0] === selectedTile.x && p[1] === selectedTile.y }).length > 0) {
+    if(selectedPiece && allowedMoves.filter(function (p) { return p[0] === selectedTile.x && p[1] === selectedTile.y }).length > 0) {
         selectedPiece.move(selectedTile.x, selectedTile.y);
-        possibleMoves = [];
+        allowedMoves = [];
         selectedPiece = undefined;
         whiteTurn = !whiteTurn;
     }
     //Si on clique sur une autre piece alliee on la selectionne
     else if(selectedTile.piece && selectedTile.piece.isWhite === whiteTurn && selectedTile.piece !== selectedPiece) {
         selectedPiece = selectedTile.piece;
-        possibleMoves = selectedPiece.getPossibleMoves();
+        allowedMoves = selectedPiece.getAllowedMoves();
     }
     //Sinon on annule la selection
     else {
-        possibleMoves = [];
+        allowedMoves = [];
         selectedPiece = undefined;
     }
 
@@ -45,7 +45,11 @@ document.addEventListener('click', function () {
 function updateDisplay() {
 
     board.drawBackground();
-    board.drawPossible(possibleMoves);
+    board.drawPossible(allowedMoves);
+
+    if(board.isKingCheck(whiteTurn))
+        (whiteTurn ? board.whiteKing : board.blackKing).drawCheckIndicator();
+
     board.drawPieces();
 }
 

@@ -8,6 +8,12 @@ function Board() {
             this.tiles[x][y] = new Tile(x,y);
     }
 
+    this.pieces = [];
+    this.blackPieces = [];
+    this.whitePieces = [];
+    this.blackKing = undefined;
+    this.whiteKing = undefined;
+
     return this;
 }
 
@@ -67,9 +73,49 @@ Board.prototype.addPiece = function (x,y,piece) {
 
     piece.x = x;
     piece.y = y;
-    board.tiles[x][y].piece = piece;
+    this.tiles[x][y].piece = piece;
+
+    if(piece.isWhite) {
+        this.whitePieces.push(piece);
+        if(piece instanceof King)
+            this.whiteKing = piece;
+    }
+    else {
+        this.blackPieces.push(piece);
+        if(piece instanceof King)
+            this.blackKing = piece;
+    }
+    this.pieces.push(piece);
 };
 
+Board.prototype.killPiece = function (piece) {
+
+    Array.prototype.remove = function(value) {
+        return this.filter(function(e){
+            return e !== value;
+        });
+    };
+
+    this.whitePieces = this.whitePieces.remove(piece);
+    this.blackPieces = this.blackPieces.remove(piece);
+    this.pieces = this.pieces.remove(piece);
+};
+
+Board.prototype.isKingCheck = function (isWhite, toIgnore) {
+
+    var ennemies = (isWhite ? board.blackPieces : board.whitePieces).filter(function (e) { return e !== toIgnore });
+    for(var i = 0; i < ennemies.length; i++) {
+
+        var possibleMoves = ennemies[i].getPossibleMoves();
+        for(var y = 0; y < possibleMoves.length; y++) {
+
+            if(board.tiles[possibleMoves[y][0]][possibleMoves[y][1]].piece === (isWhite ? board.whiteKing : board.blackKing))
+                return true;
+        }
+    }
+
+    return false;
+};
 /**
  * Regarde si il y a une piece de la team donnee a la position donnee
  * Si aucune team n'est donnee on regarde n'importe quelle team
