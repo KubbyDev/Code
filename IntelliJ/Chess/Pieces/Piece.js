@@ -69,3 +69,29 @@ Piece.prototype.getAllowedMoves = function () {
 
     return moves;
 };
+
+Piece.prototype.drawIndicator = function (rIntensity, gIntensity, bIntensity) {
+
+    String.prototype.padLeft = function (length, character) {
+        var str = this;
+        while(str.length < length)
+            str = character + str;
+        return str;
+    };
+
+    function sqr(a) { return a*a; }
+
+    for(var y = -50; y < 50; y++) {
+        for(var x = -50; x < 50; x++) {
+            var intensity = Math.max(0, Math.min(1-(sqr(x)+sqr(y))/2500, 1));
+            ctx.globalAlpha = intensity;
+            ctx.fillStyle = "#"
+                + Math.floor(intensity*255*rIntensity).toString(16).padLeft(2, '0')
+                + Math.floor(intensity*255*gIntensity).toString(16).padLeft(2, '0')
+                + Math.floor(intensity*255*bIntensity).toString(16).padLeft(2, '0');
+            ctx.fillRect(this.x*100+50 + x, this.y*100+50 + y, 1, 1);
+        }
+    }
+
+    ctx.globalAlpha = 1;
+};

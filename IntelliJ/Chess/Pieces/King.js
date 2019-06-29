@@ -33,17 +33,5 @@ King.prototype.getPossibleMoves = function () {
 };
 
 King.prototype.drawCheckIndicator = function () {
-
-    function sqr(x) { return x*x; }
-
-    for(var y = -50; y < 50; y++) {
-        for(var x = -50; x < 50; x++) {
-            var intensity = Math.max(0, Math.min(1-(sqr(x)+sqr(y))/2500, 1));
-            ctx.globalAlpha = intensity;
-            ctx.fillStyle = "#" + Math.floor(intensity*255).toString(16) + "0000";
-            ctx.fillRect(this.x*100+50 + x, this.y*100+50 + y, 1, 1);
-        }
-    }
-
-    ctx.globalAlpha = 1;
+    this.drawIndicator(1,1,0);
 };

@@ -10,37 +10,46 @@ setTimeout(updateDisplay, 500);
 var mouseX = 0;
 var mouseY = 0;
 document.addEventListener('mousemove', function(event) {
-    mouseX = event.clientX - canvas.offsetLeft;
-    mouseY = event.clientY - canvas.offsetTop;
+    mouseX = event.clientX - canvas.getBoundingClientRect().left;
+    mouseY = event.clientY - canvas.getBoundingClientRect().top;
 });
 
 //On Click
-document.addEventListener('click', function () {
+document.addEventListener('click', clickEvent);
+function clickEvent() {
 
     //Recuperation de la tile sur laquelle l'utilisateur a clique
     var selectedTile = board.tiles[Math.floor(mouseX/100)][Math.floor(mouseY/100)];
 
     //Si on a clique sur un endroit ou on peut bouger et qu'on a une piece selectionnee on bouge
     if(selectedPiece && allowedMoves.filter(function (p) { return p[0] === selectedTile.x && p[1] === selectedTile.y }).length > 0) {
+
         selectedPiece.move(selectedTile.x, selectedTile.y);
         allowedMoves = [];
         selectedPiece = undefined;
         whiteTurn = !whiteTurn;
+
+        if(board.isKingCheck(whiteTurn) && (whiteTurn ? board.whiteKing : board.blackKing).getAllowedMoves().length === 0) {
+            checkMate(whiteTurn);
+            return;
+        }
     }
     //Si on clique sur une autre piece alliee on la selectionne
     else if(selectedTile.piece && selectedTile.piece.isWhite === whiteTurn && selectedTile.piece !== selectedPiece) {
+
         selectedPiece = selectedTile.piece;
         allowedMoves = selectedPiece.getAllowedMoves();
     }
     //Sinon on annule la selection
     else {
+
         allowedMoves = [];
         selectedPiece = undefined;
     }
 
     updateDisplay();
 
-});
+}
 
 function updateDisplay() {
 
@@ -50,6 +59,19 @@ function updateDisplay() {
     if(board.isKingCheck(whiteTurn))
         (whiteTurn ? board.whiteKing : board.blackKing).drawCheckIndicator();
 
+    if(selectedPiece)
+        selectedPiece.drawIndicator(0, 1, 0);
+
+    board.drawPieces();
+}
+
+function checkMate(winnerIsWhite) {
+
+    document.removeEventListener('click', clickEvent);
+
+    board.drawBackground();
+    board.drawPossible(allowedMoves);
+    (winnerIsWhite ? board.whiteKing : board.blackKing).drawIndicator(1,0,0);
     board.drawPieces();
 }
 
