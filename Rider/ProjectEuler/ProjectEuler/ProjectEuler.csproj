@@ -41,9 +41,15 @@
     <Compile Include="Launcher.cs" />
     <Compile Include="Programs\Argument.cs" />
     <Compile Include="Programs\Condition.cs" />
+    <Compile Include="Programs\Fibonacci\Main.cs" />
     <Compile Include="Programs\Multiples3And5\Main.cs" />
+    <Compile Include="Programs\PasscodeDerivation\Main.cs" />
     <Compile Include="Programs\PiCalculator\Main.cs" />
+    <Compile Include="Programs\SmoothTriNumbers\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Programs\PasscodeDerivation\data.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

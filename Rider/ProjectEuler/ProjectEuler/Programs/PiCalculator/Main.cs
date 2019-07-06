@@ -1,5 +1,6 @@
 using System;
 
+//Not from ProjectEuler but still fun
 namespace ProjectEuler.Programs.PiCalculator
 {
     // ReSharper disable once UnusedMember.Global
