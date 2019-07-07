@@ -12,7 +12,7 @@ namespace ProjectEuler.Programs.TotientMaximum
             double max = 0;
             long maxN = 0;
 
-            for (long i = 2; i < 1000; i++)
+            for (long i = 2; i < 10000; i++)
             {
                 double val = (double) i / Totient(i);
                 if (val > max)
@@ -38,22 +38,20 @@ namespace ProjectEuler.Programs.TotientMaximum
             return res;
         }
 
-        private static bool isRelativelyPrimeTo(this long a, long b) // a > b pour cet algo
+        private static bool isRelativelyPrimeTo(this long a, long b)
         {
-            //Pas besoin de gerer les negatifs pour cet algo
-            //if (a == 1 || b == 1) return true;  Pas besoin pour cet algo
-            
-            if (a % b == 0 || b % a == 0)
-                return false;
-
-            //De 2 a b-1 pour cet algo, sinon c'est Math.Min(a, b)-1
-            for (long i = 2; i < b; i++)
-            {
-                if (a % i == 0 && b % i == 0)
-                    return false;
+            return GCD(a, b) == 1;
+        }
+        
+        private static long GCD(long a, long b)
+        {
+            long t;
+            while(b != 0){
+                t = a;
+                a = b;
+                b = t%b;
             }
-
-            return true;
+            return a;
         }
     }
 }
