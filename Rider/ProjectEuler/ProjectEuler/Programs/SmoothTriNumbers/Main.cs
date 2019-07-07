@@ -8,7 +8,7 @@ namespace ProjectEuler.Programs.SmoothTriNumbers
      */
     
     // ReSharper disable once UnusedMember.Global
-    public class Main
+    public static class Main
     {
         // ReSharper disable once UnusedMember.Global
         public static void Run()

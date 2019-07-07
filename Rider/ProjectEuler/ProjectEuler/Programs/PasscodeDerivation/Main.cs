@@ -13,7 +13,8 @@ namespace ProjectEuler.Programs.PasscodeDerivation
      */
     
     // ReSharper disable once UnusedMember.Global
-    public class Main
+    [Done]
+    public static class Main
     {
         private static string filePath = "PasscodeDerivation/data.txt";
         

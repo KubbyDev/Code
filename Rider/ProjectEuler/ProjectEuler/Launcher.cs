@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ProjectEuler.Programs;
 
 namespace ProjectEuler
 {
@@ -18,13 +19,16 @@ namespace ProjectEuler
                 //Si ce n'est pas une classe qui s'appelle Main et qui est dans ProjectEuler.Programs.<name> on passe
                 if (!(program.IsClass && program.Name == "Main" && program.Namespace.Contains("ProjectEuler.Programs")))
                     continue;
-
+                
                 //Recupere la methode Run
                 MethodInfo runMethod = program.GetMethods()
                     .FirstOrDefault(method => method.Name == "Run" && method.IsPublic && method.IsStatic);
                 
-                if(runMethod != null)        //Prend la derniere partie du namespace
-                    programs.Add(new Program(program.Namespace.Substring(22), runMethod));
+                string programName = program.Namespace.Substring(22);
+                bool done = program.GetCustomAttributes(typeof(DoneAttribute), true).Length > 0;
+
+                if(runMethod != null)
+                    programs.Add(new Program(programName, runMethod, done));
             }
             
             string selected;
@@ -37,7 +41,7 @@ namespace ProjectEuler
             //Sinon on demande a l'utilisateur d'en choisir un
             else
             {
-                programs.ForEach(prog => Console.WriteLine(prog.Name));
+                programs.ForEach(prog => prog.Display());
                 
                 Console.WriteLine("\nWhat do you want to run ?");
                 selected = Console.ReadLine();
@@ -56,18 +60,32 @@ namespace ProjectEuler
 
         private class Program
         {
+            public readonly string Name;
             private MethodInfo RunMethod;
-            public string Name;
+            private bool Done;
 
-            public Program(string name, MethodInfo runMethod)
+            public Program(string name, MethodInfo runMethod, bool done = false)
             {
                 RunMethod = runMethod;
                 Name = name;
+                Done = done;
             }
 
             public void Run()
             {
                 RunMethod.Invoke(new object(), new object[0]);
+            }
+
+            public void Display()
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(Name);
+                
+                Console.SetCursorPosition(22, Console.CursorTop);
+                Console.Write("- ");
+                Console.ForegroundColor = Done ? ConsoleColor.Green : ConsoleColor.DarkRed; 
+                Console.WriteLine(Done ? "DONE" : "TODO");
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
     }

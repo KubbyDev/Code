@@ -41,11 +41,13 @@
     <Compile Include="Launcher.cs" />
     <Compile Include="Programs\Argument.cs" />
     <Compile Include="Programs\Condition.cs" />
+    <Compile Include="Programs\DoneAttribute.cs" />
     <Compile Include="Programs\Fibonacci\Main.cs" />
     <Compile Include="Programs\Multiples3And5\Main.cs" />
     <Compile Include="Programs\PasscodeDerivation\Main.cs" />
     <Compile Include="Programs\PiCalculator\Main.cs" />
     <Compile Include="Programs\SmoothTriNumbers\Main.cs" />
+    <Compile Include="Programs\TotientMaximum\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,8 @@ using System;
 namespace ProjectEuler.Programs.Multiples3And5
 {
     // ReSharper disable once UnusedMember.Global
-    public class Main
+    [Done]
+    public static class Main
     {
         // ReSharper disable once UnusedMember.Global
         public static void Run()
