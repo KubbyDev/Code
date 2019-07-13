@@ -4,7 +4,7 @@ namespace ProjectEuler.Programs
 {
     public static class Argument
     {
-        public static bool GetFromUser<T>(string name, out T arg, params Condition<T>[] conditions)
+        public static bool GetFromUser<T>(string name, out T arg, params Condition<T>[] conditions) where T : IConvertible
         {
             Console.Write(name + ": ");
             string userInput = Console.ReadLine();
