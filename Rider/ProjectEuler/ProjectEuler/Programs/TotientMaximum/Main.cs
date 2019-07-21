@@ -131,12 +131,16 @@ namespace ProjectEuler.Programs.TotientMaximum
                 if (n % i == 0)
                 {
                     //On l'ajoute a la liste
-                    n /= i;
                     res.Add(i);
+                    n /= i;
 
                     //Et on divise autant que possible
                     while (n % i == 0)
                         n /= i;
+
+                   //Ce programme marche alors qu'il n'est pas cense marcher
+                   //Avec ça je pense que c'est bon, mais j'ai pas teste
+                   //res.Add(n);
                 }
 
                 i++;

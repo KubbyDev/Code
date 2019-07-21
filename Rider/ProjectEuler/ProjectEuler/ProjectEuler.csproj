@@ -43,6 +43,8 @@
     <Compile Include="Programs\Condition.cs" />
     <Compile Include="Programs\DoneAttribute.cs" />
     <Compile Include="Programs\Fibonacci\Main.cs" />
+    <Compile Include="Programs\LargestPalindrome\Main.cs" />
+    <Compile Include="Programs\LargestPrimeFactor\Main.cs" />
     <Compile Include="Programs\Multiples3And5\Main.cs" />
     <Compile Include="Programs\PasscodeDerivation\Main.cs" />
     <Compile Include="Programs\PiCalculator\Main.cs" />
