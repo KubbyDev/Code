@@ -11,7 +11,7 @@ void pointers(int *pSeconds, int *pMinutes, int *pHours) {
     *pSeconds = *pSeconds % 60;
 }
 
-int main() {
+void test() {
 
     int seconds = 3900;
     int minutes;
@@ -19,6 +19,26 @@ int main() {
     pointers(&seconds, &minutes, &hours);
 
     printf("Hours: %d, Minutes: %d, Seconds: %d", hours, minutes, seconds);
+
+}
+
+void memoryAllocation() {
+
+    int* memoireAllouee = malloc(sizeof(int)); // Allocation de la mémoire
+    if (memoireAllouee == NULL)
+        exit(0);
+
+    // Utilisation de la mémoire
+    printf("Quel age avez-vous ? ");
+    scanf("%d", memoireAllouee);
+    printf("Vous avez %d ans\n", *memoireAllouee);
+
+    free(memoireAllouee); // Libération de mémoire
+}
+
+int main() {
+
+    memoryAllocation();
 
     return 0;
 }

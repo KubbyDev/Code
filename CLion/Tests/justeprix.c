@@ -8,7 +8,7 @@ int rnd(long min, long max) {
     return (rand() % (max - min + 1)) + min;
 }
 
-int ain() {
+int main2() {
 
     long toFind = rnd(0,50000);
     long guess = -1;

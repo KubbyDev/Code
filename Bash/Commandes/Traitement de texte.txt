@@ -1,0 +1,17 @@
+ls /etc | sort -r
+Affiche tous les fichiers de /etc en les triant en ordre decroissant (-r = reverse)
+
+uniq reading.txt
+supprime toutes les lignes adjacentes dupliquées dans reading.txt
+
+sort reading.txt | uniq
+trie avant de supprimer les lignes duppliquées du coup on supprime meme celles qui ne sont pas adjacentes
+
+wc test.txt
+Affiche le nombre de lignes, mots, et octets (-l, -w, -c pour en choisir un en particulier)
+
+grep searchedText test.txt
+recherche (-i: case insensitive)
+
+ls /somedir | grep '.txt$'
+Recherche tous les fichiers .txt dans /somedir
