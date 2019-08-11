@@ -3,5 +3,4 @@ project(Tests C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Tests justeprix.c)
-add_executable(Tests pointer.c tests.c tests.h)
+add_executable(Tests Pendu/pendu.c Pendu/pendu.h)
