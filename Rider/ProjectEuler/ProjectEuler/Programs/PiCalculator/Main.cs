@@ -21,6 +21,7 @@ namespace ProjectEuler.Programs.PiCalculator
             double sqr(double x) => x * x;
             for (long i = 1; i <= segments; i++)
             {
+                //Ouais ouais c'est de la merde mais c'est un test ok ?
                 double x = Math.Cos(2*Math.PI * ((double) i / segments)) /2;
                 double y = Math.Sin(2*Math.PI * ((double) i / segments)) /2;
 
