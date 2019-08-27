@@ -3,4 +3,4 @@ project(Tests C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Tests Pendu/pendu.c Pendu/pendu.h)
+add_executable(Tests ChainedList/Main.c ChainedList/ChainedList.c ChainedList/ChainedList.h)
