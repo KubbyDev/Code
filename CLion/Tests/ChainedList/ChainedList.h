@@ -5,9 +5,14 @@ typedef struct ChainedList ChainedList;
 typedef struct ChainedListElement ChainedListElement;
 
 ChainedList* chndlstEmpty();
+ChainedListElement* chndlstCreateElement(int value, ChainedListElement* next);
+ChainedListElement* getFirst(ChainedList* list);
+ChainedListElement* getNext(ChainedListElement* element);
 void chndlstInsertValue(ChainedListElement* afterElement, int value);
-void chndlstAddValue(ChainedList* list, int value);
+void chndlstAddValueAtBeginning(ChainedList* list, int value);
+void chndlstAddValueAtEnd(ChainedList* list, int value);
 void chndlstRemoveValue(ChainedListElement* elementBefore);
+void chndlstRemoveFirst(ChainedList* list);
 int chndlstLength(ChainedList* list);
 void chndlstDisplay(ChainedList* list);
 
