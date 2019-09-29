@@ -6,8 +6,8 @@
 SDL_Surface* screen;
 
 //Width and height of the screen in pixels
-int screenWidth = 600;
-int screenHeight = 320;
+int screenWidth = 1280;
+int screenHeight= 720;
 
 //Position of the top left corner of the screen in the real plane
 double startX = -1;
@@ -17,17 +17,45 @@ double startY; //Initialised in openFrame
 double width = 2;
 double height; //Initialised in openFrame
 
+//Zooms. newCenter is the position of the new center of the window in the screen plane
+void zoom(int newCenterX, int newCenterY, double zoomFactor) {
+    
+    zoomFactor = 1/zoomFactor; //Inverts the zoomFactor to make it zoom when it is >1
+
+    startX += ((double)newCenterX/screenWidth)*width //Position of the new center in real plane
+            - width/2 *zoomFactor;  //Position of the new top left corner in real plane
+    startY -= ((double)newCenterY/screenHeight)*height
+            - height/2 *zoomFactor;
+   
+    width *= zoomFactor;       
+    height *= zoomFactor;
+}
+
 //Returns 0 if the user closed the window and 1 otherwise
 //Updates the screen values (zooming/resizing)
 int updateEvents() {
     
-    SDL_Event event;
-    SDL_WaitEvent(&event);
-    switch(event.type) {
-        case SDL_QUIT: return 0;
+    int res = -1; 
+    while(res == -1) {
+    
+        SDL_Event event;
+        SDL_WaitEvent(&event);
+        switch(event.type) {
+            case SDL_QUIT: 
+                res = 0;
+                break;
+            case SDL_MOUSEBUTTONDOWN: 
+                zoom(
+                    event.button.x,
+                    event.button.y,
+                    event.button.button == SDL_BUTTON_LEFT ? 1/0.8 : 0.8
+                );
+                res = 1;
+                break;
+        }
     }
 
-    return 1;
+    return res;
 }
 
 //This function was shamelessly stolen from openclassrooms (I think he stole it too)

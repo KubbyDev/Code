@@ -4,8 +4,9 @@ int main() {
 
     openFrame();
 
-    while(updateEvents())
+    do {
         recalculateFrame();    
+    } while(updateEvents());
 
     closeFrame();    
 

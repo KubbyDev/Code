@@ -11,10 +11,10 @@ Color* calcPixel(int x, int y,
                  double width, double height) {
 
     double pixelValue = getPixelValue(
-        (double)x/w * width + startX,
-        (double)-y/h * height + startY
+        startX + (double)x/w * width,
+        startY - (double)y/h * height
     );
-    return simpleColoration(pixelValue);
+    return getColor(pixelValue);
 }
 
 //(x0, y0) is the position of the pixel in the real plane (not the screen plane)
@@ -34,7 +34,7 @@ double getPixelValue(double x0, double y0) {
 	i++;	
     }
 
-    return i/max_i;
+    return (double)i/max_i;
 }
 
 //----------
@@ -45,4 +45,8 @@ double getPixelValue(double x0, double y0) {
 //This function just uses the value and plugs in the green value
 Color* simpleColoration(double value) {
     return newColor(0, 255*value, 0);
+}
+
+Color* getColor(double value) {
+    return simpleColoration(value);
 }
