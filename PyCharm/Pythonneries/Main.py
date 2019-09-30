@@ -6,18 +6,6 @@ import random
 # # Algo Toolbox and "*Pythoneries*"
 # ## Lists
 
-# ### **<font color="blue">Exercise: Split List</font>**
-# Write a function that splits a list of length *n*, with *n* odd, into 3 parts:
-# - the elements of the first half of the list (without the middle one)
-# - the middle element
-# - the elements of the second half of the list (without the middle one)
-
-
-def splitlist(L):
-    # FIXME
-    pass
-
-
 # #### Pythonery
 # This can be simplified with *Python list slices*:
 # - `L[a:b]` is the sub list of `L` with elements from positions `a` to `b` (`b` excluded)
@@ -26,9 +14,8 @@ def splitlist(L):
 # - `L[-1]` is `L[len(L)-1]`
 
 
-def splitlist(L):
-    # FIXME
-    pass
+def splitlist(l):
+    return l[2:]
 
 
 L = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -51,8 +38,6 @@ def binarysearch(L, x, left, right):
     Returns:
         The position where x is or might be
     """
-
-    # FIXME
     pass
 
 
@@ -64,8 +49,10 @@ binarysearch(L, 0, 0, len(L))
 
 
 def listsearch(L, x):
-    # FIXME
-    pass
+    for i in range(len(L)):
+        if L[i] == x:
+            return i
+    return -1
 
 
 # #### Pythonery
@@ -74,8 +61,11 @@ def listsearch(L, x):
 
 
 def listsearch2(x, L):
-    # FIXME
-    pass
+    i = 0
+    n = len(L)
+    while i < n and L[i] != x:
+        i += 1
+    return -1 if i == n else i
 
 
 # ### **<font color="blue">Exercise: Build List &rarr; Build Matrix</font>**
@@ -88,8 +78,15 @@ def listsearch2(x, L):
 
 
 def buildlist(nb, val=None, alea=None):
-    # FIXME
-    pass
+    ret = []
+    for i in range(nb):
+        number = 0
+        if val:
+            number = val
+        if alea:
+            number = random.randint(alea[0], alea[1])
+        ret.append(number)
+    return ret
 
 
 # #### Pythonery
@@ -97,13 +94,12 @@ def buildlist(nb, val=None, alea=None):
 
 
 def buildlist(nb, val=None, alea=None):
-    # FIXME
-    pass
-
-
-def buildlist(nb, val=None, alea=None):
-    # FIXME
-    pass
+    if alea:
+        L = []
+        for i in range(nb):
+            L.append(random.randint(alea[0], alea[1]))
+        return L
+    return [val if val is not None else 0] * nb
 
 
 buildlist(5), buildlist(5, 0), buildlist(5, alea=(0, 10))
@@ -128,8 +124,12 @@ L
 
 
 def buildlist(nb, val=None, alea=None):
-    # FIXME
-    pass
+    if alea:
+        L = []
+        for i in range(nb):
+            L.append(random.randint(alea[0], alea[1]))
+        return L
+    return [val[:] if val is not None else 0] * nb
 
 
 # Use `buildlist` to build a (5*5) matrix filled with `None`, then change a value
@@ -151,8 +151,11 @@ M
 
 
 def buildmatrix(line, col, val=None):
-    # FIXME
-    pass
+    M = []
+    l = [val]*col
+    for i in range(line):
+        M.append(l[:])
+    return M
 
 
 M = buildmatrix(4, 5)
