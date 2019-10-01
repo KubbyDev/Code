@@ -2,7 +2,14 @@
 #define TESTS_NEURON_H
 
 typedef struct Neuron Neuron;
-float simulate(const Neuron* n, const float* inputs);
+struct Neuron {
+    float* weights;
+    float biais;
+    int nbWeight;
+};
+
+Neuron* newNeuron(int nbWeights);
+float simulate(Neuron* n, float* inputs);
 float activation(float x);
 
 #endif

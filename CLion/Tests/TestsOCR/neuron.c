@@ -1,12 +1,18 @@
+#include <stdlib.h>
 #include "neuron.h"
 
-struct Neuron {
-    float* weights;
-    float biais;
-    int nbWeight;
-};
+Neuron* newNeuron(int nbWeights) {
 
-float simulate(const Neuron* n, const float* inputs) {
+    //Allocates memory for the weights, the biais and the number of weights
+    //(All the fields in the Neuron struct)
+    Neuron* neuron = malloc(sizeof(float) *(nbWeights+1) + sizeof(int));
+
+    //TODO generate random weights and biais
+
+    return neuron;
+}
+
+float simulate(Neuron* n, float* inputs) {
     float sum = (*n).biais; //Adds the biais to the weighted sum
     //Sums all the inputs multiplied by the weights
     for(int i = 0; i < (*n).nbWeight; i++)
@@ -14,6 +20,7 @@ float simulate(const Neuron* n, const float* inputs) {
     return activation(sum);
 }
 
+/** The activation function: x < 0 => 0; x > 1 => 1; else: x */
 float activation(float x) {
     if(x > 1) return 1;
     if(x < 0) return 0;
