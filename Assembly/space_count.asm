@@ -1,23 +1,43 @@
-			org 		$4
-			
-Vector_001 	dc.l 		Main
+                ; ==============================
+                ; Vector Initialization
+                ; ==============================
+                
+                org         $4
 
-			org 		$500
-			
-Main 		movea.l 	#STRING,a0 		; A0 points to the string.
+vector_001      dc.l        Main
 
-SpaceCount 	clr 		d0
-Loop		tst.b 		(a0)			; Sets the N and Z flags for the character pointed by a0
-			beq			Done			; If char \0 is encountered, the operation is done
-			cmp.b		#' ',(a0)+      ; Checks if the character is a space and goes on to the next one
-			bne			NotASpace		; If the character is not a space, skips the special treatment
-			add.l 		#1,d0			; If the character is a space, increments the counter
-NotASpace	bra 		Loop
+                ; ==============================
+                ; Main Program
+                ; ==============================
 
-Done
-			
-			illegal
-			
-			org 		$550
-			
-STRING 		dc.b 		"This string contains 4 spaces.",0
+                org         $500
+
+Main            movea.l     #String1,a0
+                jsr         SpaceCount
+                movea.l     #String2,a0
+                jsr         SpaceCount
+
+                illegal
+
+                ; ==============================
+                ; Subroutines
+                ; ==============================
+
+SpaceCount      movem.l     d1/a0,-(a7) ; Save registers on the stack.
+                clr.l       d0
+\loop           move.b      (a0)+,d1
+                beq         \quit
+                cmp.b       #' ',d1
+                bne         \loop
+                addq.l      #1,d0
+                bra         \loop
+
+\quit           movem.l     (a7)+,d1/a0 ; Restore registers from the stack.
+                rts
+
+                ; ==============================
+                ; Data
+                ; ==============================
+
+String1         dc.b        "This string contains 4 spaces.",0
+String2         dc.b        "This one only 3.",0
