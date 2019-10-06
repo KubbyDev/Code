@@ -6,6 +6,7 @@
 typedef struct Network Network;
 struct Network {
     //All the neurons of the network. The layers are stored one after the other
+    //The input layer doesn't contain any neuron because it's just the input values
     Neuron** neurons;
     //The index of the first neuron of each layer.
     //firstNeuronIndices[1] is the index of the first neuron of the 2nd layer (the one just after the input layer)
@@ -19,7 +20,17 @@ struct Network {
 };
 
 Network* newNetwork(int* layerLengths, int nbLayers);
+
 float* getNetworkAnswer(Network* network, float* inputs);
+
+float* cost(Network* network, int nbExamples, float** inputs, float** labels);
+
+char* serialize(Network* network);
+
+void destroyNetwork(Network* network);
 int getLayerLength(Network* network, int layerIndex);
+int getOutputNumber(Network* network);
+int getInputNumber(Network* network);
+int getTotalNeurons(Network* network);
 
 #endif
