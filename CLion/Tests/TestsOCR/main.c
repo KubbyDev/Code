@@ -47,10 +47,11 @@ int main() {
 
     int layers[] = {2,2,2,1};
     Network* network = NULL;
+    int i = 0;
     do {
         if(network != NULL) destroyNetwork(network);
         network = newNetwork(layers, 4);
-    } while(xor_cost(network) > 0.1f);
+    } while(xor_cost(network) > 0.05f);
 
     printf("%s\n", serialize(network));
 

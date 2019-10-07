@@ -6,17 +6,23 @@
 // Building ------------------------------------------------------------------------------------------------------------
 
 /** Creates a new network with random weights and biaises
+ * <br> Warning, the layer lengths are just copied, don't forget to free them
  * @param nbLayers - Number of layers
  * @param layerLengths - Number of neurons in each layer (including input and output layers) */
 Network* newNetwork(int* layerLengths, int nbLayers) {
 
-    Network* network = malloc(sizeof(Neuron**) + sizeof(int*) *2 + sizeof(int));
+
+
+
+
+
+    Network* network = malloc(sizeof(Neuron**) + sizeof(int*)*2 + sizeof(int));
 
     //The index of the first neuron of each layer.
     //firstNeuronIndices[1] is the index of the first neuron of the 2nd layer (the one just after the input layer)
     //firstNeuronIndices[1] will always give 0 because the input layer doesn't contain any neuron.
     //firstNeuronIndices[0] will give -(the number of inputs)
-    int* firstNeuronIndices = malloc(sizeof(int) *nbLayers);
+    int* firstNeuronIndices = malloc(sizeof(int)*nbLayers);
     int lastIndex = -layerLengths[0]; //The index of the first neuron of the previous layer
     for (int i = 0; i < nbLayers; i++) {
         //Sets the index of the first neuron of the current layer and updates the lastIndex
@@ -28,12 +34,17 @@ Network* newNetwork(int* layerLengths, int nbLayers) {
     //So it's the number of neurons in the network, inputs excluded
     int nbNeurons = lastIndex;
 
+    //Copies the layer lengths in a new array
+    int* layerLengthsCopy = malloc(sizeof(int)*nbLayers);
+    for(int i = 0; i < nbLayers; i++)
+        layerLengthsCopy[i] = layerLengths[i];
+
     (*network).firstNeuronIndices = firstNeuronIndices;
-    (*network).layerLengths = layerLengths;
+    (*network).layerLengths = layerLengthsCopy;
     (*network).nbLayers = nbLayers;
 
     //Construction of the neurons
-    Neuron** neurons = malloc(sizeof(Neuron*) *nbNeurons);
+    Neuron** neurons = malloc(sizeof(Neuron*)*nbNeurons);
     //For each layer
     for (int layer = 1; layer < nbLayers; layer++) {
         //Precalculates the number of neurons of the layer, the number of neurons
@@ -58,7 +69,7 @@ Network* newNetwork(int* layerLengths, int nbLayers) {
  * <br> The length of the input array must be equal to getInputNumber(network) */
 float* getNetworkAnswer(Network* network, float* inputs) {
 
-    float** nextLayerInputs = &inputs; //Pointer to the input array of the next layer to simulate
+    float* nextLayerInputs = inputs; //Input array of the next layer to simulate
     float* outputs = NULL; //Array of outputs of the last layer simulated
 
     //For each layer
@@ -66,19 +77,19 @@ float* getNetworkAnswer(Network* network, float* inputs) {
 
         //Gets the length of the layer and allocates the memory for the output of the layer
         int layerLength = getLayerLength(network, layer);
-        outputs = malloc(sizeof(float) *layerLength);
+        outputs = malloc(sizeof(float)*layerLength);
 
         //For each neuron of the layer
         for(int neuronIndex = 0; neuronIndex < layerLength; neuronIndex++) {
 
             //Simulates the neuron and stores its answer
             Neuron* neuron = (*network).neurons[(*network).firstNeuronIndices[layer]+neuronIndex];
-            outputs[neuronIndex] = simulate(neuron, *nextLayerInputs);
+            outputs[neuronIndex] = simulate(neuron, nextLayerInputs);
         }
 
         //When the outputs are calculated, they become the inputs of the next layer
-        if(layer != 1) free(*nextLayerInputs); //The if avoids freeing the inputs array
-        nextLayerInputs = &outputs;
+        if(layer != 1) free(nextLayerInputs); //The if avoids freeing the inputs array
+        nextLayerInputs = outputs;
     }
 
     return outputs;
@@ -182,9 +193,11 @@ Network* parse(char* data) {
 // Tools ---------------------------------------------------------------------------------------------------------------
 
 void destroyNetwork(Network* network) {
+    free((*network).layerLengths);
+    free((*network).firstNeuronIndices);
     int totalNeurons = getTotalNeurons(network);
     for(int i = 0; i < totalNeurons; i++)
-        free((*network).neurons[i]);
+        destroyNeuron((*network).neurons[i]);
     free(network);
 }
 

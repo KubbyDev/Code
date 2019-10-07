@@ -16,25 +16,28 @@ Neuron* randomNeuron(int nbWeights) {
     Neuron* neuron = malloc(sizeof(float) + sizeof(float*) + sizeof(int));
 
     //Generates random weights and random biais
-    float* weights = malloc(sizeof(float) *nbWeights);
+    float* weights = malloc(sizeof(float)*nbWeights);
     for(int i = 0; i < nbWeights; i++)
         weights[i] = randomFloat(-1, 2) / (float) nbWeights;
 
-    (*neuron).weights = weights;
     (*neuron).biais = randomFloat(-1, 1);
+    (*neuron).weights = weights;
     (*neuron).nbWeights = nbWeights;
 
     return neuron;
 }
 
-/** Creates a new neuron with given biais and given weights */
+/** Creates a new neuron with given biais and given weights
+ * <br> Warning, the weights are just copied, don't forget to free them */
 Neuron* buildNeuron(float biais, int nbWeights, float* weights) {
 
     //Allocates memory for the weights, the biais and the number of weights
     //(All the fields in the Neuron struct)
-    Neuron* neuron = malloc(sizeof(float) + sizeof(float*) + sizeof(int));
+    Neuron* neuron = malloc(sizeof(float) + sizeof(float)*nbWeights + sizeof(int));
 
-    (*neuron).weights = weights;
+    for(int i = 0; i < nbWeights; i++)
+        (*neuron).weights[i] = weights[i];
+
     (*neuron).biais = biais;
     (*neuron).nbWeights = nbWeights;
 
@@ -56,4 +59,9 @@ float activation(float x) {
     if(x > 1) return 1;
     if(x < 0) return 0;
     return x;
+}
+
+void destroyNeuron(Neuron* neuron) {
+    free((*neuron).weights);
+    free(neuron);
 }

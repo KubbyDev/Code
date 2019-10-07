@@ -14,4 +14,6 @@ Neuron* buildNeuron(float biais, int nbWeights, float* weights);
 float simulate(Neuron* n, float* inputs);
 float activation(float x);
 
+void destroyNeuron(Neuron* neuron);
+
 #endif
