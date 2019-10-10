@@ -12,29 +12,18 @@ public class Main {
 
 	public static int slot = 4;
 	public static ArrayList<Example> trainExamples = ReadData.trainExamples();	
-	//public static ArrayList<Example> testExamples = ReadData.testExamples();	
+	public static ArrayList<Example> testExamples = ReadData.testExamples();	
 	
 	public static void main(String[] args) {
 		
-		BiologicalNetwork bn;
+		SimpleNetwork sn = new SimpleNetwork(784, 10);
 		
-		int[] i = {784,50,50,10};
+		sn.test(testExamples).display();
+		System.out.println("Training...");
+		sn.train(trainExamples, 20000);
+		sn.test(testExamples).display();
 		
-		if(BiologicalNetwork.exists(slot))
-			bn = new BiologicalNetwork(slot);
-		else
-			bn = new BiologicalNetwork(i);
-		
-		bn.test(trainExamples).display();
-		
-		for(int y = 0; y < 10; y++) {
-		
-			//bn.train(trainExamples, 10000, 5);
-			bn.test(trainExamples).display();
-		
-		}
-		
-        bn.save(slot);
+		sn.save(slot);
 		
 	}
 	

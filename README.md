@@ -12,10 +12,11 @@ A viewer of the mandelbrot set because I just love this thing. You can zoom/unzo
 A sort of library that can handle simple logic gates. It can generate logic gates based on a truth table, generate a truth table based on the gate, handle user created gates etc...
 
 ## NeuralNetwork (Java): 
-My very first attempt to make machine learning. It's probably not working now, but it was capable of recognizing 28x28 images representing digits with 8% errors (from the MNIST database)
+My very first attempt to make machine learning. It is capable of recognizing 28x28 images representing digits with 15% errors (from the MNIST database)
 
 ## Puissance4 (Java): 
-The program that was used for this project: https://www.youtube.com/watch?v=-Fhdys94Y70
+The program that was used for this project: https://www.youtube.com/watch?v=-Fhdys94Y70  
+It was modified a lot for other purposes so it doesn't work anymore.
 
 # In IntelliJ:
 

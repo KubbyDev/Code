@@ -8,12 +8,12 @@ public class Main {
 		
 		//Creation d'une porte qui sort toujours true
 		CustomGate alwaysT = new CustomGate("alwt", "or(i0,not(i0))");
-		System.out.println("Simulation de AlwaysTrue: true -> " + alwaysT.simulate(input1) + " | false: " + alwaysT.simulate(input2));
+		System.out.println("Simulation de AlwaysTrue: true: " + alwaysT.simulate(input1) + " | false: " + alwaysT.simulate(input2));
 		
 		//Creation d'une porte qui sort toujours le contraire de AlwaysT
 		CustomGate alwaysF = new CustomGate("alwf", "not(alwt(i0))");
 		alwaysF.addGateToMemory(alwaysT); //On ajoute AlwaysT a la memoire de AlwaysF pour qu'elle connaisse son circuit (plus pratique pour pouvoir la simuler)
-		System.out.println("Simulation de AlwaysFalse: true -> " + alwaysF.simulate(input1) + " | false: " + alwaysF.simulate(input2));
+		System.out.println("Simulation de AlwaysFalse: true: " + alwaysF.simulate(input1) + " | false: " + alwaysF.simulate(input2));
 		
 		//Creation d'une porte un peu plus complexe
 		CustomGate multiplex = new CustomGate("mux", "or(and(i0,i2),and(i1,not(i2)))");
@@ -25,14 +25,14 @@ public class Main {
 		multiplex.generateTruthTable();
 		disp(multiplex.getTruthTable());
 		
-		//On peut générer une porte en donnant une table de vérités
+		//On peut generer une porte en donnant une table de verites
 		boolean[][] truthT = {{false,false,false},{false,true,true},{true,false,true},{true,true,false}};
 		CustomGate c = new CustomGate("c", truthT, 1, true); //Genere une porte qui correspond a cette truth table avec un temps max de 10 sec et en utilisant uniquement les 3 portes de base (not, and, or)
 		System.out.println("\nTruth Table:");
 		disp(truthT);
 		System.out.println("\nCircuit correspondant: " + c.getCircuit());
 		
-		//On peut vérifier l'equivalence de 2 circuits
+		//On peut verifier l'equivalence de 2 circuits
 		CustomGate x = new CustomGate("x", "xor(i0,i1)");
 		x.generateTruthTable();
 		System.out.println("Circuits equivalent a xor(i0,i1) ? : " + x.isCircuitEquivalent(c.getCircuit()));
