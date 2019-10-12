@@ -101,6 +101,7 @@ alias vimrc='vim /home/kubby/.vimrc'
 alias bashrc='vim /home/kubby/.bashrc'
 alias zshrc="vim /home/kubby/.zshrc"
 alias rm='trash'
+alias reload='bash'
 
 # This function creates a new practical and does the base config
 createpractical() {
@@ -135,9 +136,20 @@ tp() {
 
 # Goes to the Assembly folder
 asm() {
+   
+
+    if [ $# -eq 0 ]
+    then
+        # No arguments provided: goes to the Assembly directory
+        cd /home/kubby/Code/Assembly/
+        ls
+    else
+        # Argument provided: creates a asm file with given name and initialises it
+        touch $1.asm
+        printf "                ; ==============================\n                ; Vector Initialization\n                ; ==============================\n\n                org         \$4\n\nVector_001      dc.l        Main\n\n                ; ==============================\n                ; Main Program\n                ; ==============================\n\n                org         \$500\n\nMain            \n\n                ; ==============================\n                ; Subroutines\n                ; ==============================\n\n\n\n                ; ==============================\n                ; Data\n                ; ==============================\n\n                org         \$700\n\n\n" > $1.asm
+        vim $1.asm
+    fi
     
-    cd /home/kubby/Code/Assembly/
-    ls
 
 }
 
@@ -145,8 +157,10 @@ asm() {
 c() {
 
     touch $1.h
-    uppercase=${1^^}
+    input=$1
+    uppercase=${input^^}
     printf "#ifndef ${uppercase}\n#define ${uppercase}\n\n    \n\n#endif" > $1.h
     vim $1.c
 
 }
+
