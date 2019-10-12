@@ -3,4 +3,4 @@ project(Tests C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Tests TestsOCR/neuron.c TestsOCR/network.c TestsOCR/main.c)
+add_executable(Tests TestsOCR/neuron.c TestsOCR/network.c TestsOCR/main.c TestsOCR/training_example.c TestsOCR/training_example.h)
