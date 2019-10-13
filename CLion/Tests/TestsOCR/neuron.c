@@ -58,28 +58,17 @@ float simulate(Neuron* n, float* inputs) {
     return (*n).lastA;
 }
 
+/** The activation function. The weighted sum passes through
+ * this function before becoming the output of the neuron */
 float activation(float x) {
     return 1.0f/(1.0f+expf(-x));
 }
 
+/** The derivative of the activation function (used by the learning algorithm) */
 float activation_prime(float x) {
     float eminusx = expf(-x);
     return eminusx/((1+eminusx)*(1+eminusx));
 }
-
-/* The activation function: x < 0 => 0; x > 1 => 1; else: x
-float activation(float x) {
-    if(x > 1) return 1;
-    if(x < 0) return 0;
-    return x;
-}
-
- The derivative of the activation function
-float activation_prime(float x) {
-    if(x > 1 || x < 0) return 0;
-    return 1;
-}
-*/
 
 void destroyNeuron(Neuron* neuron) {
     free((*neuron).weights);

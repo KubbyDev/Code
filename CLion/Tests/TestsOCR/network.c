@@ -136,6 +136,13 @@ void learn(Network* network, float eta, TrainingExample** examples, int nbExampl
     //deltaB[i] is the adjustment to make on the biais of the ith neuron
     float* deltaB = malloc(sizeof(float)*totalNeurons);
 
+    //Initialises all the deltas to 0
+    for(int i = 0; i < totalNeurons; i++) {
+        for(int j = 0; j < network->neurons[i]->nbWeights; j++)
+            deltaW[i][j] = 0;
+        deltaB[i] = 0;
+    }
+
     //Calculates the cost gradient for each example and sums all the adjustments to make (to do it only once)
     for(int exampleIndex = 0; exampleIndex < nbExamples; exampleIndex++) {
 
@@ -206,9 +213,20 @@ void getCostGradient(Network* network, TrainingExample* example, float** deltaW,
         deltas[i] = (neuron->lastA - example->label[i]) * activation_prime(neuron->lastZ);
     }
 
+    //Does the 4th step now for this layer so we don't have to store all the deltas
+    //Calculation of the gradient for the output layer
+    int outputLayerIndex = network->nbLayers-1;
+    int previousLayerLength = network->layerLengths[outputLayerIndex-1];
+    for(int neuronIndex = 0; neuronIndex < outputNumber; neuronIndex++) {
+        deltaB[firstOutputIndex + neuronIndex] = deltas[neuronIndex];
+        for (int weightIndex = 0; weightIndex < previousLayerLength; weightIndex++)
+            deltaW[firstOutputIndex + neuronIndex][weightIndex] = deltas[neuronIndex]
+                    * network->neurons[network->firstNeuronIndices[outputLayerIndex-1] + weightIndex]->lastA;
+    }
+
     //3rd step: get the deltas (error) for the all the hidden layers
 
-    //Calculates the deltas for each hidden layers(starts at the one before the output layer and ends at the one
+    //Calculates the deltas for each hidden layer (starts at the one before the output layer and ends at the one
     //before the input layer). The calculation is explained below
     for(int layerIndex = network->nbLayers-2; layerIndex >= 1; layerIndex--) {
 
@@ -245,8 +263,8 @@ void getCostGradient(Network* network, TrainingExample* example, float** deltaW,
 
         // 4th step: Calculate the gradient
 
-        //For the hidden layers first and inside the 3rd step loop so we can free the delta arrays
-        int previousLayerLength = network->layerLengths[layerIndex-1];
+        //Inside the 3rd step loop so we can free the delta arrays
+        previousLayerLength = network->layerLengths[layerIndex-1];
         for(int neuronIndex = 0; neuronIndex < layerLength; neuronIndex++) {
             //delta refers to the delta of the corresponding neuron
             //The biais components are given by: dC/db = delta
@@ -259,18 +277,10 @@ void getCostGradient(Network* network, TrainingExample* example, float** deltaW,
                             : example->inputs[weightIndex]);
         }
 
-        //TODO: free deltas
+        free(nextLayerDeltas);
     }
 
-    //Calculation of the gradient for the output layer
-    int outputLayerIndex = network->nbLayers-1;
-    int previousLayerLength = network->layerLengths[outputLayerIndex-1];
-    for(int neuronIndex = 0; neuronIndex < outputNumber; neuronIndex++) {
-        deltaB[firstOutputIndex + neuronIndex] = deltas[neuronIndex];
-        for (int weightIndex = 0; weightIndex < previousLayerLength; weightIndex++)
-            deltaW[firstOutputIndex + neuronIndex][weightIndex] = deltas[neuronIndex]
-                    * network->neurons[network->firstNeuronIndices[outputLayerIndex-1] + weightIndex]->lastA;
-    }
+    free(deltas);
 }
 
 // Serialization/Parsing -----------------------------------------------------------------------------------------------

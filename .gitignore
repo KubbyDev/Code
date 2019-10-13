@@ -6,6 +6,9 @@ C/OCR
 IntelliJ/LogicGateSimulator
 IntelliJ/OrbitalSimulator
 VisualStudio/ClientFTP
+**/Assembly/Given/
+
+
 Eclipse/.metadata/
 Eclipse/.recommenders/
 **/.idea/
@@ -14,7 +17,6 @@ Eclipse/.recommenders/
 CLion/Tests/Pendu/words\.txt___jb_old___
 *.stackdump
 **/SDL2
-**/Assembly/Given/
 
 
 ## Ignore Visual Studio temporary files, build results, and

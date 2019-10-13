@@ -56,7 +56,7 @@ void learn_xor(Network* network) {
     examples[2] = newTrainingExample(i3, l3);
     examples[3] = newTrainingExample(i4, l4);
 
-    learn(network, 0.5f, examples, 4);
+    learn(network, 1.0f, examples, 4);
 }
 
 int main() {
@@ -71,7 +71,7 @@ int main() {
     printf("Cost: %f\n\n", xor_cost(network));
 
     printf("Learning...\n\n");
-    for(int i = 0; i < 10000; i++)
+    for(int i = 0; i < 100000; i++)
         learn_xor(network);
 
     xor(network);
