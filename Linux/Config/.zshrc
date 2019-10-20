@@ -144,7 +144,7 @@ asm() {
         cd /home/kubby/Code/Assembly/
         ls
     else
-        # Argument provided: creates a asm file with given name and initialises it
+        # Argument provided: creates an asm file with given name and inis it
         touch $1.asm
         printf "                ; ==============================\n                ; Vector Initialization\n                ; ==============================\n\n                org         \$4\n\nVector_001      dc.l        Main\n\n                ; ==============================\n                ; Main Program\n                ; ==============================\n\n                org         \$500\n\nMain            \n\n                ; ==============================\n                ; Subroutines\n                ; ==============================\n\n\n\n                ; ==============================\n                ; Data\n                ; ==============================\n\n                org         \$700\n\n\n" > $1.asm
         vim $1.asm

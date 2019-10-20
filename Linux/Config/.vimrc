@@ -8,6 +8,8 @@
 " F4: Compile
 map <F4> <ESC> :w <CR> :call Compile(
 :function! Compile(...)
+    " Extension of the current file
+:   let ext = expand('%:e')
     " Compilation arguments ("" if nothing given)
 :   let arguments = a:0 >= 1 ? a:1 : ""
     " If compile.sh exists, executes it
@@ -15,17 +17,19 @@ map <F4> <ESC> :w <CR> :call Compile(
 :       execute '!./compile.sh ' arguments ' && echo "Compilation successfull"'
     " else run the standard compilation command
     " C
-:   elseif(&filetype == "c" || &filetype == "h")
-:       execute '!gcc -Wall -Wextra -Werror -std=c99 -O1 -o a.out *.[co] ' arguments ' && echo "Compilation successfull"'
+:   elseif(ext == "c" || ext == "h")
+:       execute '!gcc -Wall -Wextra -Werror -std=c99 -O1 -o a.out *.[co] -lm ' arguments ' && echo "Compilation successfull"'
     " Assembly
-:   elseif(&filetype == "asm")
+:   elseif(ext == "asm")
 :       !/home/kubby/68000/a68k % -o%:r.hex -s -n -rmal && echo "Compilation successfull"
 :   endif
 :endfunction
 
 " F5: Run
-map <F5> <ESC> :call Run(
+map <F5> <ESC> :w <CR> :call Run(
 :function! Run(...)
+    " Extension of the current file
+:   let ext = expand('%:e')
     " Arguments for the execution ("" if nothing given)
 :   let arguments = a:0 >= 1 ? a:1 : ""
     " If run.sh exists, executes it
@@ -33,19 +37,24 @@ map <F5> <ESC> :call Run(
 :       execute '!./run.sh ' arguments
     " else run the standard run command
     " C
-:   elseif((&filetype == "c" || &filetype == "h"))
+:   elseif((ext == "c" || ext == "h"))
 :       if(filereadable("a.out"))
-:           execute '!./a.out ' arguments ' & rm a.out'
+:           execute '!./a.out ' arguments ' && rm a.out'
 :       else
 :           !echo "Compiled file not found"
 :       endif
     " Assembly
-:   elseif(&filetype == "asm")
+:   elseif(ext == "asm")
 :       if(filereadable(expand("%:r") . ".hex"))
-:           silent !(/home/kubby/68000/d68k.sh %:r.hex && rm %:r.hex) &          
+:           silent !(/home/kubby/68000/d68k.sh %:r.hex && rm %:r.hex) & 
 :       else
 :           !echo "Compiled file not found"
 :       endif
+    " Bash scripts
+:   elseif(ext == "sh")
+:       execute '!bash ' expand('%:t') ' ' arguments
+:   elseif(ext == "py")
+:       execute '!python ' expand('%:t') ' ' arguments
 :   endif
 :endfunction
 
@@ -59,16 +68,17 @@ map <F8> <ESC> :w <CR> :call CompileRun() <CR>
 " F9: Debug
 map <F9> <ESC> :w <CR> :call Debug(
 :function! Debug(...)
+    " Extension of the current file
+:   let ext = expand('%:e')
     " Arguments for the execution ("" if nothing given)
 :   let runArgs = a:0 >= 1 ? a:1 : ""
     " Compilation arguments ("" if nothing given)
 :   let compArgs = a:0 >= 2 ? a:2 : ""
     " C
-:   if(&filetype == "c" || &filetype == "h")
-:       call Compile('-g '.compArgs)
-:       execute '!gdb --args ./a.out ' runArgs ' && rm ./a.out'
+:   if(ext == "c" || ext == "h")
+:       execute '!gcc -Wall -Wextra -Werror -std=c99 -O0 -o a.out *.[co] -lm -g ' compArgs ' && gdb --args ./a.out ' runArgs ' && rm ./a.out'
     " Assembly
-:   elseif(&filetype == "asm")
+:   elseif(ext == "asm")
 :       call Compile()
 :       call Run()
 :   endif
@@ -89,6 +99,10 @@ Plugin 'joshdick/onedark.vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'justinmk/vim-syntax-extra'
+Plugin 'vim-syntastic/syntastic'
+Plugin 'Raimondi/delimitMate'
+Plugin 'scrooloose/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
 
 call vundle#end()
 filetype plugin indent on
@@ -97,6 +111,19 @@ filetype plugin indent on
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" NERDtree
+map <F2> :NERDTreeToggle<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " ----------------------------------------------------------
 " Graphics and coloration
@@ -114,11 +141,18 @@ set mouse=a
 " Theme
 colorscheme onedark
 
+" Prevents line wrap
+set nowrap
+
 " Syntaxic coloration
 syntax on
 autocmd Filetype asm set syntax=asm68k
 autocmd Filetype c set syntax=c
 autocmd Filetype h set syntax=c
+
+" Highlights text that goes over 80 charaters in red
+highlight OverLength ctermfg=red guibg=#592929
+match OverLength /\%81v.\+/
 
 " Sets the background transparent
 hi Normal guibg=NONE ctermbg=NONE
