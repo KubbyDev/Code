@@ -1,6 +1,6 @@
-" ----------------------------------------------------------
+" ------------------------------------------------------------------------------
 " Compilation and running
-" ----------------------------------------------------------
+" ------------------------------------------------------------------------------
 
 " If you add compile.sh or run.sh files, dont forget to execute
 " this command: chmod +x run/compile.sh
@@ -84,9 +84,20 @@ map <F9> <ESC> :w <CR> :call Debug(
 :   endif
 :endfunction
 
-" ----------------------------------------------------------
+" ------------------------------------------------------------------------------
+" File specific things
+" ------------------------------------------------------------------------------
+
+let ext = expand('%:e')
+if(ext == "asm")
+    silent autocmd GUIEnter :SyntasticToggle <CR>
+elseif(ext == "c")
+    map <F6> <ESC> :w <CR> :silent !python ~/Code/Linux/Scripts/generate_header.py % <CR> <C-l>
+endif
+
+" ------------------------------------------------------------------------------
 " Plugins
-" ----------------------------------------------------------
+" ------------------------------------------------------------------------------
 
 set nocompatible
 filetype off
@@ -95,7 +106,7 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 " Plugin 'Valloric/YouCompleteMe'
-Plugin 'joshdick/onedark.vim'
+" Plugin 'joshdick/onedark.vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'justinmk/vim-syntax-extra'
@@ -103,6 +114,7 @@ Plugin 'vim-syntastic/syntastic'
 Plugin 'Raimondi/delimitMate'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim'}
 
 call vundle#end()
 filetype plugin indent on
@@ -125,21 +137,29 @@ let g:syntastic_check_on_wq = 0
 map <F2> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-" ----------------------------------------------------------
+" Powerline
+set laststatus=2
+
+" ------------------------------------------------------------------------------
 " Graphics and coloration
-" ----------------------------------------------------------
+" ------------------------------------------------------------------------------
 
 " Displays line numbers
 set number
+set cursorline
 
 " Forces the tabs to be made of spaces
 set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
+
+" Auto reloads the file if it's modified outside of vim
+set autoread
 
 " Enables mouse
 set mouse=a
 
 " Theme
-colorscheme onedark
+" colorscheme onedark
+colorscheme monokai
 
 " Prevents line wrap
 set nowrap
