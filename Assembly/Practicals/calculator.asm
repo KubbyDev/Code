@@ -12,9 +12,10 @@ Vector_001      dc.l        Main
 
                 org         $500
 
-Main            movea.l     #String3,a0
+Main            movea.l     #Empty,a0
+                move.l      #6578,d0
                 
-                jsr         NextOp 
+                jsr         Uitoa
 
                 illegal                
 
@@ -45,7 +46,7 @@ RemoveSpace     movem.l     a0/a1,-(a7)
 \quit           movem.l     (a7)+,a0/a1
                 rts
 
-; Returns true if at least one character in the string pointed by a0 is not a number
+
 ; Stores the result in the Z flag
 IsCharError     move.l     a0,-(a7)   
                 
@@ -124,17 +125,21 @@ StrLen          move.l      a0,-(a7) ; Save A0 on the stack.
 ; Sets the Z flag to 1 if there is no error, 0 if there is
 Convert         ; Checks if all the characters are digits
                 jsr         IsCharError
-                beq         \quit
+                beq         \false
 
                 ; Checks if the integer is less than the maximum
                 jsr         IsMaxError
-                beq         \quit
+                beq         \false
                 
                 jsr         Atoui
 
-                ; Inverts the Z flag
-\quit           eori.b      #%00000100,ccr
+                ; Return Z = 1 (no error).
+                ori.b       #%00000100,ccr
                 rts
+        
+                ; Return Z = 0 (error).
+\false          andi.b      #%11111011,ccr
+                rts 
 
 ; Returns the 16-bit unsigned integer represented by the string pointed by a0
 Atoui           movem.l     d1/a0,-(a7)
@@ -145,7 +150,7 @@ Atoui           movem.l     d1/a0,-(a7)
                 beq         \quit       ; If it encounters the \0 char, quits
             
                 ; If there is a number
-                mulu.w      #10,d0
+                mulu.w      #$A,d0
                 subi.b      #'0',d1
                 add.w       d1,d0
 
@@ -201,13 +206,124 @@ NextOp
                 bra         \loop
 
 \quit           rts
-               
+    
+; Gets the first number of the string pointed by a0 and moves a0 to the next
+; operator on this string (or the null terminator)           
+GetNum          movem.l     d1/a1/a2,-(a7)
+
+                movea.l     a0,a1       ; Saves the start of the string
+
+                jsr         NextOp      ; Gets the position of the op in a0
+
+                movea.l     a0,a2       ; Saves the position of the op
+
+                move.b      (a2),d1    ; Saves the char in the pos of the op
+                move.b      #0,(a2)     ; and places a null terminator instead
+                
+                movea.l     a1,a0       ; Gets back the start to get the number
+
+                jsr         Convert     ; Gets the number in d0 (and the Z flag)                
+
+                bne         \false
+
+\true           movea.l     a2,a0       ; Moves a0 to the pos of the next op                
+                move.b      d1,(a2)     ; Places back the op                
+                ori.b       #%00000100,ccr
+                bra         \quit
+
+\false          move.b      d1,(a2)     ; Places back the op
+                andi.b      #%111110111,ccr                
+                
+\quit           movem.l     (a7)+,d1/a1/a2
+                rts
+
+; Evaluates the string pointed by a0 and puts the result in d0
+; Does not respect operation priorities
+GetExpr         movem.l     d1/d2/a0,-(a7)
+
+                clr.l       d1
+
+                jsr         GetNum
+                move.l      d0,d1
+                bra         \nextNumber
+
+\loop           cmp.b       #'+',d2
+                beq         \addop
+                cmp.b       #'-',d2
+                beq         \subop
+                cmp.b       #'*',d2
+                beq         \mulop
+                cmp.b       #'/',d2
+                beq         \divop
+
+\nextNumber     tst.b       (a0)
+                beq         \true
+
+                ; Gets the next number and moves to the next operator
+                move.b      (a0),d2     ; Saves the operator
+                adda.l      #1,a0       ; Skips the operator
+                jsr         GetNum      ; Gets the number and moves to the op
+                bne         \false      ; Quits if there is a conversion problem
+                
+                bra         \loop
+
+\addop          add.w       d0,d1
+                bra         \nextNumber            
+\subop          sub.w       d0,d1
+                bra         \nextNumber
+\mulop          muls.w      d0,d1
+                bra         \nextNumber 
+\divop          tst.w       d0 
+                beq         \false
+                divs.w      d0,d1
+                bra         \nextNumber
+
+\false          andi.b      #%11111011,ccr                  
+                bra         \quit
+
+\true           move.l      d1,d0
+                ori.b       #%00000100,ccr
+
+\quit           movem.l     (a7)+,d1/d2/a0
+                rts
+
+Uitoa           movem.l     a0/d0/d1,-(a7)
+                clr.w       d1
+
+                ; The divu instruction puts the quotient in the 16 most
+                ; significant bits and the remainder in the other bits
+\loop           divu.w      #$A,d0
+                swap        d0               
+ 
+                ; Gets the remainder and puts it in the stack
+                move.w      d0,-(a7)                
+                addq.w      #1,d1
+
+                ; Gets the quotient to continue
+                swap        d0
+                andi.l      #$0000FFFF,d0               
+ 
+                ; If all the characters are processed
+                tst.w       d0
+                bne         \loop
+
+                ; Constructs the string
+\loop2          move.w      (a7)+,d0
+                add.b      #'0',d0
+                move.b      d0,(a0)+
+                subq.w      #1,d1
+                bne         \loop2
+
+                movem.l     (a7)+,a0/d0/d1
+                rts
+
                 ; ==============================
                 ; Data
                 ; ==============================
 
-                org         $700
+                org         $10000
 
 String1         dc.b        "32767",0
 String2         dc.b        "Ceci est un message",0
-String3         dc.b        "43+59",0
+String3         dc.b        "43+59-2/4*10",0
+Empty           dc.b        0,0,0,0,0,0,0,0,0,0
