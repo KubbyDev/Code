@@ -6,42 +6,45 @@
 /*
  * This class represents a boolean matrix
  * Each boolean uses only one bit of memory
- * The values are stored in a one line array of unsigned chars containing 8 booleans each (1 in each bit)
+ * The values are stored in a one line array of unsigned chars
+ * containing 8 booleans each (1 in each bit)
  */
 
 struct BooleanMatrix {
-    unsigned char* values;  //The values: unsigned chars containing 8 booleans each (1 in each bit)
+    unsigned char* values;  //The values: uchars 8 bools in each (1 in each bit)
     unsigned int sizeX;     //The size of the matrix (given at the construction)
     unsigned int sizeY;     //The size of the matrix (given at the construction)
     unsigned int bytesX;    //The allocated sizeX (in bytes)
 };
 
 /** Constructs a matrix containing sizeX * sizeY booleans */
-BooleanMatrix* newMatrix(unsigned int sizeX, unsigned int sizeY) {
+BooleanMatrix* bm_new(unsigned int sizeX, unsigned int sizeY) {
 
-    BooleanMatrix* matrix = malloc(sizeof(unsigned int)*3 + sizeof(unsigned char*));
+    BooleanMatrix* matrix = (BooleanMatrix*) malloc(
+            sizeof(unsigned int)*3 + sizeof(unsigned char*));
 
     //The number of bytes to allocate for each line
     unsigned int bytesX = (unsigned int)ceilf((float)sizeX/8);
 
-    matrix->values = malloc(sizeof(unsigned char) * bytesX * sizeY);
+    matrix->values = (unsigned char*) malloc(
+            sizeof(unsigned char) * bytesX * sizeY);
     matrix->sizeX = sizeX;
     matrix->sizeY = sizeY;
     matrix->bytesX = bytesX;
-    
+
     return matrix;
 }
 
 /** Frees all the memory used by the matrix */
-void destroyMatrix(BooleanMatrix* matrix) {
+void bm_destroy(BooleanMatrix* matrix) {
     free(matrix->values);
     free(matrix);
 }
 
-// Getters -------------------------------------------------------------------------------------------------------------
+// Getters ---------------------------------------------------------------------
 
 /** Returns the value at position (x (horizontal), y (vertical)) */
-int getValue(BooleanMatrix* matrix, unsigned int x, unsigned int y) {
+int bm_get(BooleanMatrix* matrix, unsigned int x, unsigned int y) {
 
     //Gets the byte containing the desired boolean
     unsigned char holder = matrix->values[y*(matrix->bytesX) + x/8];
@@ -54,22 +57,22 @@ int getValue(BooleanMatrix* matrix, unsigned int x, unsigned int y) {
     return res ? 1 : 0;
 }
 
-/** Returns the byte at position (x (horizontal), y (vertical)) 
+/** Returns the byte at position (x (horizontal), y (vertical))
  * This byte encodes the values from (x,y) to (x+8, y) */
-unsigned char getByte(BooleanMatrix* matrix, unsigned int x, unsigned int y) {
+unsigned char bm_getByte(BooleanMatrix* matrix, unsigned int x, unsigned int y) {
     return matrix->values[y*(matrix->bytesX) + x];
 }
 
 /** Returns the number of columns of the matrix */
-unsigned int getSizeX(BooleanMatrix* matrix) { return matrix->sizeX; }
+unsigned int bm_sizeX(BooleanMatrix* matrix) { return matrix->sizeX; }
 
 /** Returns the number of lines of the matrix */
-unsigned int getSizeY(BooleanMatrix* matrix) { return matrix->sizeY; }
+unsigned int bm_sizeY(BooleanMatrix* matrix) { return matrix->sizeY; }
 
-// Setters -------------------------------------------------------------------------------------------------------------
+// Setters ---------------------------------------------------------------------
 
-/** Sets the value at position (x (horizontal), y (vertical)) to the one in parameter */
-void setValue(BooleanMatrix* matrix, unsigned int x, unsigned int y, int booleanValue) {
+/** Sets the value at position (x, y) to the one in parameter */
+void bm_set(BooleanMatrix* matrix, unsigned int x, unsigned int y, int booleanValue) {
 
     //Gets a pointer to the byte containing the desired boolean
     unsigned char* holder = &(matrix->values[y*(matrix->bytesX) + x/8]);
@@ -79,21 +82,23 @@ void setValue(BooleanMatrix* matrix, unsigned int x, unsigned int y, int boolean
     mask = mask >> (unsigned char) (x%8);
 
     if(booleanValue) {
-        //If the desired boolean is true, does a bitwise or with 0s everywhere and 1 in the desired bit
+        //If the desired boolean is true, does a bitwise or
+        //with 0s everywhere and 1 in the desired bit
         *holder = *holder | mask;
     }
     else {
-        //If the desired boolean is false, does a bitwise and with 1s everywhere and 0 in the desired bit
+        //If the desired boolean is false, does a bitwise and
+        //with 1s everywhere and 0 in the desired bit
         mask = ~mask;
         *holder = *holder & mask;
     }
 }
 
 /** Fills the matrix with 0 (false) */
-void clear(BooleanMatrix* matrix) { fill(matrix, 0); }
+void bm_clear(BooleanMatrix* matrix) { fill(matrix, 0); }
 
 /** Fills the matrix with the desired value (0 -> false, != 0 -> true) */
-void fill(BooleanMatrix* matrix, int booleanValue) {
+void bm_fill(BooleanMatrix* matrix, int booleanValue) {
 
     unsigned char toFill = booleanValue ? 0xFF : 0x00;
 
