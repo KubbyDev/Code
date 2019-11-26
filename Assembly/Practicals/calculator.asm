@@ -12,10 +12,31 @@ Vector_001      dc.l        Main
 
                 org         $500
 
-Main            movea.l     #Empty,a0
-                move.l      #6578,d0
-                
-                jsr         Uitoa
+Main            ; Displays the first message
+                move.l      #0,d1
+                move.l      #0,d2
+                move.l      #PROMPT1,a0
+                jsr         Print
+
+                ; Gets the result of the operation
+                movea.l     #sBuffer,a0
+                clr.b       d1
+                move.l      #1,d2
+                move.l      #60000,d3
+                move.l      #8000,d4
+                jsr         GetInput
+                jsr         GetExpr
+
+                ; Displays the second message
+                move.l      #0,d1
+                move.l      #2,d2
+                move.l      #PROMPT2,a0
+                jsr         Print
+
+                ; Displays the result
+                move.l      #3,d2
+                jsr         Itoa
+                jsr         Print
 
                 illegal                
 
@@ -287,6 +308,22 @@ GetExpr         movem.l     d1/d2/a0,-(a7)
 \quit           movem.l     (a7)+,d1/d2/a0
                 rts
 
+GetExprOpPrio   
+
+
+\separateall    
+
+;\findblock      cmp.b       '+',(a0)
+ ;               bne         \blockfound
+  ;              cmp.b       '-',(a0)
+   ;             beq         \blockfound
+
+    ;            bra         \findblock                
+
+\blockfound     
+
+                
+
 Uitoa           movem.l     a0/d0/d1,-(a7)
                 clr.w       d1
 
@@ -309,21 +346,37 @@ Uitoa           movem.l     a0/d0/d1,-(a7)
 
                 ; Constructs the string
 \loop2          move.w      (a7)+,d0
-                add.b      #'0',d0
+                add.b       #'0',d0
                 move.b      d0,(a0)+
                 subq.w      #1,d1
                 bne         \loop2
 
+                move.b      #0,(a0)
+
                 movem.l     (a7)+,a0/d0/d1
                 rts
+
+; Converts a 16 bit signed 
+Itoa            movem.l     d0/a0,-(a7)
+
+                tst.w       d0
+                bpl         \positive                
+                
+                ; If the number is negative
+                neg         d0
+                move.b      #'-',(a0)+ 
+
+\positive       jsr         Uitoa
+
+                movem.l     (a7)+,a0/d0
+                rts
+
+GetInput        incbin      "../Given/GetInput.bin"
 
                 ; ==============================
                 ; Data
                 ; ==============================
 
-                org         $10000
-
-String1         dc.b        "32767",0
-String2         dc.b        "Ceci est un message",0
-String3         dc.b        "43+59-2/4*10",0
-Empty           dc.b        0,0,0,0,0,0,0,0,0,0
+PROMPT1         dc.b        "Enter an expression:",0
+PROMPT2         dc.b        "Result",0
+sBuffer         ds.b        60
