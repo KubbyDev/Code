@@ -13,14 +13,62 @@ Vector_001      dc.l        Main
 
                 org         $500
 
-Main            move.l      #20,d0
-                jsr         WhiteSquare
+Main            move.l      #VIDEO_START,a1
+                move.l      #Invader_Bitmap,a0
+                jsr         CopyBitmap
 
                 illegal
 
                 ; ==============================
                 ; Subroutines
                 ; ==============================
+
+; Copies a bitmap image at the specified location
+; A0 = bitmap address, A1 = destination
+CopyBitmap      movem.l     d3/d4/a0/a1,-(a7)
+                
+                move.w      WIDTH(a0),d3
+                jsr         PixelToByte
+
+                move.w      HEIGHT(a0),d4
+                subq.l      #1,d4
+
+                addq.l      #MATRIX,a0
+
+\loop           jsr         CopyLine
+                add.l       #BYTE_PER_LINE,a1
+                dbra        d4,\loop
+                
+                movem.l     (a7)+,d3/d4/a0/a1
+                rts
+
+; Copies a line at the specified location
+; A0 = source address, A1 = destination address, D3 = line width (bytes)
+; A0 holds the address of the next line after execution
+CopyLine        movem.l     a1/d1,-(a7)
+
+                move.l      d3,d1
+                subq.l      #1,d1
+\loop           move.b      (a0)+,(a1)+
+                dbra        d1,\loop
+
+                movem.l     (a7)+,a1/d1
+                rts
+
+; D3 := CEIL(D3/8)
+PixelToByte     divu.w      #8,d3
+                
+                swap        d3
+                tst.w       d3
+                beq         \multiple
+                
+                clr.w       d3
+                swap        d3
+                addq.w      #1,d3
+                rts
+
+\multiple       swap        d3
+                rts
 
 HLines          ; Save registers on the stack.
                 movem.l     d6/d7/a0,-(a7)
@@ -126,3 +174,24 @@ VIDEO_HEIGHT    equ         320 ; Height in pixels
 VIDEO_SIZE      equ         (VIDEO_WIDTH*VIDEO_HEIGHT/8) ; Size in bytes
 BYTE_PER_LINE   equ         (VIDEO_WIDTH/8) ; Number of bytes per line
 
+WIDTH           equ         0
+HEIGHT          equ         2
+MATRIX          equ         4
+
+Invader_Bitmap  dc.w        22,16
+                dc.b        %00001100,%00000000,%11000000
+                dc.b        %00001100,%00000000,%11000000
+                dc.b        %00000011,%00000011,%00000000
+                dc.b        %00000011,%00000011,%00000000
+                dc.b        %00001111,%11111111,%11000000
+                dc.b        %00001111,%11111111,%11000000
+                dc.b        %00001100,%11111100,%11000000
+                dc.b        %00001100,%11111100,%11000000
+                dc.b        %00111111,%11111111,%11110000
+                dc.b        %00111111,%11111111,%11110000
+                dc.b        %11001111,%11111111,%11001100
+                dc.b        %11001111,%11111111,%11001100
+                dc.b        %11001100,%00000000,%11001100
+                dc.b        %11001100,%00000000,%11001100
+                dc.b        %00000011,%11001111,%00000000
+                dc.b        %00000011,%11001111,%00000000
