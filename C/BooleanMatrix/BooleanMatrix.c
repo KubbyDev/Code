@@ -21,7 +21,7 @@ struct BooleanMatrix {
 BooleanMatrix* bm_new(unsigned int sizeX, unsigned int sizeY) {
 
     BooleanMatrix* matrix = (BooleanMatrix*) malloc(
-            sizeof(unsigned int)*3 + sizeof(unsigned char*));
+            sizeof(BooleanMatrix));
 
     //The number of bytes to allocate for each line
     unsigned int bytesX = (unsigned int)ceilf((float)sizeX/8);
@@ -57,10 +57,10 @@ int bm_get(BooleanMatrix* matrix, unsigned int x, unsigned int y) {
     return res ? 1 : 0;
 }
 
-/** Returns the byte at position (x (horizontal), y (vertical))
- * This byte encodes the values from (x,y) to (x+8, y) */
-unsigned char bm_getByte(BooleanMatrix* matrix, unsigned int x, unsigned int y) {
-    return matrix->values[y*(matrix->bytesX) + x];
+/** Returns the byte at position i in the buffer (x,y) = (i%width, i/width)
+ * This byte encodes the values from i to i+7 included */
+unsigned char bm_getByte(BooleanMatrix* matrix, unsigned int i) {
+    return matrix->values[i];
 }
 
 /** Returns the number of columns of the matrix */
@@ -68,6 +68,11 @@ unsigned int bm_sizeX(BooleanMatrix* matrix) { return matrix->sizeX; }
 
 /** Returns the number of lines of the matrix */
 unsigned int bm_sizeY(BooleanMatrix* matrix) { return matrix->sizeY; }
+
+/** Returns 1 if the given coordinates are in the matrix bounds, 0 otherwise */
+int bm_inBounds(BooleanMatrix* matrix, unsigned int x, unsigned int y) {
+    return x < matrix->sizeX && y < matrix->sizeY;
+}
 
 // Setters ---------------------------------------------------------------------
 
@@ -95,7 +100,7 @@ void bm_set(BooleanMatrix* matrix, unsigned int x, unsigned int y, int booleanVa
 }
 
 /** Fills the matrix with 0 (false) */
-void bm_clear(BooleanMatrix* matrix) { fill(matrix, 0); }
+void bm_clear(BooleanMatrix* matrix) { bm_fill(matrix, 0); }
 
 /** Fills the matrix with the desired value (0 -> false, != 0 -> true) */
 void bm_fill(BooleanMatrix* matrix, int booleanValue) {
