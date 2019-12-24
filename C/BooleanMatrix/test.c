@@ -4,14 +4,14 @@
 
 int main() {
 
-    BooleanMatrix* matrix = newMatrix(20, 20);
-    fill(matrix, 1);
+    BooleanMatrix* matrix = bm_new(20, 20);
+    bm_fill(matrix, 1);
 
-    setValue(matrix, 18, 18, 0);
+    bm_set(matrix, 18, 18, 0);
 
-    for(unsigned int y = 0; y < getSizeY(matrix); y++) {
-        for(unsigned int x = 0; x < getSizeX(matrix); x++)
-            printf("%i ", getValue(matrix, x, y));
+    for(unsigned int y = 0; y < bm_sizeY(matrix); y++) {
+        for(unsigned int x = 0; x < bm_sizeX(matrix); x++)
+            printf("%i ", bm_get(matrix, x, y));
         printf("\n");
     }
 
