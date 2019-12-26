@@ -13,7 +13,7 @@ I have done a much better simulator since, in its own repository: [https://githu
 
 ## Puissance4 (Java): 
 The program that was used for this project:
-![Puissance4](https://i.ibb.co/2NBbK0b/https-i-ytimg-com-vi-Fhdys94-Y70-maxresdefault.jpg)(https://www.youtube.com/watch?v=-Fhdys94Y70 "Puissance4")  
+[![Puissance4](https://i.ibb.co/2NBbK0b/https-i-ytimg-com-vi-Fhdys94-Y70-maxresdefault.jpg)](https://www.youtube.com/watch?v=-Fhdys94Y70 "Puissance4")  
 It was modified a lot for other purposes so it doesn't work anymore.
 
 ## NeuralNetwork (Java): 
