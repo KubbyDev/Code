@@ -19,6 +19,9 @@ map <F4> <ESC> :w <CR> :call Compile(
     " C
 :   elseif(ext == "c" || ext == "h")
 :       execute '!gcc -Wall -Wextra -Werror -std=c99 -O1 -o a.out *.[co] -lm ' arguments ' && echo "Compilation successfull"'
+    " Cpp
+:   elseif(ext == "cpp")
+:       execute '!g++ -Wall -Wextra -Werror -O1 -o a.out *.(cpp|o) -lm ' arguments ' && echo "Compilation successfull"'
     " Assembly
 :   elseif(ext == "asm")
 :       !/home/kubby/68000/a68k % -o%:r.hex -s -n -rmal && echo "Compilation successfull"
@@ -37,7 +40,7 @@ map <F5> <ESC> :w <CR> :call Run(
 :       execute '!./run.sh ' arguments
     " else run the standard run command
     " C
-:   elseif((ext == "c" || ext == "h"))
+:   elseif(ext == "c" || ext == "h" || ext == "cpp")
 :       if(filereadable("a.out"))
 :           execute '!./a.out ' arguments ' && rm a.out'
 :       else
@@ -46,7 +49,7 @@ map <F5> <ESC> :w <CR> :call Run(
     " Assembly
 :   elseif(ext == "asm")
 :       if(filereadable(expand("%:r") . ".hex"))
-:           silent !(/home/kubby/68000/d68k.sh %:r.hex && rm %:r.hex) & 
+:           silent !(/home/kubby/68000/d68k.sh %:r.hex && rm %:r.hex) &
 :       else
 :           !echo "Compiled file not found"
 :       endif
@@ -77,23 +80,15 @@ map <F9> <ESC> :w <CR> :call Debug(
     " C
 :   if(ext == "c" || ext == "h")
 :       execute '!gcc -Wall -Wextra -Werror -std=c99 -O0 -o a.out *.[co] -lm -g ' compArgs ' && gdb --args ./a.out ' runArgs ' && rm ./a.out'
+    " Cpp
+:   elseif(ext == "cpp")
+:       execute '!g++ -Wall -Wextra -Werror -O0 -o a.out *.(cpp|o) -lm -g ' compArgs ' && gdb --args ./a.out ' runArgs ' && rm ./a.out'
     " Assembly
 :   elseif(ext == "asm")
 :       call Compile()
 :       call Run()
 :   endif
 :endfunction
-
-" ------------------------------------------------------------------------------
-" File specific things
-" ------------------------------------------------------------------------------
-
-let ext = expand('%:e')
-if(ext == "asm")
-    silent autocmd GUIEnter :SyntasticToggle <CR>
-elseif(ext == "c")
-    map <F6> <ESC> :w <CR> :silent !python ~/Code/Linux/Scripts/generate_header.py % <CR> <C-l>
-endif
 
 " ------------------------------------------------------------------------------
 " Plugins
@@ -114,6 +109,7 @@ Plugin 'vim-syntastic/syntastic'
 Plugin 'Raimondi/delimitMate'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim'}
 
 call vundle#end()
@@ -139,6 +135,29 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 
 " Powerline
 set laststatus=2
+
+" Better Whitespace
+function EnableWSClean()
+   function WhiteSpaceClean(timer)
+        silent StripWhitespace
+   endfunction
+   let timer = timer_start(5000, 'WhiteSpaceClean', {'repeat': -1})
+endfunction
+
+" ------------------------------------------------------------------------------
+" File specific things
+" ------------------------------------------------------------------------------
+
+let ext = expand('%:e')
+if(ext == "asm")
+    silent autocmd GUIEnter :SyntasticToggle <CR>
+    call EnableWSClean()
+elseif(ext == "c" || ext == "cpp")
+    map <F6> <ESC> :w <CR> :silent !python ~/Code/Linux/Scripts/generate_header.py % <CR> <C-l>
+    call EnableWSClean()
+elseif(ext == "h")
+    call EnableWSClean()
+endif
 
 " ------------------------------------------------------------------------------
 " Graphics and coloration

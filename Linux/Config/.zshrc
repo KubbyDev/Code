@@ -3,6 +3,9 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/kubby/.oh-my-zsh"
+export LANGUAGE=fr_FR.UTF-8
+export LANG=fr_FR.UTF-8
+export LC_ALL=fr_FR.UTF-8
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -94,6 +97,9 @@ source $ZSH/oh-my-zsh.sh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
 # Aliases
 alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="mate ~/.oh-my-zsh"
@@ -102,6 +108,8 @@ alias bashrc='vim /home/kubby/.bashrc'
 alias zshrc="vim /home/kubby/.zshrc"
 alias rm='trash'
 alias reload='bash'
+alias ocr="cd ~/Code/C/OCR"
+alias apt="sudo apt-get install"
 
 # This function creates a new practical and does the base config
 createpractical() {
@@ -118,11 +126,15 @@ createpractical() {
 # Git commits and pushes
 commit() {
 
-    git add *
+    git add .
     git status
-    git commit -m $1
-    git push
 
+    read "response?Commit ? [Y/n] "
+    response=${response:l} #tolower
+    if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
+        git commit -m $1
+        git push
+    fi
 }
 
 # Goes the the folder of the nth tp
@@ -141,13 +153,17 @@ asm() {
     if [ $# -eq 0 ]
     then
         # No arguments provided: goes to the Assembly directory
-        cd /home/kubby/Code/Assembly/
+        cd ~/Code/Assembly/
         ls
     else
-        # Argument provided: creates an asm file with given name and inis it
-        touch $1.asm
-        printf "                ; ==============================\n                ; Vector Initialization\n                ; ==============================\n\n                org         \$4\n\nVector_001      dc.l        Main\n\n                ; ==============================\n                ; Main Program\n                ; ==============================\n\n                org         \$500\n\nMain            \n\n                ; ==============================\n                ; Subroutines\n                ; ==============================\n\n\n\n                ; ==============================\n                ; Data\n                ; ==============================\n\n                org         \$700\n\n\n" > $1.asm
-        vim $1.asm
+        if ! test -f "$1.asm"; then
+            # Argument provided: creates an asm file with given name and inits it
+            touch $1.asm
+            printf "                ; ==============================\n                ; Vector Initialization\n                ; ==============================\n\n                org         \$4\n\nVector_001      dc.l        Main\n\n                ; ==============================\n                ; Main Program\n                ; ==============================\n\n                org         \$500\n\nMain            \n\n                ; ==============================\n                ; Subroutines\n                ; ==============================\n\n\n\n                ; ==============================\n                ; Data\n                ; ==============================\n\n                org         \$700\n\n\n" >> $1.asm
+            vim $1.asm
+        else
+            vim $1.asm
+        fi
     fi
     
 
@@ -163,4 +179,3 @@ c() {
     vim $1.c
 
 }
-
