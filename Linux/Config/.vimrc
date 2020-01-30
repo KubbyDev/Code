@@ -20,7 +20,7 @@ map <F4> <ESC> :w <CR> :call Compile(
 :   elseif(ext == "c" || ext == "h")
 :       execute '!gcc -Wall -Wextra -Werror -std=c99 -O1 -o a.out *.[co] -lm ' arguments ' && echo "Compilation successfull"'
     " Cpp
-:   elseif(ext == "cpp")
+:   elseif(ext == "cpp" || ext == "hh")
 :       execute '!g++ -Wall -Wextra -Werror -O1 -o a.out *.(cpp|o) -lm ' arguments ' && echo "Compilation successfull"'
     " Assembly
 :   elseif(ext == "asm")
@@ -40,7 +40,7 @@ map <F5> <ESC> :w <CR> :call Run(
 :       execute '!./run.sh ' arguments
     " else run the standard run command
     " C
-:   elseif(ext == "c" || ext == "h" || ext == "cpp")
+:   elseif(ext == "c" || ext == "h" || ext == "cpp" || ext == "hh")
 :       if(filereadable("a.out"))
 :           execute '!./a.out ' arguments ' && rm a.out'
 :       else
@@ -81,7 +81,7 @@ map <F9> <ESC> :w <CR> :call Debug(
 :   if(ext == "c" || ext == "h")
 :       execute '!gcc -Wall -Wextra -Werror -std=c99 -O0 -o a.out *.[co] -lm -g ' compArgs ' && gdb --args ./a.out ' runArgs ' && rm ./a.out'
     " Cpp
-:   elseif(ext == "cpp")
+:   elseif(ext == "cpp" || ext == "hh")
 :       execute '!g++ -Wall -Wextra -Werror -O0 -o a.out *.(cpp|o) -lm -g ' compArgs ' && gdb --args ./a.out ' runArgs ' && rm ./a.out'
     " Assembly
 :   elseif(ext == "asm")
@@ -137,11 +137,16 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 set laststatus=2
 
 " Better Whitespace
+let g:better_whitespace_enabled=0 " Disables highlighting
+let g:strip_whitespace_on_save=0
 function EnableWSClean()
-   function WhiteSpaceClean(timer)
-        silent StripWhitespace
-   endfunction
-   let timer = timer_start(5000, 'WhiteSpaceClean', {'repeat': -1})
+"    function WhiteSpaceClean(timer)
+"        silent call StripWhitespace(0,2)
+"    endfunction
+"    let timer = timer_start(5000, 'WhiteSpaceClean', {'repeat': -1})
+    let g:strip_whitespace_on_save=1
+    let g:strip_whitelines_at_eof=1
+    let g:strip_whitespace_confirm=0
 endfunction
 
 " ------------------------------------------------------------------------------

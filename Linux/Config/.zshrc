@@ -109,7 +109,6 @@ alias zshrc="vim /home/kubby/.zshrc"
 alias rm='trash'
 alias reload='bash'
 alias ocr="cd ~/Code/C/OCR"
-alias apt="sudo apt-get install"
 
 # This function creates a new practical and does the base config
 createpractical() {
