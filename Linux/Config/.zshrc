@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/kubby/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 export LANGUAGE=fr_FR.UTF-8
 export LANG=fr_FR.UTF-8
 export LC_ALL=fr_FR.UTF-8
@@ -101,19 +101,19 @@ export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 # Aliases
-alias zshconfig="mate ~/.zshrc"
-alias ohmyzsh="mate ~/.oh-my-zsh"
-alias vimrc='vim /home/kubby/.vimrc'
-alias bashrc='vim /home/kubby/.bashrc'
-alias zshrc="vim /home/kubby/.zshrc"
+alias zshconfig="mate $HOME/.zshrc"
+alias ohmyzsh="mate $HOME/.oh-my-zsh"
+alias vimrc="vim $HOME/.vimrc"
+alias bashrc="vim $HOME/.bashrc"
+alias zshrc="vim $HOME/.zshrc"
 alias rm='trash'
 alias reload='bash'
-alias ocr="cd ~/Code/C/OCR"
+alias ocr="cd $HOME/Code/C/OCR"
 
 # This function creates a new practical and does the base config
 createpractical() {
 
-    cd /home/kubby/Code/C/TP_Prog
+    cd $HOME/Code/C/TP_Prog
     git clone git@git.cri.epita.net:p/2023-s3-tp/tp0$1-gabriel.jorge
 
     cd tp0$1-gabriel.jorge
@@ -139,7 +139,7 @@ commit() {
 # Goes the the folder of the nth tp
 tp() {
     
-    cd /home/kubby/Code/C/TP_Prog/tp0$1-gabriel.jorge
+    cd $HOME/Code/C/TP_Prog/tp0$1-gabriel.jorge
     cd *
     ls
 
