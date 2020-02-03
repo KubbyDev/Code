@@ -3,7 +3,7 @@
 
 #include "Frame.h"
 
-Frame* initFrame(int width, int height, int additionnalDataCount);
+Frame* initFrame(int width, int height, int posx, int posy, int additionnalDataCount);
 unsigned char* updateFrame(Frame* frame);
 void zoom(Frame* frame, int newCenterX, int newCenterY, float zoomFactor);
 void destroyFrame(Frame* frame);

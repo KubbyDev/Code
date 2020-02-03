@@ -2,6 +2,9 @@
 #define FRAME_H
 
 typedef struct {
+    // Position of the top left corner of the frame in the window
+    int xPixels;
+    int yPixels;
     // Width and height of the window in pixels
     int widthPixels;
     int heightPixels;

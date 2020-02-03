@@ -3,11 +3,13 @@
 #include "Frame.h"
 #include "Config.h"
 
-Frame* initFrame(int width, int height, int additionnalDataCount) {
+Frame* initFrame(int width, int height, int posx, int posy, int additionnalDataCount) {
 
     Frame* frame;
     cudaMallocManaged(&frame, sizeof(Frame));
 
+    frame->xPixels = posx;
+    frame->yPixels = posy;
     frame->widthPixels = width;
     frame->heightPixels = height;
     frame->width = 2;

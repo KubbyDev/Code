@@ -1,8 +1,7 @@
 #ifndef WINDOW_MANAGER_H
 #define WINDOW_MANAGER_H
 
-int updateEvents();
-void updateWindow();
+int updateWindow();
 void openWindow();
 void closeWindow();
 
