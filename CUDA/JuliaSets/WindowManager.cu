@@ -59,45 +59,47 @@ int updateEvents() {
             switch(event.type) {
 
                 case SDL_QUIT:
-                   res = 0;
+                    res = 0;
                     break;
 
                 case SDL_MOUSEBUTTONDOWN:
+                    int mainFocused = event.button.x <= mainFrame->widthPixels;
                     zoom(
-                        mainFrame,
-                        event.button.x,
+                        mainFocused ? mainFrame : secFrame,
+                        event.button.x - (mainFocused ? 0 : mainFrame->widthPixels),
                         event.button.y,
                         event.button.button ==
                             SDL_BUTTON_LEFT ? ZOOM_STRENGTH : 1.0/ZOOM_STRENGTH
                     );
+
                     res = 1;
                     break;
-
-                default: ;
             }
         }
 
-        int x;
-        int y;
-        SDL_GetMouseState(&x, &y);
+        int mouseX;
+        int mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
 
-        unsigned char* pixels = updateFrame(secFrame);
+        if(mouseX <= mainFrame->widthPixels) {
 
-        for(int y = 0; y < secFrame->heightPixels; y++)
-            for(int x = 0; x < secFrame->widthPixels; x++)
-                setPixel(window, x+(mainFrame->widthPixels), y, SDL_MapRGB(
-                            window->format,
-                            0,
-                            pixels[y*(secFrame->widthPixels)+x],
-                            0));
+            unsigned char* pixels = updateFrame(secFrame);
 
-        secFrame->additionnalData[0] = mainFrame->topLeftX + (float)x/(mainFrame->widthPixels) * mainFrame->width;
-        secFrame->additionnalData[1] = mainFrame->topLeftY - (float)y/(mainFrame->heightPixels) * mainFrame->height;
+            for(int y = 0; y < secFrame->heightPixels; y++)
+                for(int x = 0; x < secFrame->widthPixels; x++)
+                    setPixel(window, x+(mainFrame->widthPixels), y, SDL_MapRGB(
+                                window->format,
+                                0,
+                                 pixels[y*(secFrame->widthPixels)+x],
+                                0));
 
-        SDL_Flip(window);
+            secFrame->additionnalData[0] = mainFrame->topLeftX + (float)mouseX/(mainFrame->widthPixels) * mainFrame->width;
+            secFrame->additionnalData[1] = mainFrame->topLeftY - (float)mouseY/(mainFrame->heightPixels) * mainFrame->height;
 
-        cudaFree(pixels);
+            SDL_Flip(window);
 
+            cudaFree(pixels);
+        }
     }
 
     return res;

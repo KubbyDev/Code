@@ -7,7 +7,7 @@ __device__
 inline float getMandelbrotValue(float x0, float y0) {
 
     //This value can be seen as the clearness of the drawing
-    int max_i = ITERATIONS_THRESHOLD;
+    int max_i = MANDELBROT_ITERATIONS_THRESHOLD;
 
     float x = 0, y = 0;
     int i = 0;
@@ -29,11 +29,11 @@ __device__
 inline float getJuliaValue(float x0, float y0, float cx, float cy) {
 
     //This value can be seen as the clearness of the drawing
-    int max_i = ITERATIONS_THRESHOLD;
+    int max_i = JULIA_ITERATIONS_THRESHOLD;
 
     float x = x0, y = y0;
     int i = 0;
-    while (x*x + y*y < 200 && i < max_i) {
+    while (x*x + y*y < 4 && i < max_i) {
 
 	    float x_temp = x*x - y*y + cx;
 	    y = 2*x*y + cy;
