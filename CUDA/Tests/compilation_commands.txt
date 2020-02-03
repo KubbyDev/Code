@@ -1,0 +1,2 @@
+g++ add.cpp -o cpu_version
+nvcc add.cu -o gpu_version
