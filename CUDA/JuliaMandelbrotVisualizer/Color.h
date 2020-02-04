@@ -2,11 +2,11 @@
 #define COLOR_H
 
 typedef struct {
-    char r;
-    char g;
-    char b;
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
 } Color;
 
-Color* newColor(char r, char g, char b);
+Color* newColor(unsigned char r, unsigned char g, unsigned char b);
 
 #endif //COLOR_H

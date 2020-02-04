@@ -54,6 +54,17 @@ void zoom(Frame* frame, int newCenterX, int newCenterY, float zoomFactor) {
     frame->height *= zoomFactor;
 }
 
+void resize(Frame* frame, int newWidth, int newHeight, int newX, int newY) {
+
+    frame->widthPixels = newWidth;
+    frame->heightPixels = newHeight;
+
+    frame->xPixels = newX;
+    frame->yPixels = newY;
+
+    frame->height = (frame->width*newHeight)/newWidth;
+}
+
 void destroyFrame(Frame* frame) {
     if(frame->additionnalDataCount > 0)
         cudaFree(frame->additionnalData);

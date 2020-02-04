@@ -20,6 +20,6 @@
 #define JULIA_ITERATIONS_THRESHOLD 200
 
 // Coloration function for the pixels (choose one from ColorationFunctions.cu)
-#define COLORATION_FUNCTION coloration_green
+#define COLORATION_FUNCTION coloration_greenGlow
 
 #endif //CONFIG_H

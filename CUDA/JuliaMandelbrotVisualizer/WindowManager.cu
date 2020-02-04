@@ -70,17 +70,8 @@ int updateWindow() {
 
             case SDL_VIDEORESIZE:
 
-                int w = event.resize.w;
-                int h = event.resize.h;
-
-                mainFrame->widthPixels = w/2;
-                mainFrame->heightPixels = h;
-
-                secFrame->widthPixels = w/2;
-                secFrame->heightPixels = h;
-
-                secFrame->xPixels = w/2;
-
+                resize(mainFrame, (event.resize.w)/2, event.resize.h, 0, 0);
+                resize(secFrame, (event.resize.w)/2, event.resize.h, (event.resize.w)/2, 0);
                 drawFrame(mainFrame);
                 drawFrame(secFrame);
 
