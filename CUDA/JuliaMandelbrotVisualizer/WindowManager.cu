@@ -9,24 +9,25 @@
 SDL_Surface* window;
 Frame* mainFrame; // Displays the Mandelbrot set
 Frame* secFrame; // Displays a Julia set
-Frame* focusedFrame; // The fraùe that is selected (has the focus)
+Frame* focusedFrame; // The frame that is selected (has the focus)
+
+int mouseX;
+int mouseY;
 
 void drawFrame(Frame* frame) {
 
-    unsigned char* pixels = updateFrame(frame);
+    Color* pixels = updateFrame(frame);
 
-    for(int y = 0; y < frame->heightPixels; y++)
-        for(int x = 0; x < frame->widthPixels; x++)
-            setPixel(window, x+(frame->xPixels), y+(frame->yPixels), SDL_MapRGB(
-                        window->format,
-                        0,
-                        pixels[y*(frame->widthPixels)+x],
-                        0));
+    for(int y = 0; y < frame->heightPixels; y++) {
+        for(int x = 0; x < frame->widthPixels; x++) {
+            Color* pixel = pixels + y*(frame->widthPixels) + x;
+            Uint32 pixelValue = SDL_MapRGB(window->format, pixel->r,pixel->g, pixel->b);
+            setPixel(window, x+(frame->xPixels), y+(frame->yPixels), pixelValue);
+        }
+    }
 
     //Updates the screen
     SDL_Flip(window);
-
-    cudaFree(pixels);
 }
 
 // Returns 0 if the user closed the window and 1 otherwise
@@ -55,6 +56,8 @@ int updateWindow() {
                 );
 
                 drawFrame(focusedFrame);
+                if(focusedFrame == mainFrame)
+                    drawFrame(secFrame);
 
                 break;
 
@@ -64,19 +67,40 @@ int updateWindow() {
                     focusedFrame = focusedFrame == mainFrame ? secFrame : mainFrame;
 
                 break;
+
+            case SDL_VIDEORESIZE:
+
+                int w = event.resize.w;
+                int h = event.resize.h;
+
+                mainFrame->widthPixels = w/2;
+                mainFrame->heightPixels = h;
+
+                secFrame->widthPixels = w/2;
+                secFrame->heightPixels = h;
+
+                secFrame->xPixels = w/2;
+
+                drawFrame(mainFrame);
+                drawFrame(secFrame);
+
+                break;
         }
     }
 
     if(focusedFrame == mainFrame) {
 
-        int mouseX;
-        int mouseY;
-        SDL_GetMouseState(&mouseX, &mouseY);
+        int tmpMouseX;
+        int tmpMouseY;
+        SDL_GetMouseState(&tmpMouseX, &tmpMouseY);
 
-        secFrame->additionnalData[0] = mainFrame->topLeftX + (float)mouseX/(mainFrame->widthPixels) * mainFrame->width;
-        secFrame->additionnalData[1] = mainFrame->topLeftY - (float)mouseY/(mainFrame->heightPixels) * mainFrame->height;
-
-        drawFrame(secFrame);
+        if(tmpMouseX != mouseX || tmpMouseY != mouseY) {
+            mouseX = tmpMouseX;
+            mouseY = tmpMouseY;
+            secFrame->additionnalData[0] = mainFrame->topLeftX + (float)mouseX/(mainFrame->widthPixels) * mainFrame->width;
+            secFrame->additionnalData[1] = mainFrame->topLeftY - (float)mouseY/(mainFrame->heightPixels) * mainFrame->height;
+            drawFrame(secFrame);
+        }
     }
 
     return 1;
@@ -85,8 +109,8 @@ int updateWindow() {
 void openWindow() {
 
     SDL_Init(SDL_INIT_VIDEO);
-    window = SDL_SetVideoMode(DEFAULT_WIDTH, DEFAULT_HEIGHT, 32, SDL_HWSURFACE);
-    SDL_WM_SetCaption("Mandelbrot: Left click to zoom, Right click to unzoom", NULL);
+    window = SDL_SetVideoMode(DEFAULT_WIDTH, DEFAULT_HEIGHT, 32, SDL_HWSURFACE|SDL_RESIZABLE);
+    SDL_WM_SetCaption("Left/Right click to zoom/unzoom, Space to toggle focus", NULL);
 
     mainFrame = initFrame(DEFAULT_WIDTH/2, DEFAULT_HEIGHT, 0, 0, 0);
     secFrame = initFrame(DEFAULT_WIDTH/2, DEFAULT_HEIGHT, DEFAULT_WIDTH/2, 0, 2);

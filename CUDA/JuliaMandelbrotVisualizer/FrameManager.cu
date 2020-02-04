@@ -1,7 +1,8 @@
 #include "FrameManager.h"
-#include "Mandelbrot.h"
+#include "ImageRenderer.h"
 #include "Frame.h"
 #include "Config.h"
+#include "Color.h"
 
 Frame* initFrame(int width, int height, int posx, int posy, int additionnalDataCount) {
 
@@ -24,18 +25,17 @@ Frame* initFrame(int width, int height, int posx, int posy, int additionnalDataC
         frame->additionnalData = data;
     }
 
+    cudaMallocManaged(&(frame->pixels), sizeof(Color)*(frame->widthPixels)*(frame->heightPixels));
+
     return frame;
 }
 
-unsigned char* updateFrame(Frame* frame) {
+Color* updateFrame(Frame* frame) {
 
-    unsigned char* pixels;
-    cudaMallocManaged(&pixels, sizeof(unsigned char)*(frame->widthPixels)*(frame->heightPixels));
-
-    calculatePixels<<<NB_BLOCKS, NB_THREADS>>>(frame, pixels);
+    calculatePixels<<<NB_BLOCKS, NB_THREADS>>>(frame);
     cudaDeviceSynchronize();
 
-    return pixels;
+    return frame->pixels;
 }
 
 //Zooms. newCenter is the position of the new center of the window in the screen plane

@@ -4,6 +4,6 @@
 #include "Frame.h"
 
 __global__
-void calculatePixels(Frame* frame, unsigned char* pixels) ;
+void calculatePixels(Frame* frame);
 
 #endif //MANDELBROT_H
