@@ -5,7 +5,7 @@ You will probably find a lot of shitty not working things. Some things although 
 
 A visualizer that calculates and displays the Mandelbrot set on the left and a Julia set on the right. You can zoom/unzoom and change the shown Julia set by moving the mouse on the left side. The images are rendered using the GPU thanks to the CUDA library. The CPU version I made a while ago took ~500 ms to calculate an image (using only one thread), this one takes ~ 20 ms (I have an Intel core i7-8550U and a Nvidia MX150).
 
-![Visualizer](https://i.imgur.com/47UYXXc.gifv)
+![Visualizer](https://media.giphy.com/media/KFo476fDRacy11o7la/giphy.gif)
 
 ## [Learning Cars](https://github.com/KubbyDev/Code/tree/master/IntelliJ/LearningCars)
 
