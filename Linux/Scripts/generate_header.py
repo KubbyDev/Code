@@ -3,11 +3,22 @@ import os
 import sys
 
 if(len(sys.argv) < 2):
-    raise Exception("You must provide a c file path as argument")
+    raise Exception("You must provide a c or cpp file path as argument")
 
-path = sys.argv[1]  # Gets the c file name
+# Gets info about the target file ----------------------------------------------
+
+path = sys.argv[1]  # Gets the c file path
+
 filename =  path[path.rfind('/')+1:path.rfind('.')] # Gets the file name without extension
-headerpath = filename + '.h' # Gets the header file name
+extension = path[path.rfind('.')+1:] # Gets the file extension
+
+headerExtension = "h"
+if extension == "cpp":
+    headerExtension = "hh"
+
+headerpath = filename + '.' + headerExtension # Gets the header file name
+
+# Initialises the header file --------------------------------------------------
 
 # Finds function definitions: word word(word*) (add { or ; at the end)
 regex = r'[^{};\n\r() ]+[ \n\r]+[^{};\n\r() ]+[ \n\r]*\([^{};()]*\)[ \n\r]*' 
@@ -23,7 +34,7 @@ if(os.path.exists(headerpath)):
 else:
     # If the file doesn't exist, creates it and inits it
     # Calculates the define string
-    define = filename.upper() + "_H"
+    define = filename.upper() + "_" + headerExtension.upper()
     # Creates the file
     file = open(headerpath, "w+")
     file.write('#ifndef ' + define + '\n' 
@@ -32,18 +43,25 @@ else:
              + '#endif //' + define)
     file.close()
 
+# Finds the functions in the target file ---------------------------------------
+
 # Gets all the functions in the c file
 file = open(path, "r")
 cfiledata = file.read()
 file.close()
 functions = re.findall(regex+'{', cfiledata)
 
+# Adds the include in the target file ------------------------------------------
+
 # Adds the include
-if cfiledata.find('#include "' + filename + '.h"') == -1:
-    cfiledata = '#include "' + filename + '.h"\n' + cfiledata
+includeLine = '#include "' + filename + '.' + headerExtension + '"'
+if cfiledata.find(includeLine) == -1:
+    cfiledata = includeLine + '\n' + cfiledata
     file = open(path, "w")
     file.write(cfiledata)
     file.close()
+
+# Adds the prototypes in the header file ---------------------------------------
 
 # Converts the functions to prototypes
 for i in range(len(functions)):
