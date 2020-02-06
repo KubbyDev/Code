@@ -20,13 +20,14 @@ headerpath = filename + '.' + headerExtension # Gets the header file name
 
 # Initialises the header file --------------------------------------------------
 
-# Finds function definitions: word word(word*) (add { or ; at the end)
-regex = r'[^{};\n\r() ]+[ \n\r]+[^{};\n\r() ]+[ \n\r]*\([^{};()]*\)[ \n\r]*' 
+# Finds function definitions: word word(word*) (add {) or ;) at the end)
+definitionRegex = r'((\/\/[^\n\r]*[\n\r]+)*([^{};\n\r()\/ ]+[ ]+)+[^{};\n\r()\/ ]+[ ]*\([^{};()]*\)[ \n\r]*{)'
+declarationRegex = r'((\/\/[^\n\r]*[\n\r]+)*([^{};\n\r()\/ ]+[ ]+)+[^{};\n\r()\/ ]+[ ]*\([^{};()]*\)[ \n\r]*;\n)'
 
 if(os.path.exists(headerpath)):
     # If the file exists, removes the function definitions
     file = open(headerpath, "r")
-    withoutFunctions = re.sub(regex+';\n', '', file.read())
+    withoutFunctions = re.sub(declarationRegex, '', file.read())
     file.close()
     file = open(headerpath, "w")
     file.write(withoutFunctions)
@@ -49,7 +50,12 @@ else:
 file = open(path, "r")
 cfiledata = file.read()
 file.close()
-functions = re.findall(regex+'{', cfiledata)
+funcs = re.findall(definitionRegex, cfiledata)
+
+# Removes the overlapping matches
+functions = []
+for func in funcs:
+    functions.append(func[0])
 
 # Adds the include in the target file ------------------------------------------
 
@@ -65,11 +71,12 @@ if cfiledata.find(includeLine) == -1:
 
 # Converts the functions to prototypes
 for i in range(len(functions)):
-    functions[i] = functions[i][:-1] + ';'
+    functions[i] = re.sub(r'\)[ \n\r]*{', r');', functions[i]);
+    
 
 # Writes the prototypes in the header file
 file = open(headerpath, "r")
-data = re.sub(regex+';\n', '', file.read())
+data = re.sub(declarationRegex, '', file.read())
 file.close()
 endifIndex = data.rfind('\n#endif')
 endif = data[endifIndex:]
