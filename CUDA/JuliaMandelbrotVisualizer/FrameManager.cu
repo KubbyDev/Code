@@ -63,10 +63,14 @@ void resize(Frame* frame, int newWidth, int newHeight, int newX, int newY) {
     frame->yPixels = newY;
 
     frame->height = (frame->width*newHeight)/newWidth;
+
+    cudaFree(frame->pixels);
+    cudaMallocManaged(&(frame->pixels), sizeof(Color)*newWidth*newHeight);
 }
 
 void destroyFrame(Frame* frame) {
     if(frame->additionnalDataCount > 0)
         cudaFree(frame->additionnalData);
+    cudaFree(frame->pixels);
     cudaFree(frame);
 }

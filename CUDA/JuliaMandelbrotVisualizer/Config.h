@@ -2,8 +2,8 @@
 #define CONFIG_H
 
 // Default width and height of the visualizer window
-#define DEFAULT_WIDTH 1800
-#define DEFAULT_HEIGHT 900
+#define DEFAULT_WIDTH 1280
+#define DEFAULT_HEIGHT 720
 
 // Strength of the zoom
 #define ZOOM_STRENGTH 1.2

@@ -41,10 +41,18 @@ void calculatePixels(Frame* frame) {
     float tlY = frame->topLeftY;
     float w = frame->width;
     float h = frame->height;
-    int pixelPerThread = (wP*hP)/(NB_THREADS*NB_BLOCKS);
+
+    int totalPixels = wP*hP;
+    // +1 makes sure all pixels are calculated. Maybe a thread will do less
+    // work but thats not problematic
+    int pixelPerThread = totalPixels/(NB_THREADS*NB_BLOCKS) +1;
 
     //Calculates the new pixel values
     for(int i = threadId*pixelPerThread; i < pixelPerThread*(threadId+1); i++) {
+
+        // Avoids calculating pixels that will not be displayed
+        if(i >= totalPixels)
+            break;
 
         float pixelValue;
         if(frame->additionnalDataCount >= 2) {

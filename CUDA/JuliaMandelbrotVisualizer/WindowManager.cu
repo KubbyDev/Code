@@ -21,7 +21,7 @@ void drawFrame(Frame* frame) {
     for(int y = 0; y < frame->heightPixels; y++) {
         for(int x = 0; x < frame->widthPixels; x++) {
             Color* pixel = pixels + y*(frame->widthPixels) + x;
-            Uint32 pixelValue = SDL_MapRGB(window->format, pixel->r,pixel->g, pixel->b);
+            Uint32 pixelValue = SDL_MapRGB(window->format, pixel->r, pixel->g, pixel->b);
             setPixel(window, x+(frame->xPixels), y+(frame->yPixels), pixelValue);
         }
     }
@@ -72,6 +72,7 @@ int updateWindow() {
 
                 resize(mainFrame, (event.resize.w)/2, event.resize.h, 0, 0);
                 resize(secFrame, (event.resize.w)/2, event.resize.h, (event.resize.w)/2, 0);
+                window = SDL_SetVideoMode(event.resize.w, event.resize.h, 32, SDL_HWSURFACE|SDL_RESIZABLE);
                 drawFrame(mainFrame);
                 drawFrame(secFrame);
 
