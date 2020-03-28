@@ -154,32 +154,45 @@ endfunction
 " ------------------------------------------------------------------------------
 
 let ext = expand('%:e')
+let filename = expand('%:r')
+
+" Turns Syntastic off for assembly files
 if(ext == "asm")
-    " Turns Syntastic off for assembly files
     silent autocmd VimEnter * :SyntasticToggleMode
 endif
+
+" Executes the header generation script for c and cpp files when F6 is pressed
 if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "cu")
-    " Executes the header generation script for c and cpp files when F6 is pressed
     map <F6> <ESC> :w <CR> :silent !python ~/Code/Linux/Scripts/generate_header.py % <CR> <C-l>
 endif
+
+" Enables the White space cleanup when the file is saved
 if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "cu" || ext == "h" || ext == "hh" || ext == "asm" || ext == "py")
-    " Enables the White space cleanup when the file is saved
     call EnableWSClean()
 endif
-if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "h" || ext == "hh")
-    " Swaps between source and header when F3 is pressed for c and cpp files
-    let filename = expand('%:r')
-    if(ext == "c")
-        let filename .= ".h"
-    elseif(ext == "cc" || ext == "cpp")
-        let filename .= ".hh"
-    elseif(ext == ".h")
-        let filename .= ".c"
-    elseif(ext == "hh")
-        let filename .= ".cpp"
+" Swaps between source and header when F3 is pressed for c and cpp files
+function SwapSourceHeader()
+    execute ':w'
+    let f = g:filename
+    if(g:ext == "c")
+        let f .= ".h"
+        let g:ext = "h"
+    elseif(g:ext == "cc" || g:ext == "cpp")
+        let f .= ".hh"
+        let g:ext = "hh"
+    elseif(g:ext == "h")
+        let f .= ".c"
+        let g:ext = "c"
+    elseif(g:ext == "hh")
+        let f .= ".cpp"
+        let g:ext = "cpp"
     endif
-    map <F3> <ESC> execute '!vim filename &' <CR> :wq <CR>
+    execute ':e ' f
+endfunction
+if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "h" || ext == "hh")
+    map <F3> <ESC> :call SwapSourceHeader() <CR>
 endif
+
 
 " ------------------------------------------------------------------------------
 " Graphics and coloration
