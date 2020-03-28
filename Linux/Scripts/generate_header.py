@@ -13,7 +13,7 @@ filename =  path[path.rfind('/')+1:path.rfind('.')] # Gets the file name without
 extension = path[path.rfind('.')+1:] # Gets the file extension
 
 headerExtension = "h"
-if extension == "cpp":
+if extension == "cpp" or extension == "cc":
     headerExtension = "hh"
 
 headerpath = filename + '.' + headerExtension # Gets the header file name

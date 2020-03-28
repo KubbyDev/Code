@@ -101,14 +101,10 @@ export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 # Aliases
-alias zshconfig="mate $HOME/.zshrc"
-alias ohmyzsh="mate $HOME/.oh-my-zsh"
 alias vimrc="vim $HOME/.vimrc"
 alias bashrc="vim $HOME/.bashrc"
 alias zshrc="vim $HOME/.zshrc"
 alias rm='trash'
-alias reload='bash'
-alias ocr="cd $HOME/Code/C/OCR"
 
 # This function creates a new practical and does the base config
 createpractical() {

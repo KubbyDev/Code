@@ -6,7 +6,7 @@
 " this command: chmod +x run/compile.sh
 
 " F4: Compile
-map <F4> <ESC> :w <CR> :call Compile(
+map <F4> <ESC> :w <CR> :call Compile()
 :function! Compile(...)
     " Extension of the current file
 :   let ext = expand('%:e')
@@ -20,8 +20,8 @@ map <F4> <ESC> :w <CR> :call Compile(
 :   elseif(ext == "c" || ext == "h")
 :       execute '!gcc -Wall -Wextra -Werror -std=c99 -O1 -o a.out *.[co] -lm ' arguments ' && echo "Compilation successfull"'
     " Cpp
-:   elseif(ext == "cpp" || ext == "hh")
-:       execute '!g++ -Wall -Wextra -Werror -O1 -o a.out *.(cpp|o) -lm ' arguments ' && echo "Compilation successfull"'
+:   elseif(ext == "cpp" || ext == "cc" || ext == "hh")
+:       execute '!g++ -Wall -Wextra -Werror -O1 -o a.out *.(cc|cpp|o) -lm ' arguments ' && echo "Compilation successfull"'
     " Assembly
 :   elseif(ext == "asm")
 :       !/home/kubby/68000/a68k % -o%:r.hex -s -n -rmal && echo "Compilation successfull"
@@ -29,7 +29,7 @@ map <F4> <ESC> :w <CR> :call Compile(
 :endfunction
 
 " F5: Run
-map <F5> <ESC> :w <CR> :call Run(
+map <F5> <ESC> :w <CR> :call Run()
 :function! Run(...)
     " Extension of the current file
 :   let ext = expand('%:e')
@@ -39,10 +39,10 @@ map <F5> <ESC> :w <CR> :call Run(
 :   if(filereadable("run.sh"))
 :       execute '!./run.sh ' arguments
     " else run the standard run command
-    " C
-:   elseif(ext == "c" || ext == "h" || ext == "cpp" || ext == "hh")
+    " C, Cpp and Cuda
+:   elseif(ext == "c" || ext == "h" || ext == "cpp" || ext == "cc" || ext == "hh" || ext == "cu")
 :       if(filereadable("a.out"))
-:           execute '!./a.out ' arguments ' && rm a.out'
+:           execute '!./a.out ' arguments ' ; rm a.out'
 :       else
 :           !echo "Compiled file not found"
 :       endif
@@ -57,7 +57,7 @@ map <F5> <ESC> :w <CR> :call Run(
 :   elseif(ext == "sh")
 :       execute '!bash ' expand('%:t') ' ' arguments
 :   elseif(ext == "py")
-:       execute '!python ' expand('%:t') ' ' arguments
+:       execute '!python3 ' expand('%:t') ' ' arguments
 :   endif
 :endfunction
 
@@ -69,7 +69,7 @@ map <F8> <ESC> :w <CR> :call CompileRun() <CR>
 :endfunction
 
 " F9: Debug
-map <F9> <ESC> :w <CR> :call Debug(
+map <F9> <ESC> :w <CR> :call Debug()
 :function! Debug(...)
     " Extension of the current file
 :   let ext = expand('%:e')
@@ -79,10 +79,10 @@ map <F9> <ESC> :w <CR> :call Debug(
 :   let compArgs = a:0 >= 2 ? a:2 : ""
     " C
 :   if(ext == "c" || ext == "h")
-:       execute '!gcc -Wall -Wextra -Werror -std=c99 -O0 -o a.out *.[co] -lm -g ' compArgs ' && gdb --args ./a.out ' runArgs ' && rm ./a.out'
+:       execute '!gcc -Wall -Wextra -Werror -std=c99 -O0 -o a.out *.[co] -lm -g ' compArgs ' && gdb --args ./a.out ' runArgs ' ; rm ./a.out'
     " Cpp
-:   elseif(ext == "cpp" || ext == "hh")
-:       execute '!g++ -Wall -Wextra -Werror -O0 -o a.out *.(cpp|o) -lm -g ' compArgs ' && gdb --args ./a.out ' runArgs ' && rm ./a.out'
+:   elseif(ext == "cpp" || ext == "cc" || ext == "hh")
+:       execute '!g++ -Wall -Wextra -Werror -O0 -o a.out *.(cc|cpp|o) -lm -g ' compArgs ' && gdb --args ./a.out ' runArgs ' ; rm ./a.out'
     " Assembly
 :   elseif(ext == "asm")
 :       call Compile()
@@ -155,13 +155,30 @@ endfunction
 
 let ext = expand('%:e')
 if(ext == "asm")
-    silent autocmd GUIEnter :SyntasticToggle <CR>
-    call EnableWSClean()
-elseif(ext == "c" || ext == "cpp")
+    " Turns Syntastic off for assembly files
+    silent autocmd VimEnter * :SyntasticToggleMode
+endif
+if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "cu")
+    " Executes the header generation script for c and cpp files when F6 is pressed
     map <F6> <ESC> :w <CR> :silent !python ~/Code/Linux/Scripts/generate_header.py % <CR> <C-l>
+endif
+if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "cu" || ext == "h" || ext == "hh" || ext == "asm" || ext == "py")
+    " Enables the White space cleanup when the file is saved
     call EnableWSClean()
-elseif(ext == "h")
-    call EnableWSClean()
+endif
+if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "h" || ext == "hh")
+    " Swaps between source and header when F3 is pressed for c and cpp files
+    let filename = expand('%:r')
+    if(ext == "c")
+        let filename .= ".h"
+    elseif(ext == "cc" || ext == "cpp")
+        let filename .= ".hh"
+    elseif(ext == ".h")
+        let filename .= ".c"
+    elseif(ext == "hh")
+        let filename .= ".cpp"
+    endif
+    map <F3> <ESC> execute '!vim filename &' <CR> :wq <CR>
 endif
 
 " ------------------------------------------------------------------------------
