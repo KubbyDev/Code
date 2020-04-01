@@ -109,13 +109,15 @@ alias rm='trash'
 # This function creates a new practical and does the base config
 createpractical() {
 
-    cd $HOME/Code/C/TP_Prog
-    git clone git@git.cri.epita.net:p/2023-s3-tp/tp0$1-gabriel.jorge
+    cd $HOME/Code/C/TP_Prog/S4/
+    git clone git@git.cri.epita.net:p/2023-s4-tp/tp0$1-gabriel.jorge
+
 
     cd tp0$1-gabriel.jorge
-    printf 'Gabriel\nJorge\ngabriel.jorge\ngabriel.jorge@epita.fr\n' > AUTHORS
-    
+    mkdir pw_0$1_$2
     cd *
+
+    printf 'Gabriel\nJorge\ngabriel.jorge\ngabriel.jorge@epita.fr\n' > AUTHORS
 }
 
 # Git commits and pushes
@@ -135,7 +137,7 @@ commit() {
 # Goes the the folder of the nth tp
 tp() {
     
-    cd $HOME/Code/C/TP_Prog/tp0$1-gabriel.jorge
+    cd $HOME/Code/C/TP_Prog/S4/tp0$1-gabriel.jorge
     cd *
     ls
 
@@ -173,4 +175,12 @@ c() {
     printf "#ifndef ${uppercase}\n#define ${uppercase}\n\n    \n\n#endif" > $1.h
     vim $1.c
 
+}
+
+drive() {
+    cd /media/kubby/$1
+}
+
+data() {
+    drive Data
 }
