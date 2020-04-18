@@ -3,9 +3,9 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-export LANGUAGE=fr_FR.UTF-8
-export LANG=fr_FR.UTF-8
-export LC_ALL=fr_FR.UTF-8
+export LANGUAGE=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -97,13 +97,15 @@ source $ZSH/oh-my-zsh.sh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
-export GOPATH=$HOME/go
+export GOPATH=$HOME/Programs/gopackages
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export PATH=$PATH:/opt/metasploit
 
 # Aliases
 alias vimrc="vim $HOME/.vimrc"
 alias bashrc="vim $HOME/.bashrc"
 alias zshrc="vim $HOME/.zshrc"
+alias reload="source $HOME/.zshrc"
 alias rm='trash'
 
 # This function creates a new practical and does the base config
@@ -184,3 +186,4 @@ drive() {
 data() {
     drive Data
 }
+
