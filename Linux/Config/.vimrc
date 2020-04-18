@@ -230,3 +230,4 @@ match OverLength /\%81v.\+/
 
 " Sets the background transparent
 hi Normal guibg=NONE ctermbg=NONE
+hi NonText guibg=NONE ctermbg=NONE
