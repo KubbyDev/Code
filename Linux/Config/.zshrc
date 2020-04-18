@@ -97,8 +97,9 @@ source $ZSH/oh-my-zsh.sh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
+export GOROOT=$HOME/Programs/go
 export GOPATH=$HOME/Programs/gopackages
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin:$GOROOT/lib:$GOROOT/doc:$GOPATH/bin
 export PATH=$PATH:/opt/metasploit
 
 # Aliases
