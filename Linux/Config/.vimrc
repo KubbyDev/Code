@@ -195,8 +195,12 @@ endif
 
 
 " ------------------------------------------------------------------------------
-" Graphics and coloration
+" Others
 " ------------------------------------------------------------------------------
+
+" Makes undo persistent (doesn't reset when vim closes)
+set undofile
+set undodir=~/.vim
 
 " Displays line numbers
 set number

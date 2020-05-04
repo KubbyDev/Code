@@ -100,7 +100,7 @@ source $ZSH/oh-my-zsh.sh
 export GOROOT=$HOME/Programs/go
 export GOPATH=$HOME/Programs/gopackages
 export PATH=$PATH:$GOROOT/bin:$GOROOT/lib:$GOROOT/doc:$GOPATH/bin
-export PATH=$PATH:/opt/metasploit
+export PATH=$PATH:/opt/metasploit-framework/bin
 
 # Aliases
 alias vimrc="vim $HOME/.vimrc"
