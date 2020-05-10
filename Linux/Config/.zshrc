@@ -108,6 +108,7 @@ alias bashrc="vim $HOME/.bashrc"
 alias zshrc="vim $HOME/.zshrc"
 alias reload="source $HOME/.zshrc"
 alias rm='trash'
+alias update='sudo apt update && sudo apt upgrade'
 
 # This function creates a new practical and does the base config
 createpractical() {

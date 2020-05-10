@@ -9,7 +9,9 @@ C/NeuralNetwork
 IntelliJ/LogicGateSimulator
 IntelliJ/OrbitalSimulator
 VisualStudio/ClientFTP
-**/Assembly/Given/
+Assembly/Given/
+Cpp/CHIP8-Emulator
+IntelliJ/SpaceDump
 
 Eclipse/.metadata/
 Eclipse/.recommenders/
