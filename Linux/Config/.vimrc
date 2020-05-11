@@ -1,3 +1,12 @@
+" <F2>: Toggle NerdTree
+" <F3>: Swap between sources and headers for c and c++ files
+" <F4>: Compile
+" <F5>: Run
+" <F6>: Generate header file for c and c++ files
+" <F7>: Toggle Syntastic checks
+" <F8>: Compile and run
+" <F9>: Debug
+
 " ------------------------------------------------------------------------------
 " Compilation and running
 " ------------------------------------------------------------------------------
@@ -126,8 +135,9 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
+map <F7> :SyntasticToggleMode<CR>
 
 " NERDtree
 map <F2> :NERDTreeToggle<CR>
