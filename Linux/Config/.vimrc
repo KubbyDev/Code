@@ -137,7 +137,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
-let b:syntastic_c_cflags = '-lglib-2.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include'
+let b:syntastic_c_cflags = '`pkg-config --cflags glib-2.0` `pkg-config --libs glib-2.0` `sdl-config --cflags --libs`'
 map <F7> :SyntasticToggleMode<CR>
 
 " NERDtree
