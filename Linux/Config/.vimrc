@@ -38,8 +38,8 @@ map <F4> <ESC> :w <CR> :call Compile()
 :   elseif(ext == "asm")
 :       !/home/kubby/68000/a68k % -o%:r.hex -s -n -rmal && echo "Compilation successfull"
     " Rust
-:   elseif(ext == "rs")
-:       !cargo build
+:   elseif(ext == "rs") " Doesn't actually compile but check is faster
+:       !cargo check
 :   endif
 :endfunction
 
@@ -78,15 +78,21 @@ map <F5> <ESC> :w <CR> :call Run()
 :       execute '!python3 '.expand('%:t').' '.arguments
     " Rust
 :   elseif(ext == "rs")
-:       !cargo run ; cargo clean
+:       execute '!cargo run ; cargo clean'
 :   endif
 :endfunction
 
 " F8: Compile and Run
 map <F8> <ESC> :w <CR> :call CompileRun() <CR>
 :function! CompileRun()
-:   call Compile()
-:   call Run()
+:   let ext = expand('%:e')  " Extension of the current file
+:   let name = expand('%:r') " Name of the current file
+:   if(ext == "rs" || ext == "py" || ext == "sh")
+:       call Run()
+:   else
+:       call Compile()
+:       call Run()
+:   endif
 :endfunction
 
 " F9: Debug
