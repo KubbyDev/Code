@@ -137,6 +137,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim'}
+Plugin 'rust-lang/rust.vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -195,7 +196,7 @@ if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "cu")
 endif
 
 " Enables the White space cleanup when the file is saved
-if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "cu" || ext == "h" || ext == "hh" || ext == "asm" || ext == "py")
+if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "cu" || ext == "h" || ext == "hh" || ext == "asm" || ext == "py" || ext == "rs")
     call EnableWSClean()
 endif
 " Swaps between source and header when F3 is pressed for c and cpp files
