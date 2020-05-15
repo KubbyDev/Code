@@ -17,41 +17,49 @@
 " F4: Compile
 map <F4> <ESC> :w <CR> :call Compile()
 :function! Compile(...)
-    " Extension of the current file
-:   let ext = expand('%:e')
+:   let ext = expand('%:e')  " Extension of the current file
+:   let name = expand('%:r') " Name of the current file
     " Compilation arguments ("" if nothing given)
 :   let arguments = a:0 >= 1 ? a:1 : ""
     " If compile.sh exists, executes it
 :   if(filereadable("compile.sh"))
-:       execute '!./compile.sh ' arguments ' && echo "Compilation successfull"'
+:       execute '!./compile.sh '.arguments.' && echo "Compilation successfull"'
+    " If a Makefile is found, uses it
+:   elseif(filereadable("Makefile"))
+:       execute '!make '.name.' || make'
     " else run the standard compilation command
     " C
 :   elseif(ext == "c" || ext == "h")
-:       execute '!gcc -Wall -Wextra -Werror -std=c99 -O1 -o a.out *.[co] -lm ' arguments ' && echo "Compilation successfull"'
+:       execute '!gcc -Wall -Wextra -Werror -std=c99 -O1 -o a.out *.[co] -lm '.arguments.' && echo "Compilation successfull"'
     " Cpp
 :   elseif(ext == "cpp" || ext == "cc" || ext == "hh")
-:       execute '!g++ -Wall -Wextra -Werror -O1 -o a.out *.(cc|cpp|o) -lm ' arguments ' && echo "Compilation successfull"'
+:       execute '!g++ -Wall -Wextra -Werror -O1 -o a.out *.(cc|cpp|o) -lm '.arguments.' && echo "Compilation successfull"'
     " Assembly
 :   elseif(ext == "asm")
 :       !/home/kubby/68000/a68k % -o%:r.hex -s -n -rmal && echo "Compilation successfull"
+    " Rust
+:   elseif(ext == "rs")
+:       !cargo build
 :   endif
 :endfunction
 
 " F5: Run
 map <F5> <ESC> :w <CR> :call Run()
 :function! Run(...)
-    " Extension of the current file
-:   let ext = expand('%:e')
+:   let ext = expand('%:e')  " Extension of the current file
+:   let name = expand('%:r') " Name of the current file
     " Arguments for the execution ("" if nothing given)
 :   let arguments = a:0 >= 1 ? a:1 : ""
     " If run.sh exists, executes it
 :   if(filereadable("run.sh"))
-:       execute '!./run.sh ' arguments
+:       execute '!./run.sh '.arguments
     " else run the standard run command
     " C, Cpp and Cuda
 :   elseif(ext == "c" || ext == "h" || ext == "cpp" || ext == "cc" || ext == "hh" || ext == "cu")
-:       if(filereadable("a.out"))
-:           execute '!./a.out ' arguments ' ; rm a.out'
+:       if(filereadable("a.out")) " Looks for an a.out executable
+:           execute '!./a.out '.arguments.' ; rm a.out'
+:       elseif(filereadable(name)) " Looks for the current file without extension
+:           execute '!./'.name.' '.arguments.' ; rm '.name
 :       else
 :           !echo "Compiled file not found"
 :       endif
@@ -64,9 +72,13 @@ map <F5> <ESC> :w <CR> :call Run()
 :       endif
     " Bash scripts
 :   elseif(ext == "sh")
-:       execute '!bash ' expand('%:t') ' ' arguments
+:       execute '!bash '.expand('%:t').' '.arguments
+    " Python scripts
 :   elseif(ext == "py")
-:       execute '!python3 ' expand('%:t') ' ' arguments
+:       execute '!python3 '.expand('%:t').' '.arguments
+    " Rust
+:   elseif(ext == "rs")
+:       !cargo run ; cargo clean
 :   endif
 :endfunction
 
@@ -88,14 +100,13 @@ map <F9> <ESC> :w <CR> :call Debug()
 :   let compArgs = a:0 >= 2 ? a:2 : ""
     " C
 :   if(ext == "c" || ext == "h")
-:       execute '!gcc -Wall -Wextra -Werror -std=c99 -O0 -o a.out *.[co] -lm -g ' compArgs ' && gdb --args ./a.out ' runArgs ' ; rm ./a.out'
+:       execute '!gcc -Wall -Wextra -Werror -std=c99 -O0 -o a.out *.[co] -lm -g '.compArgs.' && gdb --args ./a.out '.runArgs.' ; rm ./a.out'
     " Cpp
 :   elseif(ext == "cpp" || ext == "cc" || ext == "hh")
-:       execute '!g++ -Wall -Wextra -Werror -O0 -o a.out *.(cc|cpp|o) -lm -g ' compArgs ' && gdb --args ./a.out ' runArgs ' ; rm ./a.out'
+:       execute '!g++ -Wall -Wextra -Werror -O0 -o a.out *.(cc|cpp|o) -lm -g '.compArgs.' && gdb --args ./a.out '.runArgs.' ; rm ./a.out'
     " Assembly
 :   elseif(ext == "asm")
-:       call Compile()
-:       call Run()
+:       call CompileRun()
 :   endif
 :endfunction
 
@@ -137,7 +148,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
-let b:syntastic_c_cflags = '`pkg-config --cflags glib-2.0` `pkg-config --libs glib-2.0` `sdl-config --cflags --libs`'
+let b:syntastic_c_cflags = '`pkg-config --cflags glib-2.0` `pkg-config --libs glib-2.0` `sdl2-config --cflags --libs` `sdl-config --cflags --libs`'
 map <F7> :SyntasticToggleMode<CR>
 
 " NERDtree
