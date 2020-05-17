@@ -14,7 +14,7 @@
 " If you add compile.sh or run.sh files, dont forget to execute
 " this command: chmod +x run/compile.sh
 
-" F4: Compile
+" F4: Compile or Check depending on the language
 map <F4> <ESC> :w <CR> :call Compile()
 :function! Compile(...)
 :   let ext = expand('%:e')  " Extension of the current file
@@ -40,6 +40,9 @@ map <F4> <ESC> :w <CR> :call Compile()
     " Rust
 :   elseif(ext == "rs") " Doesn't actually compile but check is faster
 :       !cargo check
+    " Python
+:   elseif(ext == "py")
+:       !python3 -m py_compile *.py
 :   endif
 :endfunction
 
@@ -156,6 +159,7 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 let b:syntastic_c_cflags = '`pkg-config --cflags glib-2.0` `pkg-config --libs glib-2.0` `sdl2-config --cflags --libs` `sdl-config --cflags --libs`'
+let g:syntastic_python_python_exec = '/usr/bin/python3'
 map <F7> :SyntasticToggleMode<CR>
 
 " NERDtree
