@@ -23,6 +23,8 @@ CLion/Tests/Pendu/words\.txt___jb_old___
 *.stackdump
 **/SDL2
 Qt/build*
+Python/AxaChallenge/in*.json
+Python/AxaChallenge/out*.json
 
 # Visual studio gitignore template
 
