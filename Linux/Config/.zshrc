@@ -111,21 +111,29 @@ alias rm='trash'
 alias update='sudo apt update && sudo apt upgrade'
 
 # This function creates a new practical and does the base config
-createpractical() {
+# If the practical name is not given, just goes to the practical folder
+tp() {
 
-    if [ -z "$1" ] || [ -z "$2" ] ; then
-        echo "Please provide a practical number and a name"
+    if [[ -z "$1" ]] ; then
+        echo "Please provide a practical number"
         return
     fi
 
-    cd $HOME/Code/Rust/TP_Prog/S4/
-    git clone git@git.cri.epita.net:p/2023-s4-tp/tp0$1-gabriel.jorge
-
+    # Goes the practicals folder
+    cd $HOME/Code/Rust/TP_Prog
+    # Clones if the practical doesn't exist
+    [[ -d tp0$1-gabriel.jorge ]] || git clone git@git.cri.epita.net:p/2023-s4-tp/tp0$1-gabriel.jorge
     cd tp0$1-gabriel.jorge
-    mkdir pw_0$1_$2
+    # Initialises the repo if the name was given
+    if [[ ! -z "$2" ]] ; then
+        # Creates the base folder
+        mkdir pw_0$1_$2
+        # Creates the AUTHORS file
+        printf 'Gabriel\nJorge\ngabriel.jorge\ngabriel.jorge@epita.fr\n' > pw_0$1_$2/AUTHORS
+    fi
+    # Goes into the base folder
     cd *
-
-    printf 'Gabriel\nJorge\ngabriel.jorge\ngabriel.jorge@epita.fr\n' > AUTHORS
+    ls
 }
 
 # Git commits and pushes
@@ -140,15 +148,6 @@ commit() {
         git commit -m $1
         git push
     fi
-}
-
-# Goes the the folder of the nth tp
-tp() {
-    
-    cd $HOME/Code/Rust/TP_Prog/S4/tp0$1-gabriel.jorge
-    cd *
-    ls
-
 }
 
 # Goes to the Assembly folder
