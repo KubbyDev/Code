@@ -113,9 +113,13 @@ alias update='sudo apt update && sudo apt upgrade'
 # This function creates a new practical and does the base config
 createpractical() {
 
-    cd $HOME/Code/C/TP_Prog/S4/
-    git clone git@git.cri.epita.net:p/2023-s4-tp/tp0$1-gabriel.jorge
+    if [ -z "$1" ] || [ -z "$2" ] ; then
+        echo "Please provide a practical number and a name"
+        return
+    fi
 
+    cd $HOME/Code/Rust/TP_Prog/S4/
+    git clone git@git.cri.epita.net:p/2023-s4-tp/tp0$1-gabriel.jorge
 
     cd tp0$1-gabriel.jorge
     mkdir pw_0$1_$2
@@ -141,7 +145,7 @@ commit() {
 # Goes the the folder of the nth tp
 tp() {
     
-    cd $HOME/Code/C/TP_Prog/S4/tp0$1-gabriel.jorge
+    cd $HOME/Code/Rust/TP_Prog/S4/tp0$1-gabriel.jorge
     cd *
     ls
 
