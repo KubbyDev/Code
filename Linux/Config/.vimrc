@@ -15,7 +15,7 @@
 " this command: chmod +x run/compile.sh
 
 " F4: Compile or Check depending on the language
-map <F4> <ESC> :w <CR> :call Compile()
+map <F4> <ESC> :w <CR> :call Compile("")
 :function! Compile(...)
 :   let ext = expand('%:e')  " Extension of the current file
 :   let name = expand('%:r') " Name of the current file
@@ -47,7 +47,7 @@ map <F4> <ESC> :w <CR> :call Compile()
 :endfunction
 
 " F5: Run
-map <F5> <ESC> :w <CR> :call Run()
+map <F5> <ESC> :w <CR> :call Run("")
 :function! Run(...)
 :   let ext = expand('%:e')  " Extension of the current file
 :   let name = expand('%:r') " Name of the current file
@@ -81,7 +81,7 @@ map <F5> <ESC> :w <CR> :call Run()
 :       execute '!python3 '.expand('%:t').' '.arguments
     " Rust
 :   elseif(ext == "rs")
-:       execute '!cargo run ; cargo clean'
+:       execute '!cargo run -- '.arguments.' ; cargo clean'
 :   endif
 :endfunction
 
@@ -99,14 +99,14 @@ map <F8> <ESC> :w <CR> :call CompileRun() <CR>
 :endfunction
 
 " F9: Debug
-map <F9> <ESC> :w <CR> :call Debug()
+map <F9> <ESC> :w <CR> :call Debug("", "")
 :function! Debug(...)
     " Extension of the current file
 :   let ext = expand('%:e')
-    " Arguments for the execution ("" if nothing given)
-:   let runArgs = a:0 >= 1 ? a:1 : ""
     " Compilation arguments ("" if nothing given)
-:   let compArgs = a:0 >= 2 ? a:2 : ""
+:   let compArgs = a:0 >= 1 ? a:1 : ""
+    " Arguments for the execution ("" if nothing given)
+:   let runArgs = a:0 >= 2 ? a:2 : ""
     " C
 :   if(ext == "c" || ext == "h")
 :       execute '!gcc -Wall -Wextra -Werror -std=c99 -O0 -o a.out *.[co] -lm -g '.compArgs.' && gdb --args ./a.out '.runArgs.' ; rm ./a.out'
