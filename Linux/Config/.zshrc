@@ -192,3 +192,9 @@ data() {
     drive Data
 }
 
+# Launches gdb with the pwndbg extension
+pwndbg() {
+    echo "source /home/kubby/Programs/pwndbg/gdbinit.py" >> $HOME/.gdbinit
+    gdb "$@" # $@ means all the arguments
+    rm $HOME/.gdbinit
+}
