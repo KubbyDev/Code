@@ -1,13 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "UCharMatrix.h"
+#include "UCharMatrix.hh"
+#include "astar.hh"
+#include "oldfindpath.hh"
+
+// Can be findPath_Old or findPath_Astar
+#define FINDPATH findPath_Astar
 
 #define SIZE 24
-#define HOR_WALLS 3
-#define VER_WALLS 3
-#define WALL_LEN_MIN 3
-#define WALL_LEN_MAX 8
+#define HOR_WALLS 5
+#define VER_WALLS 5
+#define WALL_LEN_MIN 5
+#define WALL_LEN_MAX 15
 
 UCharMatrix* map;
 
@@ -38,19 +43,20 @@ void printMap(int posx, int posy, int tarx, int tary) {
 
     for(int y = 0; y < SIZE; y++) {
         for(int x = 0; x < SIZE; x++) {
-            // Changes the color to green for the target and yellow for the pos
+            unsigned char val = getMatrixValue(map, x, y);
+            // Changes the color to green for the target, yellow for
+            // the position and red for the walls
             if(x == posx && y == posy) printf("\033[42m");
             if(x == tarx && y == tary) printf("\033[43m");
+            if(val == 255) printf("\033[31;1m");
             // Prints the value of the map at this position
-            unsigned char val = getMatrixValue(map, x, y);
             if(val == 0) printf(" . ");
             else if(val == 255) printf(" W ");
             else if(val < 10) printf(" %hhu ", val);
             else if(val < 100) printf(" %hhu", val);
             else printf("%hhu", val);
             // Resets the color
-            if((x == posx && y == posy) || (x == tarx && y == tary))
-                printf("\033[00m");
+            printf("\033[00m");
         }
         printf("\n");
     }
@@ -85,10 +91,13 @@ int main() {
         randomizePos(&tarx, &tary);
 
         // Finds a path
-
+        clock_t begin = clock();
+        FINDPATH(map, posx, posy, tarx, tary);
+        clock_t end = clock();
 
         // Displays everything
         printMap(posx, posy, tarx, tary);
+        printf("Calculation time: %lf ms", (double)(end-begin)/(CLOCKS_PER_SEC/1000));
 
         // Waits for the user to press a key
         char c = getchar();

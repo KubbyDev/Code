@@ -1,4 +1,4 @@
-#include "UCharMatrix.h"
+#include "UCharMatrix.hh"
 
 #include <stdlib.h>
 
