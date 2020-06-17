@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="src\WindowManager.h" />
+    <CudaCompile Include="src\Config.h" />
+    <CudaCompile Include="src\Frame.h" />
+    <CudaCompile Include="src\FrameManager.h" />
+    <CudaCompile Include="src\ImageRenderer.h" />
+    <CudaCompile Include="src\Tools.h" />
+    <CudaCompile Include="src\Color.cpp" />
+    <CudaCompile Include="src\ColorationFunctions.cpp" />
+    <CudaCompile Include="src\FrameManager.cpp" />
+    <CudaCompile Include="src\ImageRenderer.cpp" />
+    <CudaCompile Include="src\Main.cpp" />
+    <CudaCompile Include="src\Tools.cpp" />
+    <CudaCompile Include="src\WindowManager.cpp" />
+    <CudaCompile Include="src\ColorationFunctions.h" />
+    <CudaCompile Include="src\Color.h" />
+  </ItemGroup>
+</Project>
