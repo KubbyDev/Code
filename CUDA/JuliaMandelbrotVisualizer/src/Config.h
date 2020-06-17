@@ -26,4 +26,7 @@
 // float is much faster, but double allows much more zoom
 #define VAR_TYPE double
 
+// Uncomment this definition to print the time it takes to calculate one frame
+#define DISPLAY_CALC_TIME
+
 #endif //CONFIG_H

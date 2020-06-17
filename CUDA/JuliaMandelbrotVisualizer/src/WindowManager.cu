@@ -1,14 +1,17 @@
-#ifdef _WIN32
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #include <SDL/SDL.h>
-#endif
-#ifdef linux
+#elif defined(__linux__) || defined(__unix__)
 #include "SDL.h"
+#else
+#error "OS not supported by this program"
 #endif
+#include <sys/timeb.h>
+#include <stdio.h>
 
+#include "Config.h"
 #include "WindowManager.h"
 #include "FrameManager.h"
 #include "Frame.h"
-#include "Config.h"
 #include "Tools.h"
 
 SDL_Surface* window;
@@ -21,7 +24,18 @@ int mouseY;
 
 void drawFrame(Frame* frame) {
 
+#ifdef DISPLAY_CALC_TIME
+    struct timeb before, after;
+    ftime(&before);
+#endif
+
     Color* pixels = updateFrame(frame);
+
+#ifdef DISPLAY_CALC_TIME
+    ftime(&after);
+    int diff = 1000 * (after.time - before.time) + after.millitm - before.millitm;
+    printf("Frame calculation time: %ims\n", diff);
+#endif
 
     for(int y = 0; y < frame->heightPixels; y++) {
         for(int x = 0; x < frame->widthPixels; x++) {
