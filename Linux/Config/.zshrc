@@ -19,7 +19,7 @@ alias bashrc="vim $HOME/.bashrc"
 alias zshrc="vim $HOME/.zshrc"
 alias reload="source $HOME/.zshrc"
 alias rm='trash'
-alias update='sudo apt update && sudo apt upgrade'
+alias update='sudo apt update && sudo apt upgrade && sudo apt autoremove'
 
 # This function creates a new practical and does the base config
 # If the practical name is not given, just goes to the practical folder
