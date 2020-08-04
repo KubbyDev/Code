@@ -1,3 +1,5 @@
+package mccmd;
+
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
