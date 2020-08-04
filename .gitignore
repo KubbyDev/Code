@@ -21,6 +21,7 @@ Eclipse/.recommenders/
 **/.idea/
 **/venv/
 **/cmake-build-debug/
+**/out/
 CLion/Tests/Pendu/words\.txt___jb_old___
 *.stackdump
 **/SDL2
