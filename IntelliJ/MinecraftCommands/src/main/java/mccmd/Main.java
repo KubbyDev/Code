@@ -4,12 +4,16 @@ public class Main {
 
     public static void main(String... args) {
 
+        if(args.length == 0)
+            System.out.println("Usage: java -jar MinecraftCommands.jar <file>\n" +
+                    "<file> contains one command per line");
+
         // Initialises everything
         CommandSupplier supplier = CommandSupplier.fromFile(args[0]);
         Bot bot = new Bot();
 
         // Small delay to let the user select the minecraft window
-        for(int i = 3; i >= 1; i--) {
+        for(int i = 5; i >= 1; i--) {
             System.out.println("Starting in "+ i + "...");
             sleep(1000);
         }
