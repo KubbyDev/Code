@@ -12,6 +12,8 @@ export GOROOT=$HOME/Programs/go
 export GOPATH=$HOME/Programs/gopackages
 export PATH=$PATH:$GOROOT/bin:$GOROOT/lib:$GOROOT/doc:$GOPATH/bin
 export PATH=$PATH:/opt/metasploit-framework/bin
+export CS_HOST=beacon
+export EDITOR=vim
 
 # Aliases
 alias vimrc="vim $HOME/.vimrc"
@@ -49,15 +51,19 @@ tp() {
 
 # Git commits and pushes
 commit() {
-
+ 
     git add .
     git status
 
     read "response?Commit ? [Y/n] "
     response=${response:l} #tolower
     if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
-        git commit -m $1
-        git push
+        git commit -m $1 || return
+        if [[ ! -z "$2" ]]; then
+            git tag -d exercises-$2-1
+            git tag -a exercises-$2-1 -m $1
+        fi
+        git push --follow-tags
     fi
 }
 
@@ -101,5 +107,10 @@ drive() {
 
 data() {
     drive Data
+}
+
+codingstyle() {
+    indent -bli0 -npsl -i4 -nut -npcs -v $1
+    trash $1~
 }
 
