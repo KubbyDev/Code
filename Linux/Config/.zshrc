@@ -49,20 +49,29 @@ tp() {
     ls
 }
 
-# Git commits and pushes
+# Usage: commit <message> [tag]
 commit() {
  
     git add .
     git status
 
+    # Asks the user if he wants to commit
     read "response?Commit ? [Y/n] "
     response=${response:l} #tolower
     if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
+        # Commits. Aborts if the command fails
         git commit -m $1 || return
+        # If the tag is specified
         if [[ ! -z "$2" ]]; then
-            git tag -d exercises-$2-1
-            git tag -a exercises-$2-1 -m $1
+            i=0
+            passed=0
+            # Tries tags until it finds an unused one
+            while [ $passed -lt 1 ]; do
+                git tag -a exercises-$2-$i -m $1 && let passed=1
+                let i=$i+1
+            done
         fi
+        # Pushes
         git push --follow-tags
     fi
 }
