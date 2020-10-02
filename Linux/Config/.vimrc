@@ -245,6 +245,9 @@ set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 " Auto reloads the file if it's modified outside of vim
 set autoread
 
+" Avoids problems with \r
+set fileformat=unix
+
 " Enables mouse
 set mouse=a
 

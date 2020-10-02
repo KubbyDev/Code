@@ -119,7 +119,8 @@ data() {
 }
 
 codingstyle() {
-    indent -bli0 -npsl -i4 -nut -npcs -v $1
-    trash $1~
+    clang-format $1 > /tmp/$1
+    mv /tmp/$1 $1
 }
+
 
