@@ -22,6 +22,9 @@ alias zshrc="vim $HOME/.zshrc"
 alias reload="source $HOME/.zshrc"
 alias rm='trash'
 alias update='sudo apt update && sudo apt upgrade && sudo apt autoremove'
+alias gl='git log'
+alias glo='git log --oneline'
+alias gs='git status'
 
 # This function creates a new practical and does the base config
 # If the practical name is not given, just goes to the practical folder
@@ -120,7 +123,7 @@ data() {
 
 codingstyle() {
     clang-format $1 > /tmp/$1
-    mv /tmp/$1 $1
+    cp /tmp/$1 $1
 }
 
 

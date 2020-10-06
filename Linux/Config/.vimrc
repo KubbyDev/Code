@@ -109,10 +109,10 @@ map <F9> <ESC> :w <CR> :call Debug("", "")
 :   let runArgs = a:0 >= 2 ? a:2 : ""
     " C
 :   if(ext == "c" || ext == "h")
-:       execute '!gcc -Wall -Wextra -Werror -std=c99 -O0 -o a.out *.[co] -lm -g '.compArgs.' && gdb --args ./a.out '.runArgs.' ; rm ./a.out'
+:       execute '!gcc -Wall -Wextra -std=c99 -O0 -o a.out *.[co] -lm -g '.compArgs.' && gdb --args ./a.out '.runArgs.' ; rm ./a.out'
     " Cpp
 :   elseif(ext == "cpp" || ext == "cc" || ext == "hh")
-:       execute '!g++ -Wall -Wextra -Werror -O0 -o a.out *.(cc|cpp|o) -lm -g '.compArgs.' && gdb --args ./a.out '.runArgs.' ; rm ./a.out'
+:       execute '!g++ -Wall -Wextra -O0 -o a.out *.(cc|cpp|o) -lm -g '.compArgs.' && gdb --args ./a.out '.runArgs.' ; rm ./a.out'
     " Assembly
 :   elseif(ext == "asm")
 :       call CompileRun()
