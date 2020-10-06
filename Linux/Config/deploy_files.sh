@@ -7,7 +7,12 @@ trash ~/.bash_aliases
 trash ~/.bashrc
 trash ~/.zshrc
 
-cp ./.vimrc ~/
-cp ./.bash_aliases ~/
-cp ./.bashrc ~/
-cp ./.zshrc ~/
+dos2unix .vimrc
+dos2unix .zshrc
+dos2unix .bash_aliases
+dos2unix .bashrc
+
+cp .vimrc ~/
+cp .bash_aliases ~/
+cp .bashrc ~/
+cp .zshrc ~/
