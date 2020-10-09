@@ -23,7 +23,7 @@ map <F4> <ESC> :w <CR> :call Compile("")
 :   let arguments = a:0 >= 1 ? a:1 : ""
     " If compile.sh exists, executes it
 :   if(filereadable("compile.sh"))
-:       execute '!./compile.sh '.arguments.' && echo "Compilation successfull"'
+:       execute '!bash compile.sh '.arguments.' && echo "Compilation successfull"'
     " If a Makefile is found, uses it
 :   elseif(filereadable("Makefile"))
 :       execute '!make '.name.' || make'
@@ -55,7 +55,7 @@ map <F5> <ESC> :w <CR> :call Run("")
 :   let arguments = a:0 >= 1 ? a:1 : ""
     " If run.sh exists, executes it
 :   if(filereadable("run.sh"))
-:       execute '!./run.sh '.arguments
+:       execute '!bash run.sh '.arguments
     " else run the standard run command
     " C, Cpp and Cuda
 :   elseif(ext == "c" || ext == "h" || ext == "cpp" || ext == "cc" || ext == "hh" || ext == "cu")
@@ -158,7 +158,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
-let b:syntastic_c_cflags = '`pkg-config --cflags glib-2.0` `pkg-config --libs glib-2.0` `sdl2-config --cflags --libs` `sdl-config --cflags --libs`'
+let b:syntastic_c_cflags = '-Wall -Wextra -std=c99 `pkg-config --cflags glib-2.0` `pkg-config --libs glib-2.0` `sdl2-config --cflags --libs` `sdl-config --cflags --libs`'
 let g:syntastic_python_python_exec = '/usr/bin/python3'
 map <F7> :SyntasticToggleMode<CR>
 
