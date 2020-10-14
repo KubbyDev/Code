@@ -102,25 +102,6 @@ asm() {
 
 }
 
-# Creates a C file with its header
-c() {
-
-    touch $1.h
-    input=$1
-    uppercase=${input^^}
-    printf "#ifndef ${uppercase}\n#define ${uppercase}\n\n    \n\n#endif" > $1.h
-    vim $1.c
-
-}
-
-drive() {
-    cd /media/kubby/$1
-}
-
-data() {
-    drive Data
-}
-
 codingstyle() {
     if [[ -z "$1" ]] ; then
         echo "Please provide files to process"
@@ -131,4 +112,51 @@ codingstyle() {
     done
 }
 
+# Automatically builds a c Makefile
+# Usage: makefile [name]
+# Name is used for the library name (libname.a) and the binary (name)
+# Parent folder name by default
+makefile() {
 
+    if [[ -f Makefile ]]; then 
+        read "response?Makefile already exists. Overwrite ? [Y/n] "
+        response=${response:l} #tolower
+        if [[ ! $response =~ ^(yes|y| ) ]] && [[ ! -z $response ]]; then
+            return;
+        fi
+    fi
+
+    SOURCES=`ls *.c | tr '\n' ' '`
+    PROJECTNAME=${PWD##*/} # Parent directory
+
+    if [[ ! -z $1 ]]; then
+        PROJECTNAME=$1
+    fi
+
+    echo "\
+CC = gcc
+CFLAGS = -std=c99 -Wall -Wextra -Werror -pedantic
+
+SRC = $SOURCES
+OBJ = \$(SRC:.c=.o)
+BIN = $PROJECTNAME
+LIB = lib$PROJECTNAME.a
+
+all: library bin
+\$(BIN): bin
+\$(LIB): library
+
+bin: \$(OBJ)
+\t\$(CC) \$(CFLAGS) \$^ -o \$(BIN)
+
+library: \$(OBJ)
+\tar -cvq  \$(LIB) \$(OBJ)
+
+clean:
+\t\$(RM) \$(LIB) \$(BIN) \$(OBJ)
+
+.PHONY: all clean library" > Makefile
+
+    echo "Makefile created!"
+
+}
