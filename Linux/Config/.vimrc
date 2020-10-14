@@ -11,9 +11,6 @@
 " Compilation and running
 " ------------------------------------------------------------------------------
 
-" If you add compile.sh or run.sh files, dont forget to execute
-" this command: chmod +x run/compile.sh
-
 " F4: Compile or Check depending on the language
 map <F4> <ESC> :w <CR> :call Compile("")
 :function! Compile(...)
