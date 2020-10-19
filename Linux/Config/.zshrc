@@ -109,7 +109,8 @@ codingstyle() {
         return
     fi
     for arg in "$@"; do
-        clang-format $arg > /tmp/$arg && cp /tmp/$arg $arg
+        cp "$arg" /tmp/`basename "$arg"`
+        clang-format -i "$arg"
     done
 }
 

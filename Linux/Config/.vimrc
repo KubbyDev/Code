@@ -155,7 +155,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
-let b:syntastic_c_cflags = '-Wall -Wextra -std=c99 `pkg-config --cflags glib-2.0` `pkg-config --libs glib-2.0` `sdl2-config --cflags --libs` `sdl-config --cflags --libs`'
+let b:syntastic_c_cflags = '-Wall -Wextra -std=c99 -pedantic'
 let g:syntastic_python_python_exec = '/usr/bin/python3'
 map <F7> :SyntasticToggleMode<CR>
 
