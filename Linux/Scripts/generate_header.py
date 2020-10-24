@@ -38,7 +38,7 @@ else:
     define = filename.upper() + "_" + headerExtension.upper()
     # Creates the file
     file = open(headerpath, "w+")
-    file.write('#ifndef ' + define + '\n' 
+    file.write('#ifndef ' + define + '\n'
              + '#define ' + define + '\n'
              + '\n\n'
              + '#endif //' + define)
@@ -52,10 +52,11 @@ cfiledata = file.read()
 file.close()
 funcs = re.findall(definitionRegex, cfiledata)
 
-# Removes the overlapping matches
+# Adds the functions if they are not static
 functions = []
 for func in funcs:
-    functions.append(func[0])
+    if func[0].split()[0] != 'static':
+        functions.append(func[0])
 
 # Adds the include in the target file ------------------------------------------
 
@@ -71,8 +72,7 @@ if cfiledata.find(includeLine) == -1:
 
 # Converts the functions to prototypes
 for i in range(len(functions)):
-    functions[i] = re.sub(r'\)[ \n\r]*{', r');', functions[i]);
-    
+    functions[i] = re.sub(r'\)[ \n\r]*{', r');', functions[i])
 
 # Writes the prototypes in the header file
 file = open(headerpath, "r")
