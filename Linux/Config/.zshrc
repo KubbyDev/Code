@@ -71,7 +71,7 @@ commit() {
             passed=0
             # Tries tags until it finds an unused one
             while [ $passed -lt 1 ]; do
-                git tag -a exercises-$2-$i -m $1 && let passed=1
+                git tag -a $2-$i -m $1 && let passed=1
                 let i=$i+1
             done
         fi
@@ -161,4 +161,31 @@ clean:
 
     echo "Makefile created!"
 
+}
+
+precommit() {
+    cp $HOME/Code/Linux/Resources/precommit/.* ./
+    pre-commit install 
+}
+
+shscript() {
+
+    name="$1"
+    if [ -z "$name" ]; then
+        name="script"
+    fi
+    name+=".sh"
+
+    if [ -f "$name" ]; then
+        echo "$name already exists!"
+        return
+    fi
+
+    echo "#!/bin/sh\n\n" > "$name"
+    chmod +x "$name"
+    vim "$name"
+}
+
+trimwhitespace() {
+    sed -i 's/[ \t]*$//' "$1"
 }
