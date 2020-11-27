@@ -151,13 +151,16 @@ all: library bin
 bin: \$(OBJ)
 \t\$(CC) \$(CFLAGS) \$^ -o \$(BIN)
 
+debug: CFLAGS += -g -fsanitize=address
+debug: clean all
+
 library: \$(OBJ)
 \tar -cvq  \$(LIB) \$(OBJ)
 
 clean:
 \t\$(RM) \$(LIB) \$(BIN) \$(OBJ)
 
-.PHONY: all clean library" > Makefile
+.PHONY: all clean library debug" > Makefile
 
     echo "Makefile created!"
 
@@ -188,4 +191,15 @@ shscript() {
 
 trimwhitespace() {
     sed -i 's/[ \t]*$//' "$1"
+}
+
+ccat() {
+    if [[ -z "$1" ]] ; then
+        echo "Please provide files to process"
+        return
+    fi
+    for arg in "$@"; do
+        echo "\n$arg:"
+        pygmentize -g $arg
+    done
 }

@@ -56,10 +56,12 @@ map <F5> <ESC> :w <CR> :call Run("")
     " else run the standard run command
     " C, Cpp and Cuda
 :   elseif(ext == "c" || ext == "h" || ext == "cpp" || ext == "cc" || ext == "hh" || ext == "cu")
-:       if(filereadable("a.out")) " Looks for an a.out executable
-:           execute '!./a.out '.arguments.' ; rm a.out'
-:       elseif(filereadable(name)) " Looks for the current file without extension
+:       if(filereadable(name)) " Looks for the current file without extension
 :           execute '!./'.name.' '.arguments.' ; rm '.name
+:       elseif(filereadable("a.out")) " Looks for an a.out executable
+:           execute '!./a.out '.arguments.' ; rm a.out'
+:       elseif(filereadable("main")) " Looks for a main executable
+:           execute '!./main '.arguments.' ; rm main'
 :       else
 :           !echo "Compiled file not found"
 :       endif
@@ -104,15 +106,20 @@ map <F9> <ESC> :w <CR> :call Debug("", "")
 :   let compArgs = a:0 >= 1 ? a:1 : ""
     " Arguments for the execution ("" if nothing given)
 :   let runArgs = a:0 >= 2 ? a:2 : ""
-    " C
-:   if(ext == "c" || ext == "h")
-:       execute '!gcc -Wall -Wextra -std=c99 -O0 -o a.out *.[co] -lm -g '.compArgs.' && gdb --args ./a.out '.runArgs.' ; rm ./a.out'
-    " Cpp
-:   elseif(ext == "cpp" || ext == "cc" || ext == "hh")
-:       execute '!g++ -Wall -Wextra -O0 -o a.out *.(cc|cpp|o) -lm -g '.compArgs.' && gdb --args ./a.out '.runArgs.' ; rm ./a.out'
-    " Assembly
-:   elseif(ext == "asm")
-:       call CompileRun()
+    " If a Makefile is found, uses it
+:   if(filereadable("Makefile"))
+:       execute '!(make debug || make) && gdb --args main '.runArgs.' ; make clean'
+:   else
+        " C
+:       if(ext == "c" || ext == "h")
+:           execute '!gcc -Wall -Wextra -std=c99 -O0 -o a.out *.[co] -lm -g '.compArgs.' && gdb --args ./a.out '.runArgs.' ; rm ./a.out'
+        " Cpp
+:       elseif(ext == "cpp" || ext == "cc" || ext == "hh")
+:           execute '!g++ -Wall -Wextra -O0 -o a.out *.(cc|cpp|o) -lm -g '.compArgs.' && gdb --args ./a.out '.runArgs.' ; rm ./a.out'
+        " Assembly
+:       elseif(ext == "asm")
+:           call CompileRun()
+:       endif
 :   endif
 :endfunction
 
