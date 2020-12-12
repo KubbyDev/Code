@@ -23,7 +23,8 @@ alias reload="source $HOME/.zshrc"
 alias rm='trash'
 alias update='sudo apt update && sudo apt upgrade && sudo apt autoremove'
 alias gl='git log'
-alias glo='git log --oneline'
+alias glo='gl --oneline'
+alias glog='glo --graph'
 alias gs='git status'
 alias gd='git diff'
 

@@ -40,6 +40,9 @@ map <F4> <ESC> :w <CR> :call Compile("")
     " Python
 :   elseif(ext == "py")
 :       !python3 -m py_compile *.py
+    " Bison
+:   elseif(ext == "y")
+:       !bison %
 :   endif
 :endfunction
 
@@ -119,6 +122,9 @@ map <F9> <ESC> :w <CR> :call Debug("", "")
         " Assembly
 :       elseif(ext == "asm")
 :           call CompileRun()
+        " Bison
+:       elseif(ext == "y")
+:          !bison % -goutputgraph.dot -o /dev/null; dot -Tpng outputgraph.dot | display; rm outputgraph.dot
 :       endif
 :   endif
 :endfunction
