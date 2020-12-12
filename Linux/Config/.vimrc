@@ -43,6 +43,9 @@ map <F4> <ESC> :w <CR> :call Compile("")
     " Bison
 :   elseif(ext == "y")
 :       !bison %
+    " Haskell
+:   elseif(ext == "hs")
+:       execute '!ghc -outputdir /tmp '.expand('%:t')
 :   endif
 :endfunction
 
@@ -57,8 +60,8 @@ map <F5> <ESC> :w <CR> :call Run("")
 :   if(filereadable("run.sh"))
 :       execute '!bash run.sh '.arguments
     " else run the standard run command
-    " C, Cpp and Cuda
-:   elseif(ext == "c" || ext == "h" || ext == "cpp" || ext == "cc" || ext == "hh" || ext == "cu")
+    " C, Cpp, Cuda and Haskell
+:   elseif(ext == "c" || ext == "h" || ext == "cpp" || ext == "cc" || ext == "hh" || ext == "cu" || ext == "hs")
 :       if(filereadable(name)) " Looks for the current file without extension
 :           execute '!./'.name.' '.arguments.' ; rm '.name
 :       elseif(filereadable("a.out")) " Looks for an a.out executable
@@ -84,6 +87,9 @@ map <F5> <ESC> :w <CR> :call Run("")
     " Rust
 :   elseif(ext == "rs")
 :       execute '!cargo run -- '.arguments.' ; cargo clean'
+    " Lisp
+:   elseif(ext == "lsp")
+:       execute '!sbcl --script '.expand('%:t').' '.arguments
 :   endif
 :endfunction
 
@@ -124,7 +130,13 @@ map <F9> <ESC> :w <CR> :call Debug("", "")
 :           call CompileRun()
         " Bison
 :       elseif(ext == "y")
-:          !bison % -goutputgraph.dot -o /dev/null; dot -Tpng outputgraph.dot | display; rm outputgraph.dot
+:           !bison % -goutputgraph.dot -o /dev/null; dot -Tpng outputgraph.dot | display; rm outputgraph.dot
+        " Lisp
+:       elseif(ext == "lsp")
+:           !sbcl --load %
+        " Haskell
+:       elseif(ext == "hs")
+:           !ghci -outputdir /tmp %
 :       endif
 :   endif
 :endfunction
