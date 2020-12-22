@@ -88,7 +88,7 @@ map <F5> <ESC> :w <CR> :call Run("")
 :   elseif(ext == "rs")
 :       execute '!cargo run -- '.arguments.' ; cargo clean'
     " Lisp
-:   elseif(ext == "lsp")
+:   elseif(ext == "lsp" || ext == "lisp")
 :       execute '!sbcl --script '.expand('%:t').' '.arguments
 :   endif
 :endfunction
@@ -132,7 +132,7 @@ map <F9> <ESC> :w <CR> :call Debug("", "")
 :       elseif(ext == "y")
 :           !bison % -goutputgraph.dot -o /dev/null; dot -Tpng outputgraph.dot | display; rm outputgraph.dot
         " Lisp
-:       elseif(ext == "lsp")
+:       elseif(ext == "lsp" || ext == "lisp")
 :           !sbcl --load %
         " Haskell
 :       elseif(ext == "hs")

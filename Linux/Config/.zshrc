@@ -6,6 +6,7 @@ export LC_ALL=en_US.UTF-8
 ZSH_THEME="mrtazz"
 HYPHEN_INSENSITIVE="true"
 
+stty -ixon
 source $ZSH/oh-my-zsh.sh
 
 export GOROOT=$HOME/Programs/go
@@ -27,6 +28,7 @@ alias glo='gl --oneline'
 alias glog='glo --graph'
 alias gs='git status'
 alias gd='git diff'
+alias gc='git checkout'
 
 # This function creates a new practical and does the base config
 # If the practical name is not given, just goes to the practical folder
