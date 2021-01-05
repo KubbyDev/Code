@@ -9,12 +9,15 @@ HYPHEN_INSENSITIVE="true"
 stty -ixon
 source $ZSH/oh-my-zsh.sh
 
-export GOROOT=$HOME/Programs/go
-export GOPATH=$HOME/Programs/gopackages
-export PATH=$PATH:$GOROOT/bin:$GOROOT/lib:$GOROOT/doc:$GOPATH/bin
-export PATH=$PATH:/opt/metasploit-framework/bin
-export CS_HOST=beacon
-export EDITOR=vim
+export GOROOT="$HOME/Programs/go"
+export GOPATH="$HOME/Programs/gopackages"
+export PATH="$PATH:$GOROOT/bin:$GOROOT/lib:$GOROOT/doc:$GOPATH/bin"
+export PATH="$PATH:/opt/metasploit-framework/bin"
+export PATH="$PATH:/usr/lib/postgresql/12/bin"
+export PGDATA="$HOME/Programs/postgresql/data"
+export PGHOST="/tmp"
+export CS_HOST="beacon"
+export EDITOR="vim"
 
 # Aliases
 alias vimrc="vim $HOME/.vimrc"
