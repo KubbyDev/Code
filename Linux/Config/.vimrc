@@ -196,10 +196,6 @@ set laststatus=2
 let g:better_whitespace_enabled=0 " Disables highlighting
 let g:strip_whitespace_on_save=0
 function EnableWSClean()
-"    function WhiteSpaceClean(timer)
-"        silent call StripWhitespace(0,2)
-"    endfunction
-"    let timer = timer_start(5000, 'WhiteSpaceClean', {'repeat': -1})
     let g:strip_whitespace_on_save=1
     let g:strip_whitelines_at_eof=1
     let g:strip_whitespace_confirm=0
@@ -212,8 +208,8 @@ endfunction
 let ext = expand('%:e')
 let filename = expand('%:r')
 
-" Turns Syntastic off for assembly files
-if(ext == "68k")
+" Turns Syntastic off for 68k assembly files
+if(ext == "asm")
     silent autocmd VimEnter * :SyntasticToggleMode
 endif
 
@@ -249,11 +245,6 @@ if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "h" || ext == "hh")
     map <F3> <ESC> :call SwapSourceHeader() <CR>
 endif
 
-" Uses gas syntax highlighting for x86 files
-if(ext == "s" || ext == "S")
-    silent autocmd VimEnter * :set ft=gas
-endif
-
 " ------------------------------------------------------------------------------
 " Others
 " ------------------------------------------------------------------------------
@@ -287,7 +278,7 @@ set nowrap
 
 " Syntaxic coloration
 syntax on
-autocmd Filetype asm set syntax=asm68k
+autocmd Filetype asm set syntax=gas
 autocmd Filetype c set syntax=c
 autocmd Filetype h set syntax=c
 
