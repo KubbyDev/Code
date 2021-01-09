@@ -31,7 +31,7 @@ map <F4> <ESC> :w <CR> :call Compile("")
     " Cpp
 :   elseif(ext == "cpp" || ext == "cc" || ext == "hh")
 :       execute '!g++ -Wall -Wextra -Werror -O1 -o a.out *.(cc|cpp|o) -lm '.arguments.' && echo "Compilation successfull"'
-    " Assembly
+    " 68k
 :   elseif(ext == "asm")
 :       !/home/kubby/68000/a68k % -o%:r.hex -s -n -rmal && echo "Compilation successfull"
     " Rust
@@ -71,7 +71,7 @@ map <F5> <ESC> :w <CR> :call Run("")
 :       else
 :           !echo "Compiled file not found"
 :       endif
-    " Assembly
+    " 68k
 :   elseif(ext == "asm")
 :       if(filereadable(expand("%:r") . ".hex"))
 :           silent !(/home/kubby/68000/d68k.sh %:r.hex && rm %:r.hex) &
@@ -125,7 +125,7 @@ map <F9> <ESC> :w <CR> :call Debug("", "")
         " Cpp
 :       elseif(ext == "cpp" || ext == "cc" || ext == "hh")
 :           execute '!g++ -Wall -Wextra -O0 -o a.out *.(cc|cpp|o) -lm -g '.compArgs.' && gdb --args ./a.out '.runArgs.' ; rm ./a.out'
-        " Assembly
+        " 68k
 :       elseif(ext == "asm")
 :           call CompileRun()
         " Bison
@@ -163,6 +163,7 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim'}
 Plugin 'rust-lang/rust.vim'
+Plugin 'shirk/vim-gas'
 
 call vundle#end()
 filetype plugin indent on
@@ -212,7 +213,7 @@ let ext = expand('%:e')
 let filename = expand('%:r')
 
 " Turns Syntastic off for assembly files
-if(ext == "asm")
+if(ext == "68k")
     silent autocmd VimEnter * :SyntasticToggleMode
 endif
 
@@ -248,6 +249,10 @@ if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "h" || ext == "hh")
     map <F3> <ESC> :call SwapSourceHeader() <CR>
 endif
 
+" Uses gas syntax highlighting for x86 files
+if(ext == "s" || ext == "S")
+    silent autocmd VimEnter * :set ft=gas
+endif
 
 " ------------------------------------------------------------------------------
 " Others
