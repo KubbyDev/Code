@@ -32,6 +32,7 @@ alias glog='glo --graph'
 alias gs='git status'
 alias gd='git diff'
 alias gc='git checkout'
+alias gp='git pull'
 
 # This function creates a new practical and does the base config
 # If the practical name is not given, just goes to the practical folder
