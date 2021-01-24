@@ -219,9 +219,10 @@ if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "cu")
 endif
 
 " Enables the White space cleanup when the file is saved
-if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "cu" || ext == "h" || ext == "hh" || ext == "asm" || ext == "py" || ext == "rs")
+if(ext == "c" || ext == "cpp" || ext == "cc" || ext == "cu" || ext == "h" || ext == "hh" || ext == "asm" || ext == "py" || ext == "rs" || ext == "sql" || ext == "s" || ext == "S")
     call EnableWSClean()
 endif
+
 " Swaps between source and header when F3 is pressed for c and cpp files
 function SwapSourceHeader()
     execute ':w'
