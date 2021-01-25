@@ -111,13 +111,24 @@ asm() {
 }
 
 codingstyle() {
+    
+    files=("$@")
+    
     if [[ -z "$1" ]] ; then
-        echo "Please provide files to process"
-        return
+        files=($(find -name '*.c' -o -name '*.h' -o -name '*.cpp' -o -name '*.cc' -o -name '*.hh'))
     fi
-    for arg in "$@"; do
+    
+    for arg in "${files[@]}"; do
+
+        if [[ ! -f $arg ]]; then
+            echo -e "[\e[31mERROR\e[0m] No such file $arg"
+            continue
+        fi
+
         cp "$arg" /tmp/`basename "$arg"`
         clang-format -i "$arg"
+        echo "Formatted $arg"
+    
     done
 }
 
