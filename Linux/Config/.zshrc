@@ -62,8 +62,18 @@ tp() {
 
 # Usage: commit <message> [tag]
 commit() {
- 
-    git add .
+
+    if [[ -n $(git diff --name-only --cached) ]]; then 
+        read "response?Detected staged files. Skips \"git add .\" ? [Y/n] "
+        response=${response:l} #tolower
+        if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
+        else
+            git add .
+        fi
+    else
+        git add .
+    fi
+
     git status
 
     # Asks the user if he wants to commit
