@@ -237,8 +237,8 @@ function SwapSourceHeader()
         let f .= ".c"
         let g:ext = "c"
     elseif(g:ext == "hh")
-        let f .= ".cpp"
-        let g:ext = "cpp"
+        let f .= ".cc"
+        let g:ext = "cc"
     endif
     execute ':e ' f
 endfunction
