@@ -2,10 +2,10 @@ cd ~/Code/Linux/Config
 
 # Puts the current files in tmp to avoid
 # deleting them by accident
-mv ~/.vimrc /tmp
-mv ~/.bash_aliases /tmp
-mv ~/.bashrc /tmp
-mv ~/.zshrc /tmp
+trash ~/.vimrc
+trash ~/.bash_aliases
+trash ~/.bashrc
+trash ~/.zshrc
 
 dos2unix .vimrc
 dos2unix .zshrc
