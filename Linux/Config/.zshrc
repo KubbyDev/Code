@@ -64,10 +64,9 @@ tp() {
 commit() {
 
     if [[ -n $(git diff --name-only --cached) ]]; then 
-        read "response?Detected staged files. Skips \"git add .\" ? [Y/n] "
+        read "response?Detected staged files. Execute \"git add .\" anyways ? [Y/n] "
         response=${response:l} #tolower
         if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
-        else
             git add .
         fi
     else
