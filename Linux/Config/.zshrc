@@ -124,7 +124,7 @@ codingstyle() {
     files=("$@")
     
     if [[ -z "$1" ]] ; then
-        files=($(find -name '*.c' -o -name '*.h' -o -name '*.cpp' -o -name '*.cc' -o -name '*.hh'))
+        files=($(find -name '*.c' -o -name '*.h' -o -name '*.cpp' -o -name '*.cc' -o -name '*.hh' -o -name '*.hxx'))
     fi
     
     for arg in "${files[@]}"; do
