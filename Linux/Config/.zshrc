@@ -68,9 +68,10 @@ tp() {
 commit() {
 
     if [[ -n $(git diff --name-only --cached) ]]; then 
-        read "response?Detected staged files. Execute \"git add .\" anyways ? [Y/n] "
+        read "response?Detected staged files. Redo add anyways ? [Y/n] "
         response=${response:l} #tolower
         if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
+            git reset HEAD .
             git add .
         fi
     else
