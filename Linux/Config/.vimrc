@@ -33,7 +33,7 @@ map <F4> <ESC> :w <CR> :call Compile("")
 :       execute '!g++ -Wall -Wextra -Werror -O1 -o a.out *.(cc|cpp|o) -lm '.arguments.' && echo "Compilation successfull"'
     " 68k
 :   elseif(ext == "asm")
-:       !/home/kubby/68000/a68k % -o%:r.hex -s -n -rmal && echo "Compilation successfull"
+:       !/home/kubby/Programs/68000/a68k % -o%:r.hex -s -n -rmal && echo "Compilation successfull"
     " Rust
 :   elseif(ext == "rs") " Doesn't actually compile but check is faster
 :       !cargo check
@@ -74,7 +74,7 @@ map <F5> <ESC> :w <CR> :call Run("")
     " 68k
 :   elseif(ext == "asm")
 :       if(filereadable(expand("%:r") . ".hex"))
-:           silent !(/home/kubby/68000/d68k.sh %:r.hex && rm %:r.hex) &
+:           silent !(/home/kubby/Programs/68000/d68k.sh %:r.hex && rm %:r.hex) &
 :       else
 :           !echo "Compiled file not found"
 :       endif
