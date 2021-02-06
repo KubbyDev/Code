@@ -34,6 +34,7 @@ alias gd='git diff'
 alias gc='git checkout'
 alias gp='git pull'
 alias decompress='tar -xvf $(ls -t $DOWNLOADS/*.tar | head -n1)'
+alias newest='ls -t | head -n1'
 
 # Stores all the things that will not be the same across all my machines
 source $HOME/.zshrc_machine_dependant
