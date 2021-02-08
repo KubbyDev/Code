@@ -1,5 +1,4 @@
-All my projects that are not big enough, or not interesting enough to have their own repository.
-You will probably find a lot of shitty not working things. Some things although deserve a bit of attention.
+My dotfiles and some tests and small learning projects
 
 ## [Julia Sets Visualizer](https://github.com/KubbyDev/Code/tree/master/CUDA/JuliaMandelbrotVisualizer)
 
@@ -21,17 +20,17 @@ A renderer that can render 3D models in the Wavefront obj format using raycastin
 
 ## [Neural Network](https://github.com/KubbyDev/Code/tree/master/Eclipse/NeuralNetwork)
 
-My very first attempt to make machine learning. It is capable of recognizing 28x28 images representing digits with 15% errors (from the MNIST database).  
+My very first attempt to make machine learning. It is capable of recognizing 28x28 images representing digits with 15% errors (from the MNIST database).
 I have done a much better neural network since, in its own repository: [https://github.com/KubbyDev/OCR\_Neural\_Network
 ](https://github.com/KubbyDev/OCR\_Neural\_Network)
 
 ## [4 in a Row](https://github.com/KubbyDev/Code/tree/master/Eclipse/Puissance4)
 
 The program that was used for this project:
-[![Puissance4](https://i.ibb.co/2NBbK0b/https-i-ytimg-com-vi-Fhdys94-Y70-maxresdefault.jpg)](https://www.youtube.com/watch?v=-Fhdys94Y70 "Puissance4")  
+[![Puissance4](https://i.ibb.co/2NBbK0b/https-i-ytimg-com-vi-Fhdys94-Y70-maxresdefault.jpg)](https://www.youtube.com/watch?v=-Fhdys94Y70 "Puissance4")
 It was modified a lot for other purposes so it doesn't work anymore.
 
 ## [Logic Gate Generator](https://github.com/KubbyDev/Code/tree/master/Eclipse/LogicGateGenerator)
 
-A sort of library that can handle simple logic gates. It can generate logic gates based on a truth table, generate a truth table based on the gate, handle user created gates etc...  
+A sort of library that can handle simple logic gates. It can generate logic gates based on a truth table, generate a truth table based on the gate, handle user created gates etc...
 I have done a much better simulator since, in its own repository: [https://github.com/KubbyDev/LogicGateSimulator](https://github.com/KubbyDev/LogicGateSimulator)
