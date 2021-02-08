@@ -9,13 +9,16 @@ HYPHEN_INSENSITIVE="true"
 stty -ixon
 source $ZSH/oh-my-zsh.sh
 
-export GOROOT="$HOME/Programs/go"
-export GOPATH="$HOME/Programs/gopackages"
+export PROGRAMS="$HOME/Programs"
+export GOROOT="$PROGRAMS/go"
+export GOPATH="$PROGRAMS/gopackages"
 export PATH="$PATH:$GOROOT/bin:$GOROOT/lib:$GOROOT/doc:$GOPATH/bin"
 export PATH="$PATH:/opt/metasploit-framework/bin"
 export PATH="$PATH:/usr/lib/postgresql/12/bin"
-export PGDATA="$HOME/Programs/postgresql/data"
+export PGDATA="$PROGRAMS/postgresql/data"
 export PGHOST="/tmp"
+export PATH="$PATH:$PROGRAMS/CLion/bin"
+export PATH="$PATH:$PROGRAMS/PyCharm/bin"
 export CS_HOST="beacon"
 export EDITOR="vim"
 
