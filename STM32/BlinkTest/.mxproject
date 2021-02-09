@@ -9,17 +9,17 @@ CDefines=USE_HAL_DRIVER;STM32F303x8;USE_HAL_DRIVER;USE_HAL_DRIVER;
 [PreviousGenFiles]
 AdvancedFolderStructure=true
 HeaderFileListSize=3
-HeaderFiles#0=G:/Programmes/STM32_Workspaces/CubeIDE/BlinkTest/Core/Inc/stm32f3xx_it.h
-HeaderFiles#1=G:/Programmes/STM32_Workspaces/CubeIDE/BlinkTest/Core/Inc/stm32f3xx_hal_conf.h
-HeaderFiles#2=G:/Programmes/STM32_Workspaces/CubeIDE/BlinkTest/Core/Inc/main.h
+HeaderFiles#0=G:/Code/STM32/BlinkTest/Core/Inc/stm32f3xx_it.h
+HeaderFiles#1=G:/Code/STM32/BlinkTest/Core/Inc/stm32f3xx_hal_conf.h
+HeaderFiles#2=G:/Code/STM32/BlinkTest/Core/Inc/main.h
 HeaderFolderListSize=1
-HeaderPath#0=G:/Programmes/STM32_Workspaces/CubeIDE/BlinkTest/Core/Inc
+HeaderPath#0=G:/Code/STM32/BlinkTest/Core/Inc
 HeaderFiles=;
 SourceFileListSize=3
-SourceFiles#0=G:/Programmes/STM32_Workspaces/CubeIDE/BlinkTest/Core/Src/stm32f3xx_it.c
-SourceFiles#1=G:/Programmes/STM32_Workspaces/CubeIDE/BlinkTest/Core/Src/stm32f3xx_hal_msp.c
-SourceFiles#2=G:/Programmes/STM32_Workspaces/CubeIDE/BlinkTest/Core/Src/main.c
+SourceFiles#0=G:/Code/STM32/BlinkTest/Core/Src/stm32f3xx_it.c
+SourceFiles#1=G:/Code/STM32/BlinkTest/Core/Src/stm32f3xx_hal_msp.c
+SourceFiles#2=G:/Code/STM32/BlinkTest/Core/Src/main.c
 SourceFolderListSize=1
-SourcePath#0=G:/Programmes/STM32_Workspaces/CubeIDE/BlinkTest/Core/Src
+SourcePath#0=G:/Code/STM32/BlinkTest/Core/Src
 SourceFiles=;
 
