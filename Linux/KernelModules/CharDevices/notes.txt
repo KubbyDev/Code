@@ -1,0 +1,2 @@
+To find the list of functions that can be implemented by character or block devices:
+cat /usr/src/linux-headers-$(uname -r)/include/linux/fs.h | cat -n | grep -A 40 "file_operations {"

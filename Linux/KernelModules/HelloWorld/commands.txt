@@ -1,0 +1,14 @@
+List modules:
+lsmod
+
+Install module:
+sudo insmod hello.ko
+
+Get info on module:
+sudo modinfo hello.ko
+
+Remove module:
+sudo rmmod hello.ko
+
+See kernel logs:
+sudo tail -f /var/log/kern.log
