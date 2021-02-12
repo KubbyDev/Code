@@ -1,2 +1,11 @@
 To find the list of functions that can be implemented by character or block devices:
 cat /usr/src/linux-headers-$(uname -r)/include/linux/fs.h | cat -n | grep -A 40 "file_operations {"
+
+To give a user access to a device we have to find the entry for that device:
+find /sys -name ebbchar
+Then we need to find the KERNEL and SUBSYSTEM values for that device:
+udevadm info -a -p /sys/class/ebb/ebbchar
+Then we can add a udev rule:
+echo 'KERNEL=="ebbchar", SUBSYSTEM=="ebb", MODE="0666"' >> /etc/udev/rules.d/*ebbchar*
+The files in this directory are of the form PRIORITY-NAME.rules
+Priority is a number, files are sorted in lexical order and the first files (lowest numbers) have the highest priority

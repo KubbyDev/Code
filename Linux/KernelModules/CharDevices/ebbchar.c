@@ -18,7 +18,8 @@
 #include <linux/device.h>         // Header to support the kernel Driver Model
 #include <linux/kernel.h>         // Contains types, macros, functions for the kernel
 #include <linux/fs.h>             // Header for the Linux file system support
-#include <linux/uaccess.h>          // Required for the copy to user function
+#include <linux/mutex.h>	      /// Required for the mutex functionality
+#include <linux/uaccess.h>        // Required for the copy to user function
 #define  DEVICE_NAME "ebbchar"    ///< The device will appear at /dev/ebbchar using this value
 #define  CLASS_NAME  "ebb"        ///< The device class -- this is a character device driver
 
@@ -26,6 +27,10 @@ MODULE_LICENSE("GPL");            ///< The license type -- this affects availabl
 MODULE_AUTHOR("Derek Molloy");    ///< The author -- visible when you use modinfo
 MODULE_DESCRIPTION("A simple Linux char driver for the BBB");  ///< The description -- see modinfo
 MODULE_VERSION("0.1");            ///< A version number to inform users
+
+static DEFINE_MUTEX(ebbchar_mutex);   /// A macro that is used to declare a new mutex that is visible in this file
+                                      /// results in a semaphore variable ebbchar_mutex with value 1 (unlocked)
+                                      /// DEFINE_MUTEX_LOCKED() results in a variable with value 0 (locked)
 
 static int    majorNumber;                  ///< Stores the device number -- determined automatically
 static char   message[256] = {0};           ///< Memory for the string that is passed from userspace
@@ -86,6 +91,9 @@ static int __init ebbchar_init(void){
       printk(KERN_ALERT "Failed to create the device\n");
       return PTR_ERR(ebbcharDevice);
    }
+
+   mutex_init(&ebbchar_mutex);       /// Initialize the mutex lock dynamically at runtime
+
    printk(KERN_INFO "EBBChar: device class created correctly\n"); // Made it! device was initialized
    return 0;
 }
@@ -99,6 +107,7 @@ static void __exit ebbchar_exit(void){
    class_unregister(ebbcharClass);                          // unregister the device class
    class_destroy(ebbcharClass);                             // remove the device class
    unregister_chrdev(majorNumber, DEVICE_NAME);             // unregister the major number
+   mutex_destroy(&ebbchar_mutex);        /// destroy the dynamically-allocated mutex
    printk(KERN_INFO "EBBChar: Goodbye from the LKM!\n");
 }
 
@@ -108,9 +117,15 @@ static void __exit ebbchar_exit(void){
  *  @param filep A pointer to a file object (defined in linux/fs.h)
  */
 static int dev_open(struct inode *inodep, struct file *filep){
-   numberOpens++;
-   printk(KERN_INFO "EBBChar: Device has been opened %d time(s)\n", numberOpens);
-   return 0;
+
+    if(!mutex_trylock(&ebbchar_mutex)){    /// Try to acquire the mutex (i.e., put the lock on/down)
+        printk(KERN_ALERT "EBBChar: Device in use by another process");
+        return -EBUSY;
+    }    /// returns 1 if successful and 0 if there is contention
+
+    numberOpens++;
+    printk(KERN_INFO "EBBChar: Device has been opened %d time(s)\n", numberOpens);
+    return 0;
 }
 
 /** @brief This function is called whenever device is being read from user space i.e. data is
@@ -157,8 +172,9 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
  *  @param filep A pointer to a file object (defined in linux/fs.h)
  */
 static int dev_release(struct inode *inodep, struct file *filep){
-   printk(KERN_INFO "EBBChar: Device successfully closed\n");
-   return 0;
+    mutex_unlock(&ebbchar_mutex);          /// Releases the mutex (i.e., the lock goes up)
+    printk(KERN_INFO "EBBChar: Device successfully closed\n");
+    return 0;
 }
 
 /** @brief A module must use the module_init() module_exit() macros from linux/init.h, which
