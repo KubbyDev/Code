@@ -1,0 +1,5 @@
+List of gpio functions that can be overwritten by the LKM
+cat /usr/src/linux-headers-$(uname -r)/include/linux/gpio.h
+
+List of interrupt flags
+cat /usr/src/linux-headers-$(uname -r)/include/linux/interrupt.h

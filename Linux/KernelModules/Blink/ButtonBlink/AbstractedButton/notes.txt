@@ -1,0 +1,11 @@
+The code from the article used timespec but they are being deprecated because the secoonds field will overflow in 2038
+Now the thing to use is timespec64. Some functions like getnstimeofday also have to be replaced (by ktime_get_real_ns)
+https://www.kernel.org/doc/html/latest/core-api/timekeeping.html
+
+There was also a problem with the __ATTR macro which is probably also deprecated
+I replaced it by the __ATTR_RW macro
+
+Apparently the kernel refuses to compile code with 64-bit divisions because they are slow
+https://stackoverflow.com/questions/25623956/aeabi-ldivmod-undefined-when-compiling-kernel-module
+I could use the do_div function but I don't know for the modulus so I just used a cast
+The code will break in 2038, that's sad :(
