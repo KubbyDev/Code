@@ -1,0 +1,1 @@
+zip tampermonkey-backup-.zip *.js *.json
