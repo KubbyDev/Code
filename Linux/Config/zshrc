@@ -203,7 +203,14 @@ clean:
 }
 
 precommit() {
-    cp $HOME/Code/Linux/Resources/precommit/.* ./
+    for i in "$HOME/Code/Linux/Resources/precommit/"*; do
+        name=$(basename "$i")
+        if [ $name = "gitignore" ]; then
+            cat "$i" >> "./.$name"
+        else
+            cp "$i" "./.$name"
+        fi;
+    done;
     pre-commit install 
 }
 
