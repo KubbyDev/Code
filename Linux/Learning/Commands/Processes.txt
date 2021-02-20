@@ -1,0 +1,8 @@
+ps aux
+liste les processus ("The a displays all processes running, including the ones being ran by other users. The u shows more details about the processes. And finally the x lists all processes that don't have a TTY associated with it")
+
+top
+Meme chose mais en temps reel
+
+
+

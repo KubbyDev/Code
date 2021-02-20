@@ -1,9 +1,0 @@
-ls -a /etc | less
-L'operateur pipe prend un stdout et le donne en stdin a un autre process
-Ici on prend l'output de ls -a /etc et on le donne a la commande less qui fait un joli affichage
-
-echo a | tee test.txt test2.txt
-Affiche a dans test.txt, test2.txt et stdout
-
-echo a | tee test.txt test2.txt 1> /dev/null
-Affiche a dans test.txt et test2.txt et ignore le stdout

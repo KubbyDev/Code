@@ -1,2 +1,0 @@
-Give execution permission to a sh script:
-chmod +x script.sh

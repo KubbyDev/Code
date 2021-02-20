@@ -1,0 +1,40 @@
+Current slide: 177
+https://bootlin.com/doc/training/linux-kernel/linux-kernel-slides.pdf
+
+	Kernel developpment:
+
+Kernel internal API: can change. So drivers can be broken by updates since they run in kernel space
+But the userspace API never changes (syscalls, /proc, /sys) so a kernel update should break any userspace program
+
+All kernel code outside /arch should be portable (work on any architecture). Floats can't be used in the kernel because
+they are not supported by every device (some low end processors don't have floating point units)
+
+To allocate memory in the kernel: kmalloc or vmalloc. Check the flags argument. kmalloc finds a physical contiguous 
+memory block. NEVER return a kmalloced block to the user, as the user uses virtual a address space.
+
+The size of the stack is fixed (4 or 8 kB). Don't use recursion !!
+
+list.h contains linked list functions :o
+
+	Device drivers:
+
+It is possible to develop device drivers in userspace with existing libraries like
+USB with libusb https://libusb.info/
+SPI with spidev https://www.kernel.org/doc/Documentation/spi/spidev
+I2C with i2cdev https://www.kernel.org/doc/Documentation/i2c/dev-interface
+Memory mapped devices with uio https://www.kernel.org/doc/html/latest/driver-api/uio-howto.html
+
+USB devices are discovered dynamically, but some buses don't allow that (I2C, devices in the SoC etc)
+These devices are statically described in teh kernel source code, in a device tree (hardware description file) or in BIOS ACPI tables
+A huge part of there are directly in the SoC: The platform bus can handle them
+
+	Loadable Kernel Modules (LKM):
+
+See https://github.com/KubbyDev/Code/tree/master/Linux/KernelModules
+http://derekmolloy.ie/writing-a-linux-kernel-module-part-1-introduction/
+
+We can export symbols with EXPORT_SYMBOL
+Or with EXPORT_SYMBOL_GPL, but only GPL modules will see it
+
+
+
