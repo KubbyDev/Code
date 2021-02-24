@@ -28,7 +28,6 @@ alias bashrc="vim $HOME/.bashrc"
 alias zshrc="vim $HOME/.zshrc"
 alias reload="source $HOME/.zshrc"
 alias rm='trash'
-alias update='sudo apt update && sudo apt upgrade && sudo apt autoremove'
 alias gl='git log'
 alias glo='gl --oneline'
 alias glog='glo --graph'
@@ -38,9 +37,28 @@ alias gc='git checkout'
 alias gp='git pull'
 alias decompress='tar -xvf $(ls -t $DOWNLOADS/*.tar | head -n1)'
 alias newest='ls -t | head -n1'
+alias pip2='sudo -H python -m pip'
+alias pip3='sudo -H python3 -m pip'
 
 # Stores all the things that will not be the same across all my machines
 source $HOME/.zshrc_machine_dependant
+
+update() {
+    sudo apt update
+    sudo apt upgrade
+    sudo apt autoremove
+}
+
+fullupdate() {
+    update
+    for py in python3 python; do
+        echo "Updating $py pip..."
+        sudo -H $py -m pip list --outdated --format=freeze  \
+        | grep -v '^\-e'                      \
+        | cut -d = -f 1                       \
+        | xargs -n1 sudo -H $py -m pip install -U
+    done
+}
 
 # This function creates a new practical and does the base config
 # If the practical name is not given, just goes to the practical folder
