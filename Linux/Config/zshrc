@@ -21,6 +21,8 @@ export PATH="$PATH:$PROGRAMS/CLion/bin"
 export PATH="$PATH:$PROGRAMS/PyCharm/bin"
 export CS_HOST="beacon"
 export EDITOR="vim"
+export DOWNLOADS="$HOME/Downloads"
+export CODE="$HOME/Code"
 
 # Aliases
 alias vimrc="vim $HOME/.vimrc"
@@ -45,8 +47,8 @@ source $HOME/.zshrc_machine_dependant
 
 update() {
     sudo apt update
-    sudo apt upgrade
-    sudo apt autoremove
+    sudo apt upgrade -y 
+    sudo apt autoremove -y
 }
 
 fullupdate() {
@@ -146,26 +148,10 @@ asm() {
 
 }
 
-codingstyle() {
-    
-    files=("$@")
-    
-    if [[ -z "$1" ]] ; then
-        files=($(find -name '*.c' -o -name '*.h' -o -name '*.cpp' -o -name '*.cc' -o -name '*.hh' -o -name '*.hxx'))
-    fi
-    
-    for arg in "${files[@]}"; do
-
-        if [[ ! -f $arg ]]; then
-            echo -e "[\e[31mERROR\e[0m] No such file $arg"
-            continue
-        fi
-
-        cp "$arg" /tmp/`basename "$arg"`
-        clang-format -i "$arg"
-        echo "Formatted $arg"
-    
-    done
+codingstyle() { 
+    find -name '*.c' -o -name '*.h' -o -name '*.cpp' \
+        -o -name '*.cc' -o -name '*.hh' -o -name '*.hxx' \
+    | parallel -X -n1 "$CODE/Linux/Scripts/coding_style.sh"
 }
 
 # Automatically builds a c Makefile
