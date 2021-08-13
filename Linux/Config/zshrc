@@ -46,9 +46,14 @@ alias pip3='sudo -H python3 -m pip'
 source $HOME/.zshrc_machine_dependant
 
 update() {
-    sudo apt update
-    sudo apt upgrade -y 
-    sudo apt autoremove -y
+
+    if [ -z $(cat /etc/*-release | grep "Manjaro") ]; then
+        sudo apt update
+        sudo apt upgrade -y 
+        sudo apt autoremove -y
+    else
+        sudo pacman -Syu
+    fi
 }
 
 fullupdate() {
