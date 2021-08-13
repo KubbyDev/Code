@@ -47,7 +47,7 @@ source $HOME/.zshrc_machine_dependant
 
 update() {
 
-    if [ -z $(cat /etc/*-release | grep "Manjaro") ]; then
+    if [ -z "$(cat /etc/*-release | grep "Manjaro")" ]; then
         sudo apt update
         sudo apt upgrade -y 
         sudo apt autoremove -y
