@@ -35,6 +35,7 @@ alias glo='gl --oneline'
 alias glog='glo --graph'
 alias gs='git status'
 alias gd='git diff'
+alias gds='gd --staged'
 alias gc='git checkout'
 alias gp='git pull'
 alias decompress='tar -xvf $(ls -t $DOWNLOADS/*.tar | head -n1)'
@@ -242,7 +243,11 @@ shscript() {
 }
 
 trimwhitespace() {
-    sed -i 's/[ \t]*$//' "$1"
+    for i in "$@"; do
+        if [ ! -f "$i" ]; then; continue; fi;
+        sed -i 's/[ \t]*$//' "$i"
+        echo "Processed $i"
+    done
 }
 
 ccat() {
