@@ -277,6 +277,9 @@ colorscheme monokai
 " Prevents line wrap
 set nowrap
 
+" Set the minimal amount of lines under and above the cursor
+set scrolloff=5
+
 " Syntaxic coloration
 syntax on
 autocmd Filetype asm set syntax=gas
