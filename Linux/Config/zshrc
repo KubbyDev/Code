@@ -42,6 +42,7 @@ alias decompress='tar -xvf $(ls -t $DOWNLOADS/*.tar | head -n1)'
 alias newest='ls -t | head -n1'
 alias pip2='sudo -H python -m pip'
 alias pip3='sudo -H python3 -m pip'
+alias ip='ip -c'
 
 # Stores all the things that will not be the same across all my machines
 source $HOME/.zshrc_machine_dependant
