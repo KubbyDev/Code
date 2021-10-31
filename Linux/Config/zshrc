@@ -23,6 +23,7 @@ export CS_HOST="beacon"
 export EDITOR="vim"
 export DOWNLOADS="$HOME/Downloads"
 export CODE="$HOME/Code"
+export PATH="$PATH:$PROGRAMS/poky/bitbake/bin"
 
 # Aliases
 alias vimrc="vim $HOME/.vimrc"
@@ -54,7 +55,7 @@ update() {
         sudo apt upgrade -y 
         sudo apt autoremove -y
     else
-        sudo pacman -Syu
+        sudo pacman -Syu --noconfirm
     fi
 }
 
