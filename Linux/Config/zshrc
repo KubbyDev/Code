@@ -41,6 +41,7 @@ alias gc='git checkout'
 alias gp='git pull'
 alias decompress='tar -xvf $(ls -t $DOWNLOADS/*.tar | head -n1)'
 alias newest='ls -t | head -n1'
+alias fetchdl='(file_="$(ls $DOWNLOADS -t | head -n1)" mv "$DOWNLOADS/$file_" . && echo "Fetched $file_")'
 alias pip2='sudo -H python -m pip'
 alias pip3='sudo -H python3 -m pip'
 alias ip='ip -c'
@@ -99,7 +100,7 @@ tp() {
 # Usage: commit <message> [tag]
 commit() {
 
-    if [[ -n $(git diff --name-only --cached) ]]; then 
+    if [[ -n $(git diff --name-only --cached) ]]; then
         read "response?Detected staged files. Redo add anyways ? [Y/n] "
         response=${response:l} #tolower
         if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
@@ -135,7 +136,7 @@ commit() {
 
 # Goes to the Assembly folder
 asm() {
-   
+
 
     if [ $# -eq 0 ]
     then
@@ -152,11 +153,11 @@ asm() {
             vim $1.asm
         fi
     fi
-    
+
 
 }
 
-codingstyle() { 
+codingstyle() {
     find -name '*.c' -o -name '*.h' -o -name '*.cpp' \
         -o -name '*.cc' -o -name '*.hh' -o -name '*.hxx' \
     | parallel -X -n1 "$CODE/Linux/Scripts/coding_style.sh"
@@ -168,7 +169,7 @@ codingstyle() {
 # Parent folder name by default
 makefile() {
 
-    if [[ -f Makefile ]]; then 
+    if [[ -f Makefile ]]; then
         read "response?Makefile already exists. Overwrite ? [Y/n] "
         response=${response:l} #tolower
         if [[ ! $response =~ ^(yes|y| ) ]] && [[ ! -z $response ]]; then
@@ -223,7 +224,7 @@ precommit() {
             cp "$i" "./.$name"
         fi;
     done;
-    pre-commit install 
+    pre-commit install
 }
 
 shscript() {
