@@ -24,6 +24,7 @@ export EDITOR="vim"
 export DOWNLOADS="$HOME/Downloads"
 export CODE="$HOME/Code"
 export PATH="$PATH:$PROGRAMS/poky/bitbake/bin"
+export PATH="$PATH:$HOME/.local/bin"
 
 # Aliases
 alias vimrc="vim $HOME/.vimrc"
@@ -39,15 +40,24 @@ alias gd='git diff'
 alias gds='gd --staged'
 alias gc='git checkout'
 alias gp='git pull'
-alias decompress='tar -xvf $(ls -t $DOWNLOADS/*.tar | head -n1)'
-alias newest='ls -t | head -n1'
-alias fetchdl='(file_="$(ls $DOWNLOADS -t | head -n1)" mv "$DOWNLOADS/$file_" . && echo "Fetched $file_")'
+alias fetchdl='(file_="$(newest $DOWNLOADS)" mv "$DOWNLOADS/$file_" . && echo "Fetched $file_")'
 alias pip2='sudo -H python -m pip'
 alias pip3='sudo -H python3 -m pip'
 alias ip='ip -c'
 
 # Stores all the things that will not be the same across all my machines
 source $HOME/.zshrc_machine_dependant
+
+newest() {
+    ls -t $1 | head -n1
+}
+
+decompress() {
+    EXT=$1
+    if [[ -z "$EXT" ]] ; then ; EXT="tar.gz" ; fi
+    REGEX="$DOWNLOADS/*.$EXT"
+    tar -xvf $(ls -t $=~REGEX | head -n1)
+}
 
 update() {
 
@@ -263,3 +273,6 @@ ccat() {
         pygmentize -g $arg
     done
 }
+
+# opam configuration
+test -r /home/kubby/.opam/opam-init/init.zsh && . /home/kubby/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
