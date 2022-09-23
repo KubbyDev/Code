@@ -1,4 +1,4 @@
-Current slide: 177
+Current slide: 247
 https://bootlin.com/doc/training/linux-kernel/linux-kernel-slides.pdf
 
 	Kernel developpment:
@@ -28,6 +28,14 @@ USB devices are discovered dynamically, but some buses don't allow that (I2C, de
 These devices are statically described in teh kernel source code, in a device tree (hardware description file) or in BIOS ACPI tables
 A huge part of there are directly in the SoC: The platform bus can handle them
 
+Driver to handle pin multiplexing: pinctrl
+
+All devices are files so they must implement basic file operations (read write open etc)
+defined in struct file_operations
+Except with ioctl syscall
+
+devm_kmalloc => kmalloc but automatically freed when device disapears 
+
 	Loadable Kernel Modules (LKM):
 
 See https://github.com/KubbyDev/Code/tree/master/Linux/KernelModules
@@ -35,6 +43,3 @@ http://derekmolloy.ie/writing-a-linux-kernel-module-part-1-introduction/
 
 We can export symbols with EXPORT_SYMBOL
 Or with EXPORT_SYMBOL_GPL, but only GPL modules will see it
-
-
-
