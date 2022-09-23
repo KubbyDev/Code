@@ -1,0 +1,39 @@
+Guide pour avoir des prints de debug sur Nucleo F303K8
+
+STM32CubeMX:
+Configurer l'UART2 en mode asynchrone 8N1 115200 baud (115200 bit/s, 8 bits de données, pas de bit de parité, un stop bit). Pas de hardware flow control. Selectionner les pins PA2 et PA15 (pins connecté au MCU ST-LINK)
+
+STM32CubeIDE:
+Normalement dans syscalls.c, read et write redirigent vers des fonctions __io_putchar et __io_getchar
+Il faut implementer ces fonctions pour qu'elles utilisent huart2.
+Mettre ce code dans USER CODE 0:
+#include "stdio.h"
+int __io_putchar(int ch)
+{
+	HAL_UART_Transmit(&huart2, (uint8_t*) &ch, 1, 0xFFFF);
+	return ch;
+}
+int __io_getchar(void)
+{
+	int ch;
+	HAL_UART_Receive(&huart2, (uint8_t*) &ch, 1, 0xFFFF);
+	return ch;
+}
+
+Pour tester on peut utiliser ce code:
+printf("GG ca marche\n");
+HAL_Delay(1000);
+
+La nucleo est maintenant capable d'envoyer des données, maintenant il faut réussir a les lire
+Pour ça sur Windows on peut utiliser PuTTY
+Sur PuTTY selectionner Serial dans Connection type
+Ensuite ller dans la categorie Serial tout en bas, et mettre la speed a 115200, data a 8, stop a 1, parity a none
+flow control a none
+Pour savoir quelle serial line mettre, ouvrir le device manager (gestionnaire de peripheriques) et prendre le port de STMicroelectrionics STLink Virtual COM Port dans Ports (COM et LPT)
+Cliquer sur Open
+
+Ca devrait spam "GG ca marche"
+
+Doc:
+https://www.st.com/resource/en/application_note/dm00354244-stm32-microcontroller-debug-toolbox-stmicroelectronics.pdf
+https://www.st.com/resource/en/user_manual/dm00231744-stm32-nucleo-32-boards-mb1180-stmicroelectronics.pdf
