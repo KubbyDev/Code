@@ -3,5 +3,8 @@ glo=git log --oneline $*
 glog=git log --oneline --graph $*
 gs=git status $*
 gd=git diff $*
+gds=git diff --staged $*
 gc=git checkout $*
 gp=git pull $*
+
+ls=dir $*
