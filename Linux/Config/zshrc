@@ -25,6 +25,7 @@ export DOWNLOADS="$HOME/Downloads"
 export CODE="$HOME/Code"
 export PATH="$PATH:$PROGRAMS/poky/bitbake/bin"
 export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:$HOME/.cargo/bin"
 
 # Aliases
 alias vimrc="vim $HOME/.vimrc"
