@@ -42,8 +42,8 @@ alias gds='gd --staged'
 alias gc='git checkout'
 alias gp='git pull'
 alias fetchdl='(f="$(newest $DOWNLOADS)" mv "$DOWNLOADS/$f" . && echo "Fetched $f")'
-alias pip2='sudo -H python -m pip'
-alias pip3='sudo -H python3 -m pip'
+alias pip2='sudo -H python -m pip --root-user-action=ignore'
+alias pip3='sudo -H python3 -m pip --root-user-action=ignore'
 alias ip='ip -c'
 
 # Stores all the things that will not be the same across all my machines
