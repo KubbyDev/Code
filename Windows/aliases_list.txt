@@ -1,6 +1,6 @@
-gl=git log $*
+gl=git log --stat $*
 glo=git log --oneline $*
-glog=git log --oneline --graph $*
+glog=git log --oneline --graph --all $*
 gs=git status $*
 gd=git diff $*
 gds=git diff --staged $*
