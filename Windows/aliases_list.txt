@@ -5,6 +5,8 @@ gs=git status $*
 gd=git diff $*
 gds=git diff --staged $*
 gc=git checkout $*
-gp=git pull $*
+gbl=git branch --list --all $*
+gpf=git push --force-with-lease
+grc=git add . & git rebase --continue
 
 ls=dir $*
