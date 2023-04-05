@@ -6,7 +6,7 @@ gd=git diff $*
 gds=git diff --staged $*
 gc=git checkout $*
 gbl=git branch --list --all $*
-gpf=git push --force-with-lease
+gp=git pull
 grc=git add . & git rebase --continue
 
 ls=dir $*
