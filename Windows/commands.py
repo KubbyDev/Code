@@ -3,6 +3,9 @@ import subprocess
 import sys
 
 
+PASS = 0
+
+
 # Executes the command and returns its exit code
 def cmd_ret(cmd, silent=False):
     file = subprocess.DEVNULL if silent else None
@@ -22,7 +25,7 @@ def get_consent(msg):
 
 def commit_main(message, tag):
     if cmd_output("git diff --name-only --cached").strip() != "":
-        if get_consent("Detected staged files. Redo add anyways ?"):
+        if not get_consent("Detected staged files. Skip git add ?"):
             cmd_ret("git reset HEAD .")
             cmd_ret("git add .")
     else:
@@ -30,12 +33,16 @@ def commit_main(message, tag):
     cmd_ret("git status")
     if not get_consent("Commit ?"):
         return
-    if cmd_ret(f'git commit -m "{message}"') != 0:
+    if cmd_ret(f'git commit -m "{message}"') != PASS:
         return
     if tag is not None:
         i = 0
         while cmd_ret(f'git tag -a "{tag}-{i}" -m "{message}"', silent=True) != 0:
             i += 1
+    if cmd_ret("git push --follow-tags") == PASS:
+        return
+    if cmd_ret("git pull --rebase") != PASS:
+        return
     cmd_ret("git push --follow-tags")
 
 
